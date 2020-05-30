@@ -1,0 +1,195 @@
+//----------------------------------------------------------------------------------------------
+int main(int argc, char** argv) {
+	Racional *r1 = new Racional(1,2);
+	Racional *r2 = new Racional(3,4);
+	Racional *r3 = new Racional(5,6);
+	Racional *r4 = new Racional(7,8);
+	
+	Racional *res = *r1 + *r2;
+	cout << r1->mostrar() << " + " << r2->mostrar() << " = " << res->mostrar() << endl;
+	cout << r2->mostrar() << " == " << r3->mostrar() << " : " << (*r1 == *r3) << endl;
+	cout << r4->mostrar() << " == " << r4->mostrar() << " : " << (*r4 == *r4) << endl;
+	
+	system("PAUSE");
+	return 0;
+}
+
+//----------------------------------------------------------------------------------------------
+// racional.h
+#ifndef racional_h
+#define racional_h
+#include <iostream>
+
+class Racional{
+	private:
+		int num;
+		int den;
+		int MCM(int a, int b);
+		std::string cStr(int n);
+	public:
+		Racional();
+		Racional(int n, int d);
+		Racional(Racional *r);
+		void set_numerador(int n);
+		void set_denominador(int d);
+		int get_numerador();
+		int get_denominador();
+		std::string mostrar();
+		Racional* suma(Racional *r);
+		Racional* diferencia(Racional *r);
+		Racional* producto(Racional *r);
+		Racional* cociente(Racional *r);
+		bool igualdad(Racional *r);
+		
+		Racional* operator + (Racional r1){
+			return this->suma(&r1);
+		}
+		
+		bool operator == (Racional r1){
+			return this->igualdad(&r1);
+		}
+};
+
+#endif
+
+//----------------------------------------------------------------------------------------------
+// racional.cpp
+#include "racional.h"
+
+
+Racional::Racional(){
+	this->num = 0;
+	this->den = 1;
+}
+
+
+Racional::Racional(int n, int d){
+	this->num = n;
+	this->den = d;
+}
+
+
+Racional::Racional(Racional *r){
+	this->num = r->get_numerador();
+	this->den = r->get_denominador();
+}
+
+
+void Racional::set_numerador(int n){
+	this->num = n;
+}
+
+
+void Racional::set_denominador(int d){
+	this->den = d;
+}
+
+
+int Racional::get_numerador(){
+	return this->num;
+}
+
+
+int Racional::get_denominador(){
+	return this->den;
+}
+
+
+std::string Racional::mostrar(){
+	return cStr(this->num) + '/' + cStr(this->den);
+}
+
+
+Racional*  Racional::suma(Racional *r){
+	/* Hallar minimo comun multiplo de denominadores (sera denominador final)
+	multiplicar cada numerador por el numero que hay que multiplicar el denominador para obtener el minimo comun multiplo
+	sumar los dos resultados para obtener el numerador final
+	Nota: Si no se entiende busca en gugle
+	*/
+	int mcm = MCM(this->den, r->get_denominador());	// denominador del resultado
+	int numA = (mcm / this->den) * this->num; // un numerador
+	int numB = (mcm / r->get_denominador()) * r->get_numerador(); // el otro numerador
+	return new Racional(numA + numB, mcm);
+}
+
+
+Racional* Racional::diferencia(Racional *r){
+	/*
+	Hay dos casos:
+	-Fracciones con el mismo denominador:
+	Restar numeradores y dejar el denominador.
+	-Fracciones con distinto denominador:
+	Multiplicar numerador de la primera por denominador de la segunda y 
+	el denominador de la primera por el numerador de la segunda.
+	Ambas multiplicaciones se restan y el resultado es el numerador.
+	Para el denominador hay que multiplicar los dos denominadores
+	*/
+	if (this->den == r->get_denominador()){
+		return new Racional(this->num - r->get_numerador(), this->den);
+	}else{
+		return new Racional((this->num * r->get_denominador()) - (this->den * r->get_numerador()), this->den * r->get_denominador());
+	}
+}
+
+
+Racional* Racional::producto(Racional *r){
+	// Multiplicar los de arriba y multiplicar los de abajo
+	return new Racional(this->num * r->get_numerador(), this->den * r->get_denominador());
+}
+
+
+Racional* Racional::cociente(Racional *r){
+	/* Multiplicar en cruz
+	numerador final = numerador de la primera * denominador de la segunda
+	denominador final = denominador de la primera * numerador de la segunda
+	*/
+	return new Racional(this->num * r->get_denominador(), this->den * r->get_numerador());
+}
+
+
+bool Racional::igualdad(Racional *r){	
+	return this->num == r->get_numerador() && this->den == get_denominador();
+}
+
+
+int Racional::MCM(int a, int b){
+	if (a == b)	return a;
+	
+	int mcm;
+	
+	if (a>b)	mcm = a;
+	else		mcm = b;
+	
+	for (; !(mcm % a == 0 && mcm % b == 0); mcm++);
+	return mcm;
+}
+
+
+std::string Racional::cStr(int n){
+	const char DIGITOS[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	std::string ret = "";
+	bool negativo = n < 0;
+	if (negativo){
+		n *= -1;
+	}
+	
+	do{
+		ret = DIGITOS[n % 10] + ret;	// agrega el ultimo digito del numero a la variable de retorno
+		n /= 10;	// avanza el contador
+	 }while(n != 0);
+	
+	if (negativo){
+		ret = '-' + ret;
+	}
+	
+	return ret;
+}
+
+
+
+
+
+
+
+
+

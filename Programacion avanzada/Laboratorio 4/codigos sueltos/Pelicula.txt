@@ -1,0 +1,95 @@
+
+class Pelicula : class ICollectible{
+private:
+	string titulo;
+	string poster;
+	string sinopsis;
+	ICollection* puntuaciones;
+	IDictionary* comentarios;
+public:
+	// constructor y destructor
+	Pelicula();
+	Pelicula(string titulo, string poster, string sinopsis);
+	~Pelicula();
+	
+	// gets y sets
+	string getTitulo();
+	string getPoster();
+	string getSinopsis();
+	int getPuntuacion(); // calcula el promedio de las puntuaciones recibidas
+	void setTitulo(string titulo);
+	void setPoster(string poster);
+	void setSinopsis(string sinopsis);
+	
+	// operaciones
+	Comentario* comentarComentario(string texto, int idComentarioActual);
+	Comentario* comentar(string texto, int id);
+	Funcion* crearFuncion(DateTine fechaYHora, float costoEntrada, Cine *cineActual);
+	float getCostoDeFuncion(int idFuncionActual);
+	Puntuacion* nuevaPuntuacion(int puntos);
+	ICollection* obtenerCines(); // set(DtCine)
+	ICollection* obtenerComentarios(); //set(DtComentario)
+	ICollection* obtenerFunciones(DateTime fechaActual, int idCineActual); //Set(DtFuncion)
+	DtPelicula* getDataType();
+	DtFuncion* obtenerDtFuncion(int idFuncion);
+	void eiminarLinks();
+	void agregarReservaAFuncion(DtReserva* dtNuevaReserva, int idFuncionActual);
+}
+
+////////////////////////////////////////////////////////////////////
+
+// constructor y destructor
+Pelicula::Pelicula(){
+	this->titulo = "";
+	this->poster = "";
+	this->sinopsis = "";
+	puntuaciones = new List();
+}
+Pelicula::Pelicula(string titulo, string poster, string sinopsis){
+	this->titulo = titulo;
+	this->poster = poster;
+	this->sinopsis = sinopsis;
+	puntuaciones = new List();
+}
+Pelicula::~Pelicula(){
+	
+}
+
+// gets y sets
+string Pelicula::getTitulo(){
+	return this->titulo
+}
+string Pelicula::getPoster(){
+	return this->poster
+}
+string Pelicula::getSinopsis(){
+	return this->sinopsis
+}
+int Pelicula::getPuntuacion(){
+	////////////////////////////////
+	// Este hay que hacerlo... xD //
+	////////////////////////////////
+	return 0; // por ahora...
+}
+
+void Pelicula::setTitulo(string titulo){
+	this->titulo = titulo;
+}
+void Pelicula::setPoster(string poster){
+	this->poster = poster;
+}
+void Pelicula::setSinopsis(string sinopsis){
+	this->sinopsis = sinopsis;
+}
+
+// operaciones
+/*
+* 
+* Ahora te toca a ti...
+* 
+*/
+
+
+
+
+

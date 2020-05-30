@@ -1,0 +1,291 @@
+##############################################################################################################
+sd: Iniciar sesion
+		 ?
+		/|\
+		 /\
+	Usuario															Sistema
+		|																|
+LOOP1	|	[no se logre iniciar sesion && no se quiera cancelar]		|
+		|		iniciarSesion(nickName:string, contraseña:string):bool	|	// El sistema recuerda al usuario con la sesion iniciada
+		|-------------------------------------------------------------->|
+\LOOP1	|																|
+
+
+##############################################################################################################
+sd: Alta cine
+			 ?
+			/|\
+			 /\
+		Administrador										Sistema
+			|													|
+LOOP1		|	[mientras se desea agregar cines]				|
+			|		nuevoCine(direccion:DtDireccion)			|	// el sistema recuerda que cine se esta creando
+			|-------------------------------------------------->|
+			|													|
+	LOOP2	|	[mientras se deseen agregar salas]				|
+			|		nuevaSala(capacidad:int)					|	// El sistema recuerda cada sala que se agrega
+			|-------------------------------------------------->|
+	\LOOP2	|													|
+			|													|
+	ALT1	|	[confirmar]										|
+			|		confirmarNuevoCine()						|	// El sistema libera memoria
+			|-------------------------------------------------->|
+	ALT1	|	[else]											|
+			|		cancelarNuevoCine()							|	// El sistema libera memoria
+			|-------------------------------------------------->|
+	\ALT1	|													|
+\LOOP1		|													|
+			|													|
+
+##############################################################################################################
+sd: Alta funcion
+		 ?
+		/|\
+		 /\
+	Administrador											Sistema
+		|														|
+		|		listarPeliculas():Set(DtPelicula)				|
+		|------------------------------------------------------>|
+		|														|
+		|		seleccionarPelicula(titulo:string):DtPelicula	| // El sistema recuerda la pelicula seleccionada
+		|------------------------------------------------------>|
+		|														|
+LOOP	|	[mientras quiera agregar funciones]					|
+		|		listarCines():Set(DtCine)						|
+		|------------------------------------------------------>|
+		|														|
+		|		seleccionarCine(idCine:int):DtCine				| // el sistema recuerda el cine
+		|------------------------------------------------------>|
+		|														|
+		|		listarSalas():Set(DtSala)						|
+		|------------------------------------------------------>|
+		|														|
+		|		seleccionarSala(idSala:int)						| // el sistema recuerda la sala del cine
+		|------------------------------------------------------>|
+		|														|
+		|		nuevaFuncion(fechaYHora:DateTine)				|	// El sistema libera memoria
+		|------------------------------------------------------>|
+\LOOP	|														|
+		|														|
+
+##############################################################################################################
+sd: Crear reserva
+						 ?
+						/|\
+						 /\
+					Usuario													Sistema
+						|																|
+LOOP1					|	[no seleccione funcion || no finalizar]						|	// Mientras no hay función seleccionada || no se opte por finalizar
+						|		listarPeliculas():set(DtPelicula)						|
+						|-------------------------------------------------------------->|
+						|																|
+	ALT1				|	[Si desea seleccionar una película]							|
+						|		seleccionarPelicula(titulo:string):DtPelicula)			|	// El sistema recuerda la pelicula
+						|-------------------------------------------------------------->|
+						|																|
+		ALT2			|	[Si desea ver mas información]								|
+						|		listarCines(): set(DtCine)								|
+						|-------------------------------------------------------------->|
+						|																|
+			ALT3		|	[Si desea seleccionar un cine]								|
+						|		seleccionarCine(idCine:int):DtCine						|	// El sistema recuerda el cine
+						|-------------------------------------------------------------->|
+						|																|
+						|		listarFunciones(fechaActual:DtDateTime):set(DtFuncion)	|
+						|-------------------------------------------------------------->|
+						|																|
+				OPT1	|	[Si selecciona una función]									|
+						|		seleccionarFuncion(id:int):DtFuncion					|	// El sistema recuerda la funcion
+						|-------------------------------------------------------------->|
+				\OPT1	|																|
+			ALT3		|	[Si desea cancelar]											|
+						|		cancelarNuevaReserva()									|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+			\ALT3		|																|
+		ALT2			|	[Si desea cancelar]											|
+						|		cancelarNuevaReserva()									|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+		\ALT2			|																|
+	ALT1				|	[Si desea cancelar]											|	// El sistema libera memoria
+						|		cancelarNuevaReserva()									|
+						|-------------------------------------------------------------->|
+	\ALT1				|																|
+\LOOP1					|																|
+						|																|
+						|		nuevaReserva(cantAsientos:int)							|	// El sistema recuerda la cantidad de asientos
+						|-------------------------------------------------------------->|
+						|																|
+ALT4					|	[desea pagar con tarjeta de debito]							|
+						|		pagoDebito(nombreBanco:string)							|	// El sistema recuerda los datos de la tarjeta
+						|-------------------------------------------------------------->|
+						|																|
+ALT4					|	[desea pagar con tarjeta de credito]						|
+						|		pagoCredito(nombreFinanciera:string):float				|	// El sistema recuerda los datos de la tarjeta
+						|-------------------------------------------------------------->|
+\ALT4					|																|
+						|																|
+						|		vistaPreviaDeReserva():DtReserva						|
+						|-------------------------------------------------------------->|
+						|																|
+ALT5					|	[si desea confirmar la reserva]								|
+						|		confirmarNuevaReserva()									|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+						|																|
+ALT5					|	[si desea cancela]											|
+						|		cancelarNuevaReserva()									|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+\ALT5					|																|
+
+
+
+##############################################################################################################
+sd: Puntuar pelicula
+			 ?
+			/|\
+			 /\
+		Administrador											Sistema
+			|														|
+			|		listarPeliculas():Set(DtPelicula)				|
+			|------------------------------------------------------>|
+			|														|
+			|		seleccionarPelicula(titulo:string):DtPelicula	|	// El sistema recuerda la pelicula
+			|------------------------------------------------------>|
+			|														|
+ALT1		|	[si ya habia puntuado la pelicula]					|
+			|		obtenerPuntajeDadoPorUsuario():int				|
+			|------------------------------------------------------>|
+			|														|
+	OPT		|	[si desea modificarlo]								|
+			|		puntuarPelicula(puntaje:int)					|	// El sistema libera memoria
+			|------------------------------------------------------>|
+	\OPT	|														|
+ALT1		|	[else]												|	
+			|		puntuarPelicula(puntaje:int)					|	// El sistema libera memoria
+			|------------------------------------------------------>|
+\ALT1		|														|
+			|														|
+
+
+##############################################################################################################
+sd: Comentar película
+			 ?
+			/|\
+			 /\
+		Usuario														Sistema
+			|															|
+			|		listarPeliculas():Set(DtPelicula)					|
+			|---------------------------------------------------------->|
+			|															|
+			|		seleccionarPelicula(titulo:string):DtPelicula		|	// El sistema recuerda la pelicula
+			|---------------------------------------------------------->|
+			|															|
+			|		listarComentarios():Set(DtComentario)				|
+			|---------------------------------------------------------->|
+			|															|
+ALT1		|	[hacer un nuevo comentario]								|
+			|		comentarPelicula(texto:string)						|	// El sistema libera memoria
+			|---------------------------------------------------------->|
+			|															|
+ALT1		|	[responder a un comentario]								|
+	LOOP	|	[no se desee finalizar]									|
+			|		seleccionarComentario(id:int)						|	// sistema recuerda el comentario
+			|---------------------------------------------------------->|
+			|															|
+			|		comentarComentario(texto:string)					|	// El sistema libera memoria
+			|---------------------------------------------------------->|
+	\LOOP	|															|
+\ALT1		|															|
+			|															|
+
+
+##############################################################################################################
+sd: Eliminar película
+		 ?
+		/|\
+		/\
+	Administrador											Sistema
+		|														|
+		|		listarPeliculas():Set(DtPelicula)				|
+		|------------------------------------------------------>|
+		|														|
+		|		seleccionarPelicula(titulo:string):DtPelicula	|	// El sistema recuerda la pelicula
+		|------------------------------------------------------>|
+		|														|
+ALT1	|	[si desea confirmar]								|
+		|		confirmarEliminarPelicula()						|	// El sistema libera memoria
+		|------------------------------------------------------>|
+		|														|
+ALT1	|	[si desea cancelar]									|
+		|		cancelarEliminarPelicula()						|	// El sistema libera memoria
+		|------------------------------------------------------>|
+\ALT1	|														|
+		|														|
+
+
+##############################################################################################################
+sd: Ver Información de película
+						 ?
+						/|\
+						 /\
+					Usuario															Sistema
+						|																|
+LOOP1					|	[no desee finalizar]										|
+						|		listarPeliculas():Set(DtPelicula)						|
+						|-------------------------------------------------------------->|
+						|																|
+	ALT1				|	[Si desea seleccionar una película]							|
+						|		seleccionarPelicula(titulo:string):DtPelicula			|	// El sistema recuerda la pelicula
+						|-------------------------------------------------------------->|
+						|																|
+		ALT2			|	[Si desea ver mas información]								|
+						|		listarCines():set(DtCine)								|
+						|-------------------------------------------------------------->|
+						|																|
+			ALT3		|	[Si desea seleccionar un cine]								|
+						|		seleccionarCine(idCine:int):DtCine						|	// El sistema recuerda el cine
+						|-------------------------------------------------------------->|
+						|																|
+						|		listarFunciones(fechaActual:DtDateTime):set(DtFuncion)	|
+						|-------------------------------------------------------------->|
+						|																|
+				OPT1	|	[Si desea finalizar]										|
+						|		cancelarVerInformacionDePelicula()						|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+				\OPT1	|																|
+			ALT3		|	[Si desea finalizar]										|
+						|		cancelarVerInformacionDePelicula()						|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+			\ALT3		|																|
+		ALT2			|	[Si desea finalizar]										|
+						|		cancelarVerInformacionDePelicula()						|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+		\ALT2			|																|
+	ALT1				|	[Si desea finalizar]										|
+						|		cancelarVerInformacionDePelicula()						|	// El sistema libera memoria
+						|-------------------------------------------------------------->|
+	\ALT1				|																|
+\LOOP1					|																|
+						|																|
+
+
+##############################################################################################################
+sd: Ver Comentarios y Puntajes de Película
+		 ?
+		/|\
+		 /\
+	Invitado / Usuario											Sistema
+		|															|
+		|		listarPeliculas():set(DtPelicula)					|
+		|---------------------------------------------------------->|
+		|															|
+		|		seleccionarPelicula(titulo:string):DtPelicula		|	// El sistema recuerda la pelicula
+		|---------------------------------------------------------->|
+		|															|
+		|		listarComentarios():set(DtComentario)				|
+		|---------------------------------------------------------->|	
+		|															|
+		|		cancelarVerComentariosYPuntajes():set(DtComentario)	|	// El sistema libera memoria
+		|---------------------------------------------------------->|	
+		|															|
+
+

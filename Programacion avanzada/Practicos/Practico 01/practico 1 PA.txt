@@ -1,0 +1,45 @@
+1)
+	-Leemos el problema a resolver, hacemos un breve analisis del mismo y vamos programando a medida que se nos prende la lamparita
+	-Nunca hicimos una representacion de la realidad
+	-El diseño de la solucion lo representabamos en un principio con dibujos
+
+2)
+	Objetos:
+		-Pepe
+		-Bicicleta
+		-Facultad
+		-Boleto
+		-Crudo
+	
+	Links: 
+		Boleto-Crudo
+		Pepe-bicicleta
+		Pepe-Facultad
+		Pepe-boleto
+
+
+3)
+
+class Punto{
+	private:
+		int x, y;
+	public:
+		punto(int _x = 0, int _y = 0);
+		void setX(int X);
+		void setY(int Y);
+		int getX();
+		int getY();
+}
+
+class Linea{
+	private:
+		punto *a;
+		punto *b;	
+	public:
+		linea(punto &_a, punto &_b);
+		punto *getInicio();
+		punto *getFin();
+		float distancia();
+}
+
+	

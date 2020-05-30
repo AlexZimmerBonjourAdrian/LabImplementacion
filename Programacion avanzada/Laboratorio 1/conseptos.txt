@@ -1,0 +1,57 @@
+
+Usuario:
+	nickName
+	contraseña
+	url de imagen de perfil
+
+Pelicula
+	titulo
+	url de poster
+	sinopsis
+
+Cine:
+	numero
+	direccion
+	salas
+
+Sala
+	numero
+	capacidad
+
+Funcion
+	numero
+	sala
+	fecha
+	hora
+
+Reserva
+	cantidad de asientos
+	costo total
+	medio de pago (credito / debito)
+
+
+Tarjeta de debito
+	banco que emite
+	
+Tarjeta de credito
+	porcentaje de descuento
+	financiera a la que pertenece
+
+
+
+
+Puntaje
+	usuario
+	pelicula
+
+
+Comentario
+	usuario
+	pelicula
+
+
+
+
+
+
+

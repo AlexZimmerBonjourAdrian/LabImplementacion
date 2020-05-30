@@ -1,0 +1,46 @@
+
+Paso 1:
+Para que las clases Persona y Mascota puedan ser coleccionadas, se las hace sub-clases de la clase abstracta ICollectible. (realizan a ICollectible)
+
+Paso 2:
+Se define la interfaz ICollection que establece las operaciones que debe realizar cualquier clase que realice esa interfaz (que le de método, la implemente)
+
+Paso 3:
+Si ICollection es implementa utilizando una lista, se define la clase Lista.
+Como toda lista necesita nodos (con ->info y ->sig), para ello se crea la clase ListNode.
+-Lista tiene un puntero al primer nodo (head)
+-Cada nodo tiene un puntero a un ICollectible (elem), y al siguiente nodo (next)
+
+Paso 4:
+Para poder recorrer los elementos de una colección se necesita un iterador. Sea como sea que se haya implementado ICollection, un iterador deberá brindar las operaciones especificadas en IIterator (interfaz, abstracta)
+
+Paso 5:
+Para la implementación List, se crea la clase ListIterator que realiza la interfaz IIterator.
+-Este iterador tiene un puntero al nodo actual (current)
+-Ahora List debe incluir la operación getIterator() para devolver un iterador sobre ella. (la flecha desde List a ListIterator representaría un #include)
+
+Paso 6:
+Para coleccionar elementos utilizando una clave para identificarlos, se define la interfaz IDictionary que establece las operaciones que debe realizar cualquier clase que realice esa interfaz. (muy similar a ICollection)
+
+Paso 7:
+Como para identificar elementos en un diccionario se necesita una clave, se crea la interfaz IKey, la cual define las operaciones que debe realizar cualquier clase que realice esa interfaz.
+Como es de interés mínimamente comparar dos claves para saber si son iguales, se define la función equals(Ikey):bool
+
+Además de identificar los elementos, con la clave se pueden ordenar dentro del diccionario, para ello se define la interfaz OrderedKey, la cual 'extiende' a IKey (porque es una interfaz que agrega operaciones a los que ya estaban definidos en IKey).
+Como ahora además de saber si dos claves son iguales (pudiéndose representar esto como un true/false) interesa saber la relación entre dos claves, se define el enumerado ComparisonRes con los posibles resultados de una comparación (más chico, iguales, más grande).
+Para realizar comparaciones se agrega a OrderedKey la operación compare(IKey):ComparisonRes
+
+Paso 8:
+Se definen las clases String e Integer, que realizan la interfaz OrderedKey. 
+
+Paso 9:
+De manera análoga al paso 3, se crea la clase OrderedDictionary que realiza la interfaz IDictionary.
+Esta vez, el diccionario es representado como un árbol binario de búsqueda, para lo cual se deben definir los nodos del árbol (con ->info, ->izq y ->der). Esto se hace creando la clase OrderedDictionaryEntry.
+-OrderedDictionary tiene un puntero al nodo raíz (root)
+-Cada nodo OrderedDictionaryEntry tiene un puntero a un ICollectible, un puntero a un nodo menor (lesser) y un puntero a un nodo mayor (greater)
+
+Paso 10:
+Al igual que con ICollection, si se desea recorrer los elementos de un diccionario será necesario un iterador, para lo cual se debería definir una clase OrderedDictionaryIterator al igual que se hizo con  ListIterator. (pero en el código dado por el profesor no lo hace de esa manera)
+
+Nota para el que quiera saber cómo hace para iterar sobre un árbol: En el código en vez de iterar sobre un árbol, al solicitarle un iterador a OrderedDictionary, se crea una ICollection List y devuelve un iterador sobre esta lista, la cual se destruye junto con el iterador. Para obtener un iterador inverso, hace exactamente lo mismo, pero la lista se crea invertida.
+

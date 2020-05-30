@@ -1,0 +1,257 @@
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+cancelarEliminarPelicula()
+
+Pre: existe un link pelicula actual
+Post: se elimina el link
+
+----------------------------------------------------------------------------------------------------------------------------
+
+cancelarNuevaReserva()
+
+Pre: (ninguna)
+Post: si existe un link pelicula actual se eliminará
+Post: si existe un link cine actual se eliminará
+Post: si existe un link funcion actual se eliminará
+Post: si existe una instancia de reserva actual se eliminará
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+cancelarNuevoCine()
+
+elimina laa instancia de nuevoCine y las de sus salas
+elimina el link al nuevoCine
+
+----------------------------------------------------------------------------------------------------------------------------
+
+cancelarVerComentariosYPuntajes()
+
+elimina el link a la pelicula actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+cancelarVerInformacionDePelicula()
+
+elimina los links de pelicula actual y de cine actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+comentarComentario(texto:string)
+
+crea el comentario en respuesta del comentario actual dada por el usuario actual
+elimina el link de pelicula actual y de comentario actual
+el sistema le generara un id al comentario
+
+----------------------------------------------------------------------------------------------------------------------------
+
+comentarPelicula(texto:string)
+
+crea el comentario para la pelicula actual dado por el usuario actual
+elimina el link de pelicula actual
+el sistema le generara un id al comentario
+
+----------------------------------------------------------------------------------------------------------------------------
+
+confirmarEliminarPelicula()
+
+Pre: existe un link pelicula actual
+Pre: el usuario actual debe ser administrador
+Post: se elimina la instancia de comentario vinculada con pelicula actual, y los comentarios que se vinculaban a este
+Post: se elimina el link entre los cines que se vinculaban a pelicula actual
+Post: se eliminan las instancias de funcion y las reservas vinculadas a ella
+Post: se eliminan las instancias de puntuacion vinculadas a pelicula actual
+Post: se elimina la instancia pelicula de pelicula actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+confirmarNuevaReserva()
+
+Pre: existe un link reserva actual
+Pre: existe un link usuario actual
+Pre: existe un link funcion actual
+Post: se crea un link que vincula reserva actual con usuario actual
+Post: se crea un link que vincula reserva actual con funcion actual
+Post: se elimina el link de pelicula actual
+Post: se elimina el link de cine actual
+Post: se elimina el link de funcion actual
+Post: se elimina el link de reserva actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+confirmarNuevoCine()
+
+agrega definitivamente la instancia de nuevoCine con sus salas al sistema
+elimina el link del nuevoCine
+
+----------------------------------------------------------------------------------------------------------------------------
+
+iniciarSesion(nickName:string, contraseña:string): bool
+
+Pre: no existe en el sistema un link vinculado a un usuario actual
+Pre: existe una instancia de usuario con nickname = nickname y contraseña = contraseña
+Post: si existe en el sistema una instancia de usuario con el nickname = nickname y la contraseña = contraseña se creará un link de usuario actual vinculado a dicha instancia, de lo contrario no se creará ningun link y retornará false
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarCines(): set(DtCine)
+
+Pre: existe un link pelicula actual
+Post: retorna un conjunto de datatypes de tipo DtCine con los datos de los cines que pasan la película actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarComentarios():Set(DtComentario)
+
+devuelve un set de DtComentario con los comentarios de la peliculaActual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarFunciones(fechaHoraActual:DtDateTime): set(DtFuncion)
+
+Pre: existe un link pelicula actual
+Pre: existe un link cine actual
+Pre: fechaHoraActual debe ser igual la fecha actual del sistema
+Post: retorna un conjunto de datatypes de tipo dtFuncion con los datos de las funciones para la pelicula actual en el cine actual que se pasarán con fecha posterior a fechaHoraActual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarPeliculas(): set(DtPelicula)
+
+Pre: (ninguna)
+Post: Retorna un conjunto de datatypes de tipo DtPelicula con los datos de cada instancia de película en el sistema
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarSalas():Set(DtSala)
+
+devuelve un set de DtSalas pertenecientes al cineActual que el sistemaq tiene en memoria
+
+----------------------------------------------------------------------------------------------------------------------------
+
+listarTodosLosCines():Set(DtCine)
+
+devuelve un set de DtCine con los datos de todos los cines
+
+----------------------------------------------------------------------------------------------------------------------------
+
+nuevaFuncion(fechaYHora:DtDateTine)
+
+crea una funcion para la pelicula actual, en la sala actual del cine actual
+libera los links de pelicula y sala
+
+----------------------------------------------------------------------------------------------------------------------------
+
+nuevaReserva(cantAsientos:int)
+
+Pre: existe un link funcion actual
+Pre: cantidad de asientos mayor a 0
+Post: el sistema mantiene en memoria la cantidad de asientos ingresada
+
+----------------------------------------------------------------------------------------------------------------------------
+
+nuevaSala(capacidad:int)   
+
+agrega al la instancia de nuevoCine una nueva sala con su capacidad
+
+----------------------------------------------------------------------------------------------------------------------------
+
+nuevoCine(direccion:DtDireccion)
+
+crea una instancia provisoria nuevoCine con la direccion y recuerda dicha instancia
+
+----------------------------------------------------------------------------------------------------------------------------
+
+obtenerPuntajeDadoPorUsuario(): int
+
+Pre: existe un link usuario actual
+Pre: existe un link pelicula actual
+Post: si el usuario ha puntuado la pelicula actual retorna el puntaje dado, de  lo contrario retorna -1
+
+----------------------------------------------------------------------------------------------------------------------------
+
+pagoDebito(nombreBanco:string)
+
+Pre: el nombre del banco no debe ser vacio
+Pre: existe en memoria la cantidad de asientos para la reserva mayor a 0
+Post: se crea una instancia de tipo reserva debito llamada reserva actual y se le asigna la cantidad de asientos y el nombre del banco
+Post: se calcula el costo en base a la cantidad de asientos y el precio de la funcion actual
+Post: se crea un link reserva actual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+pagoCredito(nombreFinanciera:string): float
+
+Pre: el nombre de la financiera no debe ser vacio
+Pre: existe en memoria la cantidad de asientos para la reserva mayor a 0
+Post: se crea una instancia de tipo reserva credito llamada reserva actual y se le asigna la cantidad de asientos y el nombre de la financiera
+Post: se calcula el costo en base a la cantidad de asientos, el precio de la funcion actual y el descuento correspondiente
+Post: se crea un link reserva actual
+Post: retorna el porcentaje de descuento que tendrá la reserva
+
+----------------------------------------------------------------------------------------------------------------------------
+
+puntuarPelicula(puntaje:int)
+
+Pre: existe un link usuario actual
+Pre: existe un link pelicula actual
+Pre: puntaje debe estar comprendido entre 1 y 5
+Post: si existe una instancia de la clase puntuacion vinculada al usuario usuario actual y a la pelicula pelicula actual, se sobreescribe el valor puntaje por puntaje, de lo contrario se creará una nueva instancia puntuacion vinculada a usuario usuario actual y a pelicula pelicula actual con puntaje = puntaje
+
+----------------------------------------------------------------------------------------------------------------------------
+
+seleccionarCine(id:int): DtCine
+
+Pre: existe una instancia de cine con id=id
+Post: se creará un link cine actual vinculado a dicha instancia
+Post: retorna un datatype de tipo DtCine con los datos del cine seleccionado
+
+----------------------------------------------------------------------------------------------------------------------------
+
+seleccionarComentario(id:int)
+
+crea un link al comentario con el ID indicado
+
+----------------------------------------------------------------------------------------------------------------------------
+seleccionarFuncion(id:int): DtFuncion
+
+Pre: existe una instancia de funcion con id=id
+Pre: existe un link pelicula actual
+Pre: existe un link cine actual
+Post: se creará un link función actual vinculado a dicha instancia
+Post: retorna un datatype de tipo DtFuncion con los datos de la funcion seleccionada
+
+----------------------------------------------------------------------------------------------------------------------------
+
+seleccionarPelicula(titulo:string): DtPelicula
+
+Pre: el parámetro titulo no debe ser vacío
+Pre: existe una instancia de pelicula con titulo = titulo
+Post: se creará un link película actual vinculado a dicha instancia
+Post: retorna un datatype de tipo DtPelicula con los datos de la pelicula seleccionada
+
+----------------------------------------------------------------------------------------------------------------------------
+
+seleccionarSala(idSala:int)
+
+crea un link salaActual referenciando a la sala con ese ID perteneciente al cineActual
+
+----------------------------------------------------------------------------------------------------------------------------
+
+vistaPreviaDeReserva(): DtReserva
+
+Pre: existe un link reserva actual
+Post: retorna un datatype de tipo DtReserva con los datos de la reserva actual
+
+
+
+
+
+
+
+
+
+
+

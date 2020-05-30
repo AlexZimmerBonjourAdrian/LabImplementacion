@@ -1,0 +1,15 @@
+
+
+Iniciar sesion
+crear reserva
+eliminar peliocula
+ver info pelicula
+
+
+
+
+
+
+
+
+

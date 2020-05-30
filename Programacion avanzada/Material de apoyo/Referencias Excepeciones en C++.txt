@@ -1,0 +1,8 @@
+Ambas referencias están en español.
+
+http://c.conclase.net/curso/?cap=043
+
+http://es.wikibooks.org/wiki/Programaci%C3%B3n_en_C%2B%2B/Excepciones
+
+Compilador online, que también ejecuta :)
+http://cpp.sh/

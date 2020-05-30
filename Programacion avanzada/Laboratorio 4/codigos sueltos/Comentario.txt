@@ -1,0 +1,83 @@
+
+class Comentario : class ICollectible{
+private:
+	int id;
+	string texto;
+	int nivelSubComentario;
+	ICollection* misSubComentarios;
+public:
+	// constructor y destructor
+	Comentario();
+	Comentario(int id, string texto, int nivelSubComentario);
+	~Comentario();
+	
+	// gets y sets
+	int getID();
+	string getTexto();
+	int getNivelSubComentario();
+	void setID(int id);
+	void setTexto(string texto);
+	void setNivelSubComentario(int nivelSubComentario);
+
+	// operaciones
+	Comentario* comentar(texto string, id int);
+	bool esComentario(id int);
+	void vincularUsuario(Usuario* usario);
+	DtComentario* getDataType();
+	ICollection* obtenerSubComentarios(); //set(DtComentario)
+	void eliminarComentarios();
+}
+
+////////////////////////////////////////////////////////////////////
+
+// constructor y destructor
+Comentario::Comentario(){
+	this->id = "";
+	this->texto = "";
+	this->nivelSubComentario = "";
+	misSubComentarios = new OrderedDictionary();
+}
+Comentario::Comentario(int id, string texto, int nivelSubComentario){
+	this->id = id;
+	this->texto = texto;
+	this->nivelSubComentario = nivelSubComentario;
+	misSubComentarios = new OrderedDictionary();
+}
+Comentario::~Comentario(){
+	
+}
+
+// gets y sets
+int getID(){
+	return this->id;
+}
+string getTexto(){
+	return this->texto;
+}
+int getNivelSubComentario(){
+	return this->nivelSubComentario;
+}
+void setID(int id){
+	this->id = id;
+}
+void setTexto(string texto){
+	this->texto = texto;
+}
+void setNivelSubComentario(int nivelSubComentario){
+	this->nivelSubComentario = nivelSubComentario;
+}
+
+
+
+
+// operaciones
+/*
+* 
+* hasta aca llegue...
+* 
+*/
+
+
+
+
+

@@ -1,0 +1,58 @@
+# Project: Laboratorio 0
+# Makefile created by Dev-C++ 5.10
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+OBJ      = main.o clases/cpp/Consulta.o clases/cpp/Gato.o clases/cpp/Mascota.o clases/cpp/Perro.o clases/cpp/Socio.o datatypes/cpp/DtConsulta.o datatypes/cpp/DtFecha.o datatypes/cpp/DtGato.o datatypes/cpp/DtMascota.o datatypes/cpp/DtPerro.o
+LINKOBJ  = main.o clases/cpp/Consulta.o clases/cpp/Gato.o clases/cpp/Mascota.o clases/cpp/Perro.o clases/cpp/Socio.o datatypes/cpp/DtConsulta.o datatypes/cpp/DtFecha.o datatypes/cpp/DtGato.o datatypes/cpp/DtMascota.o datatypes/cpp/DtPerro.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include/c++"
+BIN      = "Laboratorio 0.exe"
+CXXFLAGS = $(CXXINCS) -m32 -g3
+CFLAGS   = $(INCS) -m32 -g3
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+clases/cpp/Consulta.o: clases/cpp/Consulta.cpp
+	$(CPP) -c clases/cpp/Consulta.cpp -o clases/cpp/Consulta.o $(CXXFLAGS)
+
+clases/cpp/Gato.o: clases/cpp/Gato.cpp
+	$(CPP) -c clases/cpp/Gato.cpp -o clases/cpp/Gato.o $(CXXFLAGS)
+
+clases/cpp/Mascota.o: clases/cpp/Mascota.cpp
+	$(CPP) -c clases/cpp/Mascota.cpp -o clases/cpp/Mascota.o $(CXXFLAGS)
+
+clases/cpp/Perro.o: clases/cpp/Perro.cpp
+	$(CPP) -c clases/cpp/Perro.cpp -o clases/cpp/Perro.o $(CXXFLAGS)
+
+clases/cpp/Socio.o: clases/cpp/Socio.cpp
+	$(CPP) -c clases/cpp/Socio.cpp -o clases/cpp/Socio.o $(CXXFLAGS)
+
+datatypes/cpp/DtConsulta.o: datatypes/cpp/DtConsulta.cpp
+	$(CPP) -c datatypes/cpp/DtConsulta.cpp -o datatypes/cpp/DtConsulta.o $(CXXFLAGS)
+
+datatypes/cpp/DtFecha.o: datatypes/cpp/DtFecha.cpp
+	$(CPP) -c datatypes/cpp/DtFecha.cpp -o datatypes/cpp/DtFecha.o $(CXXFLAGS)
+
+datatypes/cpp/DtGato.o: datatypes/cpp/DtGato.cpp
+	$(CPP) -c datatypes/cpp/DtGato.cpp -o datatypes/cpp/DtGato.o $(CXXFLAGS)
+
+datatypes/cpp/DtMascota.o: datatypes/cpp/DtMascota.cpp
+	$(CPP) -c datatypes/cpp/DtMascota.cpp -o datatypes/cpp/DtMascota.o $(CXXFLAGS)
+
+datatypes/cpp/DtPerro.o: datatypes/cpp/DtPerro.cpp
+	$(CPP) -c datatypes/cpp/DtPerro.cpp -o datatypes/cpp/DtPerro.o $(CXXFLAGS)

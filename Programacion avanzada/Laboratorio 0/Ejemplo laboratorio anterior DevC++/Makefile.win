@@ -1,0 +1,61 @@
+# Project: Ejemplo laboratorio anterior
+# Makefile created by Dev-C++ 5.10
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+OBJ      = main.o classes/sources/Empleado.o classes/sources/Empresa.o classes/sources/EmpresaExtranjera.o classes/sources/EmpresaNacional.o classes/sources/RelacionLaboral.o datatypes/sources/Direccion.o datatypes/sources/DtEmpleado.o datatypes/sources/DtEmpresa.o datatypes/sources/DtEmpresaExtranjera.o datatypes/sources/DtEmpresaNacional.o datatypes/sources/Fecha.o
+LINKOBJ  = main.o classes/sources/Empleado.o classes/sources/Empresa.o classes/sources/EmpresaExtranjera.o classes/sources/EmpresaNacional.o classes/sources/RelacionLaboral.o datatypes/sources/Direccion.o datatypes/sources/DtEmpleado.o datatypes/sources/DtEmpresa.o datatypes/sources/DtEmpresaExtranjera.o datatypes/sources/DtEmpresaNacional.o datatypes/sources/Fecha.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.8.1/include/c++"
+BIN      = "Ejemplo laboratorio anterior.exe"
+CXXFLAGS = $(CXXINCS) -m32 -g3
+CFLAGS   = $(INCS) -m32 -g3
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+classes/sources/Empleado.o: classes/sources/Empleado.cpp
+	$(CPP) -c classes/sources/Empleado.cpp -o classes/sources/Empleado.o $(CXXFLAGS)
+
+classes/sources/Empresa.o: classes/sources/Empresa.cpp
+	$(CPP) -c classes/sources/Empresa.cpp -o classes/sources/Empresa.o $(CXXFLAGS)
+
+classes/sources/EmpresaExtranjera.o: classes/sources/EmpresaExtranjera.cpp
+	$(CPP) -c classes/sources/EmpresaExtranjera.cpp -o classes/sources/EmpresaExtranjera.o $(CXXFLAGS)
+
+classes/sources/EmpresaNacional.o: classes/sources/EmpresaNacional.cpp
+	$(CPP) -c classes/sources/EmpresaNacional.cpp -o classes/sources/EmpresaNacional.o $(CXXFLAGS)
+
+classes/sources/RelacionLaboral.o: classes/sources/RelacionLaboral.cpp
+	$(CPP) -c classes/sources/RelacionLaboral.cpp -o classes/sources/RelacionLaboral.o $(CXXFLAGS)
+
+datatypes/sources/Direccion.o: datatypes/sources/Direccion.cpp
+	$(CPP) -c datatypes/sources/Direccion.cpp -o datatypes/sources/Direccion.o $(CXXFLAGS)
+
+datatypes/sources/DtEmpleado.o: datatypes/sources/DtEmpleado.cpp
+	$(CPP) -c datatypes/sources/DtEmpleado.cpp -o datatypes/sources/DtEmpleado.o $(CXXFLAGS)
+
+datatypes/sources/DtEmpresa.o: datatypes/sources/DtEmpresa.cpp
+	$(CPP) -c datatypes/sources/DtEmpresa.cpp -o datatypes/sources/DtEmpresa.o $(CXXFLAGS)
+
+datatypes/sources/DtEmpresaExtranjera.o: datatypes/sources/DtEmpresaExtranjera.cpp
+	$(CPP) -c datatypes/sources/DtEmpresaExtranjera.cpp -o datatypes/sources/DtEmpresaExtranjera.o $(CXXFLAGS)
+
+datatypes/sources/DtEmpresaNacional.o: datatypes/sources/DtEmpresaNacional.cpp
+	$(CPP) -c datatypes/sources/DtEmpresaNacional.cpp -o datatypes/sources/DtEmpresaNacional.o $(CXXFLAGS)
+
+datatypes/sources/Fecha.o: datatypes/sources/Fecha.cpp
+	$(CPP) -c datatypes/sources/Fecha.cpp -o datatypes/sources/Fecha.o $(CXXFLAGS)

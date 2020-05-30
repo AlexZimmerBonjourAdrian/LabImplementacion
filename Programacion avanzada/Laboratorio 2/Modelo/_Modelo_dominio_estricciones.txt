@@ -1,0 +1,17 @@
+Restricciones del modelo de dominio
+
+
+El nicknames identifica a los usuarios
+El id identifica a los comentarios
+El titulo identifica a las peliculas
+El id identifica a las funciones
+El id identifica a los cines
+El número identifica a la sala dentro de un mismo cine.
+La cantidad de asientos de una reserva debe ser menor o igual a la cantidad de asientos disponibles en la sala donde se realiza la función.
+La suma de la cantidad de asientos reservados para una función no puede ser mayor que la cantidad de asientos de la sala.
+No puede haber dos funciones al mismo tiempo en la misma sala. Pero si en el mismo cine.
+Al definir una función, la fecha de ésta no puede ser anterior a la actual.
+El puntaje de una pelicula se calcula como el promedio de los puntajes que el usuario le ha dado a la pelicula
+
+
+

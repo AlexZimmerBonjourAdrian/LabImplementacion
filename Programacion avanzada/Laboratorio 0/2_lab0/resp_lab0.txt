@@ -1,0 +1,5 @@
+- ¿Cuáles son las dependencias circulares que fueron necesarias solucionar para que el programa compile?
+En la clase A se tuvo que hacer una forward declaration de la clase B y la clase C, asi como tambien en la clase B se tuvo que hacer lo mismo declarando a A y C, y en la clase C declarando A y B.
+
+- ¿Qué es forward declaration?
+Una forward declaration es una declaracion de un identificador (variable, constante, funcion, etc) a la cual todavia no se le ha dado una definicion completa. Se utiliza para "avisar" al compilador que tal cosa existe, pero no la voy a *definir* en este lugar, sino mas adelante.

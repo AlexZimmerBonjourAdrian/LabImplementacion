@@ -1,0 +1,43 @@
+class Racional{
+	private:
+		int numerador;
+		int denominador;
+	public:
+		Racional();
+		Racional(int n, int d);
+		Racional suma(Racional r);
+		void set_numerador();
+		void set_denominador();
+		int get_numerador();
+		int get_denominador();
+		Racional diferencia(Racional r);
+		Racional producto(Racional r);
+		Racional cociente(Racional r);
+		bool igualdad(Racional r);
+}
+
+void Racional::Racional(){
+	numerador = 0;
+	denominador = 1;
+}
+int Racional::get_numerador(){
+	return numerador
+}
+int Racional::get_denominador(){
+	return denominador
+}
+
+Racional*  Racional::suma(Racional r){
+	int mcm = mcm(denominador, r.get_denominador);
+	int numA = (mcm / denominador) * numerador; // un numerador
+	int numB = (mcm / r.get_denominador) * r.getnumerador; // otro numerador
+	Racional ret = new Racional(numA+numB, mcm);
+	return ret;
+}
+
+Racional* Racional::Racional::diferencia(Racional r);
+Racional* Racional::producto(Racional r);
+Racional* Racional::cociente(Racional r);
+bool Racional::igualdad(Racional r);
+
+

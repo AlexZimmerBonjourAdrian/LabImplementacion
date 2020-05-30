@@ -1,0 +1,40 @@
+
+usuario
+	nickname
+	contraseña
+	url_imagen
+	
+pelicula 
+	titulo 
+	poster
+	sinopsis
+
+cine 
+	numero
+	direccion
+	salas
+
+Sala
+	numero
+	capacidad
+
+funcion
+	numero
+	sala
+	fecha
+	horario
+
+reserva
+	asientos
+	costo
+	credito
+		descuento
+		nombre finaciera
+	debito
+		banco que la emiti
+		
+comentario
+	puntaje
+	usuario
+	pelicula
+	respuestas

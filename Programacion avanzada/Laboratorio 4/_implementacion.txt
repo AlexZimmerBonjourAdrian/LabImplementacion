@@ -1,0 +1,23 @@
+
+------- 1 ---------------------------------------------------------
+Puntuacion		OK	// No depende de nadie
+Reserva			OK	// No depende de nadie
+ReservaCredito	OK	// Depende de Reserva
+ReservaDebito	OK	// Depende de Reserva
+Sala			l	// Depende de Cine
+Cine			l	// Depende de Sala
+
+------- 2 ---------------------------------------------------------
+Funcion			f	// Depende de Sala y Reserva
+Usuario			OK	// Depende de Puntuacion
+
+------- 3 ---------------------------------------------------------
+Comentario			// Depende de Usuario
+
+------- 4 ---------------------------------------------------------
+Pelicula			// Depende de Puntuacion, Comentario, Funcion y Cine
+
+------- 5 ---------------------------------------------------------
+Sistema				// Depende de Cine, Usuario y Pelicula
+
+-------------------------------------------------------------------
