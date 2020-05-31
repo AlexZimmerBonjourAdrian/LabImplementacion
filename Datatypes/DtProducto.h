@@ -1,5 +1,7 @@
 #include "string.h"
-class DtProducto
+#include "../ICollection/interfaces/ICollectible.h"
+using namespace std;
+class DtProducto :: public ICollectible
 {
 private:
  int Codigo;

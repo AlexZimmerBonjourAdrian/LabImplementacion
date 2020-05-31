@@ -1,5 +1,5 @@
 #include "../DtFactura.h"
-
+using namespace std;
 DtFactura::DtFactura(float codigo,time hora, string Nombre_Trabajador, DtProducto * productos,float subtotal,float descuento, float total_iva){
 this->codigo=codigo;
 this->fecha = fecha;
@@ -15,7 +15,11 @@ int DtFactura::getCodigo()
     return this->codigo;
 }
 
-DtProducto * DtFactura::getProductos()
+time_t DtFactura::getFechaHora()
+{
+    return this->getFechaHora;
+}
+ICollection * DtFactura::getProductos()
 {
     return this->productos;
 }

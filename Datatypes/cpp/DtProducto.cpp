@@ -12,8 +12,6 @@ DtProducto::DtProducto(int codigo, string Descripcion, float precio, int cantida
     this->Precio = precio;
     this->Cantidad = cantidad;
 }
-DtProducto::~DtProducto(){
-}
 
 int DtProducto::getCodigo()
 {
@@ -34,3 +32,6 @@ int DtProducto::getCantidad()
 {
     return this->Cantidad;
 }
+DtProducto::~DtProducto(){
+}
+

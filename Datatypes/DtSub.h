@@ -1,4 +1,5 @@
-class DtSub
+#include "../ICollection/interfaces/ICollectible.h"
+class DtSub :: public ICollectible
 {
 private:
      int cod;
