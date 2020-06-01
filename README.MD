@@ -1,5 +1,6 @@
 # LabImplementacion
-TareaBruno
-TareaAlex
+TareaBruno /n
+'/n' TareaAlex '/n' 
+
 TareaGerman
 TareaPablo
