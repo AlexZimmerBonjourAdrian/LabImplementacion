@@ -18,7 +18,7 @@ private:
     float descuento;
     float total_iva;
 public:
-DtFactura(float codigo,time_t FechaHora,ICollection * producto ,float subtotal, float descuento,float total_iva);
+DtFactura(int codigo,time_t FechaHora,ICollection * producto ,float subtotal, float descuento,float total_iva);
 int getCodigo();
 time_t getFechaHora();
  ICollection * getProductos();
