@@ -1,3 +1,5 @@
+#ifndef DTPRODUCTO_H
+#define DTPRODUCTO_H
 #include "string.h"
 #include "../ICollection/interfaces/ICollectible.h"
 using namespace std;
@@ -18,4 +20,4 @@ public:
     int getCantidad();
     virtual ~DtProducto();
 };
-
+#endif

@@ -1,11 +1,9 @@
 #include "Mozo.h"
+#include "Local.h"
 
 Mesa::Mesa(int id)
 {
     this->id;
-}
-
-Mesa::~Mesa(){
 }
 
 void Mesa::setid(int id)
@@ -18,5 +16,7 @@ int Mesa:getid()
     return this->id;
 }
 
+Mesa::~Mesa(){
+}
 
 

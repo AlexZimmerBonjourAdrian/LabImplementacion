@@ -1,3 +1,5 @@
+#ifndef DTFECHA_H
+#define DTFECHA_H
 #include "time.h"
 class DtFecha :: public ICollectible
 {
@@ -9,4 +11,4 @@ public:
     time_t getFechaHora();
    virtual ~DtFecha();
 };
-
+#endif
