@@ -1,4 +1,6 @@
-#include "./colecciones/ColMozos.cpp"
+#include "./colecciones/ListDictionary.cpp"
+#include "./iterators/ListDiterator.cpp"
+#include "./clases/Mozo.cpp"
 #include "./colecciones/List.cpp"
 
 struct nodolista{
@@ -36,12 +38,12 @@ class Sistema {
 	private:
 		static Sistema * instance;
 		Sistema();
-		ColMozos * mozos;
+		IDictionary * mozos;
 		
 	
 	public:
 		static Sistema * getInstance();
-		ColMozos * getMozos();
+		IDictionary * getMozos();
 		//Caso de uso Iniciar venta en mesa
 		Lista listarMesasAsignadas(int idmozo);
 		int seleccionarMesas(int);

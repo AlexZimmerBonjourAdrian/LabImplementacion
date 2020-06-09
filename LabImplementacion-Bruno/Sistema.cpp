@@ -7,7 +7,7 @@ Sistema * Sistema::instance=NULL;
 
 Sistema::Sistema() {
 
-	mozos = new ColMozos(new List());
+	mozos = new ListDictionary();
 }
 
 Sistema * Sistema::getInstance(){
@@ -17,32 +17,33 @@ Sistema * Sistema::getInstance(){
 	return instance;
 }
 
-ColMozos * Sistema::getMozos(){
+IDictionary * Sistema::getMozos(){
 	return this->mozos;
 }
 
 Lista Sistema::listarMesasAsignadas(int idmozo){
-	Sistema * s =Sistema::getInstance();
-	ColMozos * mozos= s->getMozos();
-	MozoIterator * it = mozos->getIterator();
-	while(it->hasCurrent()){
-		Mozo * mo = it->getCurrent();
-		if(idmozo==mo->getidmozo()){
-			Lista IDmesas = NULL;
-			ICollection * mesas = mo->getMesa();
-			IIterator * itmesas  = mesas->getIterator();
-			while(itmesas->hasCurrent()){
-				ICollectible * i = itmesas->getCurrent();
-				Mesa * m = (Mesa *) i;
-				InsertEnd(IDmesas,m->getid());
-				itmesas->next();
-			}
-			return IDmesas;
-		}
-		else{
-			it->next();
-		}
+	IKey * k = new IntKey(idmozo);
+	Mozo * mo= (Mozo*) mozos->find(k);
+	if(mo==NULL){
+		throw "No existe el mozo";
 	}
+	else{
+		Lista IDmesas = NULL;
+		ICollection * mesas = mo->getMesa();
+		IIterator * itmesas  = mesas->getIterator();
+		if(itmesas->hasCurrent()==false){
+			throw "El mozo no tiene mesas asignadas";
+		}
+		while(itmesas->hasCurrent()){
+			ICollectible * i = itmesas->getCurrent();
+			Mesa * m = (Mesa *) i;
+			InsertEnd(IDmesas,m->getid());
+			itmesas->next();
+		}
+		
+		return IDmesas;
+	}
+	
 	
 	
 }

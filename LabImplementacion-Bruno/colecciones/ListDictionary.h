@@ -1,19 +1,20 @@
-#include "../interfaces/IDictionary.h"
-
+#include "../interfaces/IDictionary.cpp"
+#include "ListNodeDictionary.cpp"
 class ListDictionary : public IDictionary{
 	
 	private:
 		ListNodeDictionary * head;
+		int size;
 		
 	public:
-		ListDictionary(ListNodeDictionary *);
+		ListDictionary();
 		void add(IKey *,ICollectible *);
-		bool member(IKey *);
+		bool member(IKey *) const;
 		void remove(IKey *);
-		ICollectible * find(IKey *);
-		bool isEmpty();
-		int getSize();
+		ICollectible * find(IKey *) const;
+		bool isEmpty() const;
+		int getSize() const;
 		IIterator * getIterator();
-		~ListDictionary();
+		virtual ~ListDictionary();
 	
 };
