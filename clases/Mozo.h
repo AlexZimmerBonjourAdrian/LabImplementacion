@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/ICollection.h"
-#include "Mesa.cpp"
+#include "Mesa.h"
 class Mozo : public ICollectible
 {
 private:

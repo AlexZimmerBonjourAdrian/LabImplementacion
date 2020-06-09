@@ -1,12 +1,13 @@
-#include "./colecciones/ColMozos.cpp"
+#include "./colecciones/ColMozos.h"
 
 
 class Sistema {
 	private:
-		static Sistema * instance;
+		static Sistema* instancia;
 		Sistema();
-		ColMozos * mozos;
+		ColMozos* mozos;
 	public:
-		static Sistema * getInstance();
-		ColMozos * getMozos();
+		static Sistema* getInstancia();
+		ColMozos* getMozos();
+		virtual ~Sistema();
 };
