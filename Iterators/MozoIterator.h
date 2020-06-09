@@ -1,4 +1,4 @@
-#include "IIterator.cpp"
+#include "../clases/Mozo.cpp"
 
 class MozoIterator{
 	
@@ -8,7 +8,7 @@ class MozoIterator{
 	public:
 		MozoIterator(IIterator*);
 		void next();
-		ICollectible * getCurrent();
+		Mozo * getCurrent();
 		bool hasCurrent();
 		~MozoIterator();
 };

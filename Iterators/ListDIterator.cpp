@@ -1,40 +1,42 @@
-#include "ListIterator.h"
+#include "ListDIterator.h"
+#ifndef LISTDITERATOR_CPP
+#define LISTDITERATOR_CPP
 
 using namespace std;
 
-ListIterator::ListIterator(ListNode* n, bool disposeHeadOnDelete):
+ListDIterator::ListDIterator(ListNodeDictionary* n, bool disposeHeadOnDelete):
         head(n), current(n), disposeHeadOnDelete(disposeHeadOnDelete) {
 }
 
-ICollectible *ListIterator::getCurrent()
+ICollectible *ListDIterator::getCurrent()
 {
     if(current == NULL)
         throw "No hay elemento: se llego al fin de la coleccion";
     return current->getElem();
 }
 
-bool ListIterator::hasCurrent()
+bool ListDIterator::hasCurrent()
 {
     return current != NULL;
 }
 
-void ListIterator::next()
+void ListDIterator::next()
 {
     if(current != NULL)
         current = current->getNext();
 }
 
-ListIterator::~ListIterator()
+ListDIterator::~ListDIterator()
 {
     if(disposeHeadOnDelete){
-        ListNode *n = head;
+        ListNodeDictionary *n = head;
         while(n != NULL){
-            ListNode *deleteMe = n;
+            ListNodeDictionary *deleteMe = n;
             n = n->getNext();
             delete deleteMe;
         }
     }
         
 }
-
+#endif
 

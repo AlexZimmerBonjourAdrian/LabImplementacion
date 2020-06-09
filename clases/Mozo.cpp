@@ -1,7 +1,10 @@
 #include "Mozo.h"
 #include <iostream>
 //#include "Mesa.h"
-Mozo::Mozo(int idmozo, ICollection * mesas)
+#include "../colecciones/IntKey.cpp"
+#ifndef MOZO_CPP
+#define MOZO_CPP
+Mozo::Mozo(int idmozo, IDictionary * mesas)
 {
     this->idmozo=idmozo;
     this->mesas=mesas;
@@ -15,16 +18,19 @@ int Mozo::getidmozo()
     return this->idmozo;
 }
 
-ICollection * Mozo::getMesa()
+IDictionary * Mozo::getMesa()
 {
  return this->mesas;
 }
 
 void Mozo::agregarMesa(Mesa * mesa){
-	this->mesas->add(mesa);
+	
+	this->mesas->add(new IntKey(mesa->getid()),mesa);
 }
 
 Mozo::~Mozo()
 {
 
 }
+
+#endif
