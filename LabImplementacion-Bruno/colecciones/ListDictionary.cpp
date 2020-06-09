@@ -30,8 +30,9 @@ void ListDictionary::add(IKey * key, ICollectible * elem){
 }
 
 bool ListDictionary::member(IKey * key) const{
-	    for(ListNodeDictionary *current = head; current != NULL; current = current->getNext()){
-			if(current->getKey() == key){
+	    IntKey * k = (IntKey *) key;
+		for(ListNodeDictionary *current = head; current != NULL; current = current->getNext()){
+			if(current->getKey()->getId() == k->getId()){
 	   			return true;
 			}	
 	   }

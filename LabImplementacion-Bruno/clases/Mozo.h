@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../interfaces/ICollectible.h"
-#include "../interfaces/ICollection.h"
+#include "../interfaces/IDictionary.h"
 #include "Mesa.cpp"
 
 #ifndef MOZO_H
@@ -9,12 +9,12 @@ class Mozo : public ICollectible
 {
 private:
     int idmozo;
-    ICollection * mesas;
+    IDictionary * mesas;
 public:
-    Mozo(int, ICollection *);
+    Mozo(int, IDictionary *);
     void setIdMozo(int idmozo);
     int getidmozo();
-    ICollection * getMesa();
+    IDictionary * getMesa();
     void agregarMesa(Mesa *);
     virtual ~Mozo();
 };

@@ -29,7 +29,7 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 	}
 	else{
 		Lista IDmesas = NULL;
-		ICollection * mesas = mo->getMesa();
+		IDictionary * mesas = mo->getMesa();
 		IIterator * itmesas  = mesas->getIterator();
 		if(itmesas->hasCurrent()==false){
 			throw "El mozo no tiene mesas asignadas";
