@@ -1,6 +1,9 @@
 #include "Mozo.h"
 #include <iostream>
 //#include "Mesa.h"
+
+#ifndef MOZO_CPP
+#define MOZO_CPP
 Mozo::Mozo(int idmozo, ICollection * mesas)
 {
     this->idmozo=idmozo;
@@ -28,3 +31,5 @@ Mozo::~Mozo()
 {
 
 }
+
+#endif

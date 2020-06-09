@@ -1,5 +1,5 @@
 #include "MozoIterator.h"
-#include "../clases/Mozo.cpp"
+
 MozoIterator::MozoIterator(IIterator* it){
 	this->it=it;
 }
@@ -8,7 +8,7 @@ void MozoIterator::next(){
 	it->next();
 }
 
-ICollectible * MozoIterator::getCurrent(){
+Mozo * MozoIterator::getCurrent(){
 	return (Mozo*) it->getCurrent();
 }
 
