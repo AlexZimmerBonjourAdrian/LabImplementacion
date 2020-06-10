@@ -4,8 +4,9 @@
 #define VENTA_CPP
 
 
-Venta::Venta(int codigo){
+Venta::Venta(int codigo, ICollection * cantidades){
 	this->codigo=codigo;
+	this->cantidades=cantidades;
 }
 void Venta::agregarProd(Producto * p, int cantProd){
 	CantidadProd * prod = new CantidadProd(cantProd,p);
@@ -33,6 +34,10 @@ int Venta::getNuevaCantidad(Producto * p, int cantProd){
 		it->next();
 	}
 	throw "No se encontro el producto en la venta";
+}
+
+ICollection * Venta::getCantidades(){
+	return this->cantidades;
 }
 
 Venta::~Venta(){

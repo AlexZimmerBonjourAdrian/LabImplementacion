@@ -10,10 +10,11 @@ class Venta : public ICollectible{
 		ICollection * cantidades;
 		
 	public:
-		Venta(int);
+		Venta(int,ICollection *);
 		void agregarProd(Producto * p, int cantProd);
 		void borrarProd(Producto * p);
 		int getNuevaCantidad(Producto * p, int cantProd);
+		ICollection * getCantidades();
 		~Venta();
 };
 
