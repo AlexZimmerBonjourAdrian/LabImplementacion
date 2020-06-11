@@ -1,7 +1,17 @@
+#ifndef SISTEMA_H
+#define SISTEMA_H
 #include "./colecciones/ListDictionary.cpp"
 #include "./iterators/ListDiterator.cpp"
 #include "./clases/Mozo.cpp"
 #include "./colecciones/List.cpp"
+#include "./structure/Producto.h"
+//#include "./structure/Producto.h"
+
+#pragma region class operations
+class Producto;
+class DtProducto;
+
+#pragma endregion
 
 struct nodolista{
     int info;
@@ -39,13 +49,26 @@ class Sistema {
 		static Sistema * instance;
 		Sistema();
 		IDictionary * mozos;
+        ICollection * Productos;
+        IDictionary * ProductosDictionary;
 		
 	
 	public:
 		static Sistema * getInstance();
-		IDictionary * getMozos();
+       
+		#pragma region Productos Operaciones del sistema
+            ICollection * getProducto();
+            ICollection * ListarProductos();
+         IDictionary selecionaproducto(int codigoP,int cantidad);
+        void agregarProducto(Producto *);
+        #pragma endregion
+		int seleccionarMesas(int);
+        IDictionary * getMozos();
 		//Caso de uso Iniciar venta en mesa
 		Lista listarMesasAsignadas(int idmozo);
-		int seleccionarMesas(int);
+       // List listarProductos();
+     
 		void confirmarSeleccion(Lista);
 };
+
+#endif

@@ -3,7 +3,7 @@
 #include<stdio.h>
 
 using namespace std;
- 
+ /*
 bool verificarMesaAtendida(Sistema * s, Mesa * m){
 	IDictionary * mozos= s->getMozos();
 	IIterator * it = mozos->getIterator();
@@ -19,9 +19,63 @@ bool verificarMesaAtendida(Sistema * s, Mesa * m){
 	delete k;
 	return false;
 }
+*/
+//Funcion de Prueba
+/*
+ bool VerificarProducto(Producto * p,  int Codigo)
+ {
+	Sistema * s;
+	 IKey * k = new IntKey(Codigo);
+	//ICollection * Pro=s->getProducto(); 
+	Producto * P = (Producto*) temas->find(k));
+	 if (P->)
+	 {
+		Pro 
+	 }
+	 
+ }
+ */
 
+bool verificarProducto(Sistema * s, Producto * p){
+IDictionary * Productos = s->getProducto();
+IIterator * it = Productos->getIterator();
+IKey * k = new IntKey(p->getCodigo());
+while (it->hasCurrent())
+{
+	Producto * pr=(Producto *) it->getCurrent();
+	IDictionary * Productos=pr->getDatos();
+	if(Productos->member(k))
+	{
+		return true;
+	}
+	it->next();
+}
+delete k;
+return false;
+
+}
 
 main(){
+
+try
+{
+ Producto * Producto1 = new Producto(1,"Hola",40f,4);
+ Producto * producto2 = new Producto(2,"Hola",20,2);
+ Producto * producto3 = new Producto(3,"hola4",10,200);
+ Sistema * s= Sistema::getInstance();
+IDictionary * productos = s->getProducto();
+s->agregarProducto(Producto1->getCodigo());
+s->agregarProducto(producto2->getCodigo());
+s->agregarProducto(producto3->getCodigo());
+
+
+
+}
+	}catch(const char* msg){
+		cout << msg << endl;
+	}
+
+/*
 	try{
 		Mesa * mesa1 = new Mesa(1);
 		Mesa * mesa2 = new Mesa(2);
@@ -51,7 +105,7 @@ main(){
 	//		cout << "Ingrese la mesa" << endl;
 	//		cin >> idmesa;
 	//		InsertEnd(mesasselec,s->seleccionarMesas(idmesa));
-	//		cout << "¿Desea seguir agregando?" << endl;
+	//		cout << "ï¿½Desea seguir agregando?" << endl;
 	//		cin >> idmesa;
 	//		if(idmesa!=1){
 	//			mostrarLista(mesasselec);
@@ -85,6 +139,6 @@ main(){
 	}
 
 
-
+*/
 	system("PAUSE");
 }
