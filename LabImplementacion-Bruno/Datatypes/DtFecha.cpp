@@ -1,4 +1,4 @@
-#include "../DtFecha.h"
+#include "DtFecha.h"
 
 DtFecha::DtFecha(time_t FechaHora)
 {

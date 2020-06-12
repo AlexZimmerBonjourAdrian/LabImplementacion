@@ -4,18 +4,9 @@
 #include "../colecciones/IntKey.cpp"
 #ifndef MOZO_CPP
 #define MOZO_CPP
-Mozo::Mozo(int idmozo, IDictionary * mesas)
-{
-    this->idmozo=idmozo;
+Mozo::Mozo(int idmozo, string nombre, IDictionary * mesas) : Empleado(idmozo,nombre){
+
     this->mesas=mesas;
-}
-void Mozo::setIdMozo(int idmozo)
-{
-    this->idmozo= idmozo;
-}
-int Mozo::getidmozo()
-{
-    return this->idmozo;
 }
 
 IDictionary * Mozo::getMesa()

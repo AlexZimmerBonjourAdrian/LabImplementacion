@@ -1,19 +1,16 @@
 #include <iostream>
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/IDictionary.h"
+#include "Empleado.cpp"
 #include "Mesa.cpp"
 
 #ifndef MOZO_H
 #define MOZO_H
-class Mozo : public ICollectible
-{
+class Mozo : public Empleado{
 private:
-    int idmozo;
     IDictionary * mesas;
 public:
-    Mozo(int, IDictionary *);
-    void setIdMozo(int idmozo);
-    int getidmozo();
+    Mozo(int, string, IDictionary *);
     IDictionary * getMesa();
     void agregarMesa(Mesa *);
     virtual ~Mozo();

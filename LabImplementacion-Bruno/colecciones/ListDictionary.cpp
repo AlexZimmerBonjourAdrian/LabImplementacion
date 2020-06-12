@@ -1,6 +1,5 @@
 #include "ListDictionary.h"
 #include "../iterators/ListDIterator.cpp"
-#include "../clases/Mozo.cpp"
 #include<iostream>
 #include<stdio.h>
 ListDictionary::ListDictionary(){
@@ -67,7 +66,6 @@ ICollectible * ListDictionary::find(IKey * key) const{
 	ListNodeDictionary * current = head;
 	IntKey * k = (IntKey *) key;
 	while(current!=NULL){
-		Mozo * m = (Mozo *) current->getElem();
 		if(current->getKey()->getId()==k->getId()){
 			return current->getElem();
 		}

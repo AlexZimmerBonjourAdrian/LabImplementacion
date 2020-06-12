@@ -1,5 +1,5 @@
 #include "time.h"
-class DtFecha :: public ICollectible
+class DtFecha : public ICollectible
 {
 private:
     time_t FechaHora;

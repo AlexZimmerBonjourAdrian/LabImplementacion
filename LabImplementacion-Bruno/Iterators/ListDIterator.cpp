@@ -15,6 +15,8 @@ ICollectible *ListDIterator::getCurrent()
     return current->getElem();
 }
 
+
+
 bool ListDIterator::hasCurrent()
 {
     return current != NULL;

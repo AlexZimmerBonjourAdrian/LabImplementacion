@@ -3,8 +3,9 @@
 #define VLOCAL_CPP
 #include "Mesa.cpp"
 #include "../colecciones/IntKey.cpp"
-Vlocal::Vlocal(int codigo, ICollection * cantidades, IDictionary * mesas) : Venta(codigo,cantidades){
+Vlocal::Vlocal(int codigo, ICollection * cantidades, IDictionary * mesas, Mozo* mozo) : Venta(codigo,cantidades){
 	this->mesas=mesas;
+	this->mozo=mozo;
 }
 
 void Vlocal::asignarMesas(ICollection * mesas){
@@ -15,6 +16,10 @@ void Vlocal::asignarMesas(ICollection * mesas){
 		this->mesas->add(key,m);
 	}
 	
+}
+
+string Vlocal::getEmpleado() const {
+	return this->mozo->getNombre();
 }
 
 Vlocal::~Vlocal(){
