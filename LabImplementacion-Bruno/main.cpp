@@ -28,18 +28,54 @@ bool verificarMesaAtendida(Sistema * s, Mesa * m){
 
 
 main(){
+	bool agregar = false;
 	try{
-		Repartidor * r1 = new Repartidor(1,"Juan","moto",new ListDictionary());
-		DtDireccion * d1 = new DtDireccion("Herrera", 233);
-		Cliente * c1 = new Cliente("098765213","Arturo",d1);
-		Vdomicilio * v1 =new Vdomicilio(1,new List(),d1,"Arturo","121212",r1,c1);
-		Factura * f1 = new Factura(1,"2019-12-01",new List(),221,12,209);
+		Sistema * s = Sistema::getInstance();
+		Mozo * m1 = new Mozo(1,"juan",new ListDictionary());
+		Vlocal * v1 = new Vlocal(new List(),m1);
+		Mesa * me1 = new Mesa(1,new ListDictionary());
+		s->agregarMozo(m1);
+		m1->agregarMesa(me1);
+		s->agregarMesa(me1);
+		int id=1;
 		
-	}catch(const char* msg){
+		
+		//Iniciar Venta en mesa
+		
+		
+		cout << "Ingrese el id del mozo" << endl;
+		cin >> id;
+		mostrarLista(s->listarMesasAsignadas(id));
+		cout << "Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
+		while(id!=0){
+			cin >> id;
+			if(id!=0)s->seleccionarMesas(id);
+			
+		}
+		Lista selec = s->listarMesasSeleccionadas();
+		mostrarLista(selec);
+		cout << "Ingrese 1 para confirmar o 0 para cancelar" << endl;
+		cin >>id;
+		if(id==0){
+			s->liberarMemoria();
+			cout << "No se inicio la venta" << endl;
+		}
+		else{
+			s->confirmarSeleccion(selec);
+			s->liberarMemoria();
+			cout << "Se inicio la venta" << endl;
+		}
+		
+		//Facturacion de una venta
+		
+		
+		
+		
+	}catch(const char * msg){
 		cout << msg << endl;
 	}
-
-
+	
+	
 
 	system("PAUSE");
 }

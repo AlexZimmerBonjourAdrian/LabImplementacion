@@ -8,15 +8,16 @@ class Factura : public ICollectible{
 	
 	private:
 		int codigo;
-		string fecha;
+		DtFecha * fecha;
 		ICollection * productos;
 		float subtotal;
 		float descuento;
 		float montototal;
 		Venta * venta;
+		static int maximo;
 		
 	public:
-		Factura(int,string,ICollection *, float,float,float);
+		Factura(DtFecha *,ICollection *, float,float,float);
 		DtFactura * getDatos();
 		~Factura();
 };

@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/IDictionary.h"
@@ -6,6 +8,7 @@
 
 #ifndef MOZO_H
 #define MOZO_H
+
 class Mozo : public Empleado{
 private:
     IDictionary * mesas;

@@ -1,10 +1,11 @@
-#ifndef DTFACTURA_H
-#define DTFACTURA_H
+
 #include <iostream>
 #include <string.h>
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/ICollection.cpp"
-#include "time.h"
+#include "../Datatypes/DtFecha.cpp"
+#ifndef DTFACTURA_H
+#define DTFACTURA_H
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class DtFactura : public ICollectible{
 
 	private:
 	    int codigo;
-	    string fecha;
+	    DtFecha * fecha;
 	    ICollection * productos;
 	    string nombre_trabajador;
 	    float subtotal;
@@ -20,9 +21,9 @@ class DtFactura : public ICollectible{
 	    float total_iva;
 	    
 	public:
-		DtFactura(int, string, ICollection * ,string, float, float ,float);
+		DtFactura(int, DtFecha *, ICollection * ,string, float, float ,float);
 		int getCodigo();
-		string getFechaHora();
+		DtFecha * getFecha();
 		ICollection * getProductos();
 		string getNombre_Trabajador();
 		float getSubtotal();

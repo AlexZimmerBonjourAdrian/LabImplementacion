@@ -4,8 +4,9 @@
 
 using namespace std;
 
-Factura::Factura(int codigo,string fecha,ICollection * productos,float subtotal,float descuento,float montototal){
-	this->codigo=codigo;
+int Factura::maximo = 1;
+
+Factura::Factura(DtFecha * fecha,ICollection * productos,float subtotal,float descuento,float montototal) : codigo(maximo++){
 	this->fecha=fecha;
 	this->productos;
 	this->productos=productos;

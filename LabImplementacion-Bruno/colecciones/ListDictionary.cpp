@@ -8,6 +8,9 @@ ListDictionary::ListDictionary(){
 }
 
 void ListDictionary::add(IKey * key, ICollectible * elem){
+	 if(key == NULL || elem==NULL){
+	 	throw "La clave y el elemento no pueden ser NULL";
+	 }
 	 if(head == NULL){ // list vacía; tamaño = 1
 	 	IntKey * k = (IntKey *)key;
         head = new ListNodeDictionary(k,elem);

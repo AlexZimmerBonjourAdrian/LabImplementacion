@@ -1,16 +1,26 @@
 #include "DtFecha.h"
+#ifndef DTFECHA_CPP
+#define DTFECHA_CPP
 
-DtFecha::DtFecha(time_t FechaHora)
-{
-    this->FechaHora=FechaHora;
+DtFecha::DtFecha(int anio, int mes, int dia){
+    this->anio=anio;
+    this->mes=mes;
+    this->dia=dia;
 }
 
-time_t DtFecha::getFechaHora()
-{
-    return  this->FechaHora;
+int DtFecha::getAnio(){
+	return this->anio;
 }
 
+int DtFecha::getMes(){
+	return this->mes;
+}
+
+int DtFecha::getDia(){
+	return this->dia;
+}
 DtFecha::~DtFecha()
 {
 
 }
+#endif

@@ -17,7 +17,7 @@ class Vdomicilio : public Venta{
 		Cliente * cliente;
 		
 	public:
-		Vdomicilio(int,ICollection *,DtDireccion *,string,string,Repartidor*, Cliente *);
+		Vdomicilio(ICollection *,DtDireccion *,string,string,Repartidor*, Cliente *);
 		DtDireccion * getDireccion();
 		string getNombre();
 		string getEmpleado() const;

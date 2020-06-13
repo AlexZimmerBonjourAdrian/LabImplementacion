@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Vdomicilio::Vdomicilio(int codigo, ICollection * cantidades,DtDireccion * direccion,string nombre_rec,string telefono_rec, Repartidor * repartidor, Cliente* cliente) : Venta(codigo,cantidades){
+Vdomicilio::Vdomicilio( ICollection * cantidades,DtDireccion * direccion,string nombre_rec,string telefono_rec, Repartidor * repartidor, Cliente* cliente) : Venta(cantidades){
 	this->direccion=direccion;
 	this->nombre_rec=nombre_rec;
 	this->telefono_rec=telefono_rec;

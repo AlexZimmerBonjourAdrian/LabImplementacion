@@ -8,8 +8,8 @@ Producto::Producto(int codigo, string descripcion,float precio){
 	this->precio=precio;
 }
 
-DtProducto Producto::getDatos(){
-	return * new DtProducto(this->codigo,this->descripcion, this->precio,0);
+DtProducto * Producto::getDatos(){
+	return  new DtProducto(this->codigo,this->descripcion, this->precio,0);
 }
 
 Producto::~Producto(){

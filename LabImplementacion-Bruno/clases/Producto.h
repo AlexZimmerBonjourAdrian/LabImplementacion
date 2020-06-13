@@ -11,7 +11,7 @@ class Producto : ICollectible {
 	
 	public:
 		Producto(int,string,float);
-		DtProducto getDatos();
+		DtProducto * getDatos();
 		virtual ~Producto();
 		
 };

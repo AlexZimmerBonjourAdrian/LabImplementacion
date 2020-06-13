@@ -1,7 +1,8 @@
 #include "DtFactura.h"
+#ifndef DTFACTURA_CPP
+#define DTFACTURA_CPP
 
-
-DtFactura::DtFactura(int codigo, string fecha, ICollection * productos, string nombre_trabajador,float subtotal,float descuento, float total_iva){
+DtFactura::DtFactura(int codigo, DtFecha * fecha, ICollection * productos, string nombre_trabajador,float subtotal,float descuento, float total_iva){
 	this->codigo=codigo;
 	this->fecha = fecha;
 	this->nombre_trabajador=nombre_trabajador;
@@ -16,7 +17,7 @@ int DtFactura::getCodigo()
     return this->codigo;
 }
 
-string DtFactura::getFechaHora()
+DtFecha * DtFactura::getFecha()
 {
     return this->fecha;
 }
@@ -50,4 +51,4 @@ DtFactura::~DtFactura(){
 }
 
 
-
+#endif
