@@ -13,7 +13,7 @@ class Mozo : public Empleado{
 private:
     IDictionary * mesas;
 public:
-    Mozo(int, string, IDictionary *);
+    Mozo(string, IDictionary *);
     IDictionary * getMesa();
     void agregarMesa(Mesa *);
     virtual ~Mozo();

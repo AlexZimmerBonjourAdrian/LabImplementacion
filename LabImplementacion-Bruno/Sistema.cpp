@@ -6,11 +6,12 @@ Sistema * Sistema::instance=NULL;
 
 Sistema::Sistema() {
 
-	mozos = new ListDictionary();
+	empleados = new ListDictionary();
 	ventas = new ListDictionary();
 	mesas = new ListDictionary();
 	productos = new ListDictionary();
 	facturas = new ListDictionary;
+	temp=NULL;
 }
 
 Sistema * Sistema::getInstance(){
@@ -20,12 +21,39 @@ Sistema * Sistema::getInstance(){
 	return instance;
 }
 
-IDictionary * Sistema::getMozos(){
-	return this->mozos;
+IDictionary * Sistema::getEmpleados(){
+	return this->empleados;
 }
 
-void Sistema::agregarProducto(Producto * p){
-	IKey * k = new IntKey(p->getCodigo());
+
+void Sistema::agregarProdMenu(int codigo,int cantidad){
+	InsertEnd(this->temp,codigo);
+	InsertEnd(this->temp,cantidad);
+	
+}
+
+void Sistema::agregarMenu(int codigo, string descripcion, float precio){
+	
+	Menu * m = new Menu(codigo,descripcion,precio);
+	while(this->temp->sig!=NULL){
+		IKey * k = new IntKey(this->temp->info);
+		Comun * p = (Comun*)this->productos->find(k);
+		if(p==NULL){
+			delete k;
+			throw "(Sistema)No se encontro el producto";
+		}
+		m->agregarProd(p,this->temp->sig->info);
+		this->temp=this->temp->sig;
+		delete k;
+	}
+	IKey * k2 = new IntKey(codigo);
+	this->productos->add(k2,m);
+	
+}
+
+void Sistema::agregarProducto(int codigo,string descripcion,float precio){
+	IKey * k = new IntKey(codigo);
+	Comun * p = new Comun(codigo,descripcion,precio);
 	productos->add(k,p);
 }
 
@@ -33,7 +61,8 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 	
 	InsertEnd(this->temp,idmozo);
 	IKey * k = new IntKey(idmozo);
-	Mozo * mo= (Mozo*) mozos->find(k);
+	
+	Mozo * mo= (Mozo*) empleados->find(k);
 	if(mo==NULL){
 		throw "No existe el mozo en el sistema";
 	}
@@ -44,13 +73,14 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 		if(itmesas->hasCurrent()==false){
 			throw "El mozo no tiene mesas asignadas";
 		}
-		while(itmesas->hasCurrent()){
+		else{
+			while(itmesas->hasCurrent()){
 			ICollectible * i = itmesas->getCurrent();
 			Mesa * m = (Mesa *) i;
 			InsertEnd(IDmesas,m->getid());
 			itmesas->next();
+			}
 		}
-		
 		return IDmesas;
 	}
 	
@@ -60,16 +90,48 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 
 void Sistema::agregarMozo(Mozo * m){
 	IKey * k = new IntKey(m->getId());
-	this->mozos->add(k,m);
+	this->empleados->add(k,m);
 }
 
-void Sistema::agregarMesa(Mesa * m){
-	IKey * k = new IntKey(m->getid());
+void Sistema::agregarMesa(int idmesa){
+	IKey * k = new IntKey(idmesa);
+	if(this->mesas->member(k)){
+		delete k;
+		throw "(Sistema)Existe una mesa con ese codigo";
+	}
+	Mesa * m = new Mesa(idmesa,new ListDictionary());
 	this->mesas->add(k,m);
+}
+
+bool Sistema::check_prod_sistema(int idprod){
+	IKey * k = new IntKey(idprod);
+	if(this->productos->member(k)){
+		return true;
+	}
+	else{
+		delete k;
+		return false;
+	}
 }
 
 void Sistema::seleccionarMesas(int idmesa){
 	InsertEnd(this->temp,idmesa);
+}
+
+void Sistema::agregarMesaMozo(int idmesa, int idmozo){
+	IKey * k1 = new IntKey(idmesa);
+	IKey * k2 = new IntKey(idmozo);
+	Mesa * m1 = (Mesa*) this->mesas->find(k1);
+	Mozo * m2 = (Mozo*)this->empleados->find(k2);
+	if(m1 != NULL && m2 != NULL){
+		m2->agregarMesa(m1);
+		return;
+	}
+	delete k1;
+	delete k2;
+	throw "No se pudo agregar la mesa";
+	
+	
 }
 
 Lista Sistema::listarMesasSeleccionadas(){
@@ -82,7 +144,7 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	Lista p;
 	p= this->temp->sig;
 	IKey * mozo_k = new IntKey(temp->info);
-	Mozo * mozo = (Mozo *)this->mozos->find(mozo_k);
+	Mozo * mozo = (Mozo *)this->empleados->find(mozo_k);
 	if(mozo==NULL){
 		throw "No existe el mozo en el sistema";
 	}
@@ -159,7 +221,7 @@ bool Sistema::check_prod_venta(int idprod){
 	return v->buscarProd(p);
 }
 
-void Sistema::agregarProducto(int idprod,int cantProd){
+void Sistema::agregarProductoVenta(int idprod,int cantProd){
 	int idventa = this->temp->info;
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal*)this->ventas->find(k2);
@@ -175,6 +237,10 @@ void Sistema::agregarProducto(int idprod,int cantProd){
 	}
 	v->agregarProd(p,cantProd);
 }
+
+
+
+
 
 void Sistema::modificarCantidad(int idprod, int cantProd){
 	int idventa = this->temp->info;
@@ -205,6 +271,18 @@ ICollection * Sistema::getFacturas(){
 		it->next();
 	}
 	return datos;
+}
+
+void Sistema::ingresarMozo(string nombre){
+	Mozo * m = new Mozo(nombre,new ListDictionary());
+	IKey * k = new IntKey(m->getId());
+	this->empleados->add(k,m);
+}
+
+void Sistema::ingresarRepartidor(string nombre, string mt){
+	Repartidor * r = new Repartidor(nombre,mt,new ListDictionary());
+	IKey * k = new IntKey(r->getId());
+	this->empleados->add(k,r);
 }
 
 void Sistema::liberarMemoria(){

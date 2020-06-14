@@ -10,9 +10,10 @@ class Empleado : public ICollectible{
 	private:
 		int id;
 		string nombre;
+		static int maximo;
 	
 	public:
-		Empleado(int,string);
+		Empleado(string);
 		int getId();
 		string getNombre();
 		~Empleado();

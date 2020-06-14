@@ -4,8 +4,9 @@
 #define EMPLEADO_CPP
 using namespace std;
 
-Empleado::Empleado(int id,string nombre){
-	this->id=id;
+int Empleado::maximo=1;
+
+Empleado::Empleado(string nombre) : id(maximo++){
 	this->nombre=nombre;
 }
 

@@ -9,7 +9,7 @@
 
 
 
-Mozo::Mozo(int idmozo, string nombre, IDictionary * mesas) : Empleado(idmozo,nombre){
+Mozo::Mozo(string nombre, IDictionary * mesas) : Empleado(nombre){
 
     this->mesas=mesas;
 }

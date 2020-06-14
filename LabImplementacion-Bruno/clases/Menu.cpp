@@ -2,6 +2,7 @@
 #include "Componente.cpp"
 #include<iostream>
 #include "../iterators/IIterator.cpp"
+#include "../colecciones/List.cpp"
 #ifndef MENU_CPP
 #define MENU_CPP
 
@@ -9,15 +10,15 @@ Menu::Menu(int codigo,string descripcion, float precio) : Producto(codigo, descr
 	this->componentes = new List();
 }
 
-void Menu::agregarProd(Producto *){
+void Menu::agregarProd(Comun *p, int cant){
 	Componente * c = new Componente(cant,p);
 	this->componentes->add(c);
 }
 
-void sacardeLista(Producto *p){
+void Menu::sacardeLista(Comun *p){
 	IIterator * it = this->componentes->getIterator();
 	while(it->hasCurrent()){
-		Componente * c = (Componente *) it->getcurrent();
+		Componente * c = (Componente *) it->getCurrent();
 		if(c->coincide(p)){
 			this->componentes->remove(c);
 			return;

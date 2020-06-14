@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Repartidor::Repartidor(int id,string nombre,string medio_de_transporte,IDictionary * ventas) : Empleado(id,nombre){
+Repartidor::Repartidor(string nombre,string medio_de_transporte,IDictionary * ventas) : Empleado(nombre){
 	this->medio_de_transporte=medio_de_transporte;
 	this->ventas=ventas;
 }

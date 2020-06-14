@@ -1,5 +1,5 @@
 #include "../interfaces/ICollection.cpp"
-#include "Producto.cpp"
+#include "Comun.cpp"
 #include<iostream>
 #ifndef MENU_H
 #define MENU_H
@@ -10,9 +10,9 @@ class Menu : public Producto {
 	private:
 		ICollection * componentes;
 	public:
-		Menu();
-		void agregarProd(int,int);
-		void sacardeLista(Producto * p);
+		Menu(int,string,float);
+		void agregarProd(Comun*,int);
+		void sacardeLista(Comun * p);
 		bool vacio();
 		~Menu();
 };

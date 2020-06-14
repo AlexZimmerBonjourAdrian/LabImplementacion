@@ -11,7 +11,7 @@ class Repartidor : public Empleado{
 		IDictionary * ventas;
 		
 	public:
-		Repartidor(int,string,string,IDictionary *);
+		Repartidor(string,string,IDictionary *);
 		string getMedio();
 		IDictionary * getVentas();
 		~Repartidor();

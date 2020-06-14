@@ -1,12 +1,12 @@
 #include<iostream>
 #include "Comun.cpp"
-
+#include "../interfaces/ICollectible.cpp"
 #ifndef COMPONENTES_H
 #define COMPONENTES_H
 
 using namespace std;
 
-class Componente{
+class Componente : public ICollectible{
 	private:
 		int cantidad;
 		Comun * producto;
