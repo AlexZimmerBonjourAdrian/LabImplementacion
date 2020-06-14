@@ -1,5 +1,5 @@
 #include "Sistema.h"
-
+#include <typeinfo>
 typedef struct nodolista *Lista;
 
 Sistema * Sistema::instance=NULL;
@@ -37,12 +37,17 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 	Menu * m = new Menu(codigo,descripcion,precio);
 	while(this->temp->sig!=NULL){
 		IKey * k = new IntKey(this->temp->info);
-		Comun * p = (Comun*)this->productos->find(k);
+		Producto * p = (Producto*)this->productos->find(k);
 		if(p==NULL){
 			delete k;
 			throw "(Sistema)No se encontro el producto";
 		}
-		m->agregarProd(p,this->temp->sig->info);
+		if(p->getTipo()=="Menu"){
+			delete k;
+			throw "No se puede agregar un menu dentro de un menu";
+		}
+		Comun * c = (Comun*) p;
+		m->agregarProd(c,this->temp->sig->info);
 		this->temp=this->temp->sig;
 		delete k;
 	}
@@ -170,12 +175,24 @@ DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 	IKey * k1 = new IntKey(idmesa);
 	Mesa * m = (Mesa *) this->mesas->find(k1);
 	Vlocal * v = m->getVenta();
-	Factura * f = new Factura(v,descuento);
-	IKey * k2 = new IntKey(f->getCodigo());
-	this->facturas->add(k2,f);
-	DtFactura * df = f->getDatos();
-	delete k1;
-	return df;
+	if(v==NULL){
+		return NULL;
+	}
+	Mozo * mozo = v->getMozo();
+
+	mozo->borrarMesas(v);
+	IKey * k3 = new IntKey(v->getCodigo());
+	if(!facturas->member(k3)){
+		Factura * f = new Factura(v,descuento);
+		IKey * k2 = new IntKey(f->getCodigo());
+		this->facturas->add(k2,f);
+		DtFactura * df = f->getDatos();
+		delete k1;
+		return df;
+	}
+	delete k3,k1;
+	return NULL;
+	
 }
 
 void Sistema::ingresarMesa(int idmesa){

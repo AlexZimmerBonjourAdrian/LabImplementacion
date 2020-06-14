@@ -19,6 +19,10 @@ void Mesa::setid(int id)
     this->id = id;
 }
 
+bool Mesa::coincide(Vlocal* venta){
+	return (this->venta==venta);
+}
+
 int Mesa::getid()
 {
     return id;

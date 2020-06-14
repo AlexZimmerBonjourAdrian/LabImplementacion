@@ -19,6 +19,7 @@ class Vlocal : public Venta{
 	public:
 		Vlocal(ICollection *,DtFecha *,Mozo*);
 		string getEmpleado() const;
+		Mozo * getMozo();
 	
 		~Vlocal();
 		

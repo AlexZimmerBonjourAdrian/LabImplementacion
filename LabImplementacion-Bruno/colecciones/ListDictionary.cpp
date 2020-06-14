@@ -48,14 +48,15 @@ void ListDictionary::remove(IKey * key){
 	ListNodeDictionary *current = head;
     ListNodeDictionary *previous = NULL;
     IntKey * k = (IntKey *) key;
-    while(current != NULL && current->getKey() != k){
+    while(current != NULL && current->getKey()->getId() != k->getId()){
         previous = current;
         current = current->getNext();
     }
 
     if(current == NULL){ // final de la lista, no estaba
         return;
-    } else if(current->getKey() == key){ // ya está, se borra
+    } else if(current->getKey()->getId() == k->getId()){ 
+		cout << current->getKey()->getId() << "   " << k->getId();// ya está, se borra
         --size;
         if(previous == NULL) // se borra el primer elemento
             head = current->getNext();

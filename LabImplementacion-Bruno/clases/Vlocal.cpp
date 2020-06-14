@@ -12,7 +12,9 @@ string Vlocal::getEmpleado() const {
 	return this->mozo->getNombre();
 }
 
-
+Mozo * Vlocal::getMozo(){
+	return this->mozo;
+}
 
 Vlocal::~Vlocal(){
 	

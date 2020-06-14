@@ -8,11 +8,14 @@ class Producto : public ICollectible {
 		int codigo;
 		string descripcion;
 		float precio;
+		string tipo;
 	
 	public:
 		Producto(int,string,float);
 		int getCodigo();
 		DtProducto * getDatos();
+		void setTipo(string); 
+		string getTipo();
 		virtual ~Producto();
 		
 };

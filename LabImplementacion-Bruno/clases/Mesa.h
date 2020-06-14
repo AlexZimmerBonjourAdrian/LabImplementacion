@@ -17,6 +17,7 @@ private:
 public:
      Mesa (int id, IDictionary*);
      void setid(int id);
+     bool coincide(Vlocal *);
      int getid();
      void setVenta(Vlocal *);
      Vlocal * getVenta();

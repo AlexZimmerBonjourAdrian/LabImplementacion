@@ -15,6 +15,7 @@ private:
 public:
     Mozo(string, IDictionary *);
     IDictionary * getMesa();
+    void borrarMesas(Vlocal *);
     void agregarMesa(Mesa *);
     virtual ~Mozo();
 };

@@ -6,6 +6,8 @@
 using namespace std;
 
 class Comun : public Producto{
+	
+
 	public:
 		Comun(int,string,float);
 		~Comun();

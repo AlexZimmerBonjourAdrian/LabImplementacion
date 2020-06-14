@@ -4,17 +4,22 @@
 #ifndef DTPRODUCTO_CPP
 #define DTPRODUCTO_CPP
 
-DtProducto::DtProducto(int codigo, string Descripcion, float precio, int cantidad)
+DtProducto::DtProducto(int codigo, string Descripcion, float precio, int cantidad,string tipo)
 {
     this->Codigo = codigo;
     this->Descripcion = Descripcion;
     this->Precio = precio;
     this->Cantidad = cantidad;
+    this->tipo=tipo;
 }
 
 int DtProducto::getCodigo()
 {
     return this->Codigo;
+}
+
+string DtProducto::getTipo(){
+	return this->tipo;
 }
 
 string DtProducto::getDescripcion()

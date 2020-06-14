@@ -7,7 +7,7 @@
 #include "./Datatypes/DtDireccion.cpp"
 #include "./clases/Cliente.cpp"
 #include <windows.h>
-
+#include <typeinfo>
 using namespace std;
  
 bool verificarMesaAtendida(Sistema * s, Mesa * m){
@@ -44,8 +44,8 @@ main(){
 		Mesa * me1 = new Mesa(1,new ListDictionary());
 		Producto * p1 = new Producto(1,"Cerveza", 150);
 		int id=1, descuento;
-//		
-//		
+		
+
 //		//Iniciar Venta en mesa
 //		
 //		
@@ -133,7 +133,7 @@ main(){
 //		}
 
 		int opc;
-		//int mozopc;
+		int mozopc;
 		bool back = false;
 		do{
 			back=false;
@@ -155,6 +155,7 @@ main(){
 									cin >> agregar;
 									if(s->check_prod_sistema(agregar)){
 										cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
+										system("PAUSE");
 										break;
 									}
 									cout << endl << endl <<"\t..Ingrese la descripcion ";
@@ -177,6 +178,7 @@ main(){
 									cin >> agregar;
 									if(s->check_prod_sistema(agregar)){
 										cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
+										system("PAUSE");
 										break;
 									}
 									cout << endl << endl <<"\t..Ingrese la descripcion ";
@@ -188,9 +190,11 @@ main(){
 									IIterator * it = p->getIterator();
 									int count=0;
 									while(it->hasCurrent()){
-										count++;
 										DtProducto * dp = (DtProducto *) it->getCurrent();
-										cout <<count <<") " << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										if(dp->getTipo()=="Comun"){
+											count++;
+											cout <<count <<") " << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										}
 										it->next();
 									
 									}
@@ -199,7 +203,7 @@ main(){
 									do{
 										cout << endl << "\t..Ingrese el codigo ";
 										cin >> cod;
-										if(!s->check_prod_sistema(agregar)){
+										if(cod!=0 && !(s->check_prod_sistema(cod))){
 											cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
 											break;
 										}
@@ -382,6 +386,9 @@ main(){
 									
 									}
 								}
+								else{
+									cout << endl << "LA MESA YA HA SIDO FACTURADA" << endl;
+								}
 								system("Pause");
 								break;
 							}
@@ -466,6 +473,7 @@ main(){
 									}
 									it->next();
 								}
+								system("PAUSE");
 								break;
 							}
 														

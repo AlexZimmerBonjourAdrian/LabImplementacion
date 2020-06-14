@@ -9,7 +9,15 @@ Producto::Producto(int codigo, string descripcion,float precio){
 }
 
 DtProducto * Producto::getDatos(){
-	return  new DtProducto(this->codigo,this->descripcion, this->precio,0);
+	return  new DtProducto(this->codigo,this->descripcion, this->precio,0,this->tipo);
+}
+
+void Producto::setTipo(string tipo){
+	this->tipo=tipo;
+}
+
+string Producto::getTipo(){
+	return this->tipo;
 }
 
 int Producto::getCodigo(){

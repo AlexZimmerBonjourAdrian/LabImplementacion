@@ -8,6 +8,7 @@
 
 Menu::Menu(int codigo,string descripcion, float precio) : Producto(codigo, descripcion,precio){
 	this->componentes = new List();
+	this->setTipo("Menu");
 }
 
 void Menu::agregarProd(Comun *p, int cant){
