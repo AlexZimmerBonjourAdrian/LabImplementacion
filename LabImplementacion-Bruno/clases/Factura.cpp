@@ -4,15 +4,20 @@
 
 using namespace std;
 
-int Factura::maximo = 1;
 
-Factura::Factura(DtFecha * fecha,ICollection * productos,float subtotal,float descuento,float montototal) : codigo(maximo++){
-	this->fecha=fecha;
-	this->productos;
-	this->productos=productos;
-	this->subtotal=subtotal;
+
+Factura::Factura(Venta* venta_, int descuento){
+	this->codigo=venta_->getCodigo();
+	this->fecha=venta_->getFecha();
+	this->productos=venta_->getProductos();
+	this->subtotal=venta_->getSubtotal();
 	this->descuento=descuento;
-	this->montototal=montototal;
+	this->montototal=venta_->getMontototal();
+	this->venta=venta_;
+}
+
+int Factura::getCodigo(){
+	return this->codigo;
 }
 
 DtFactura * Factura::getDatos(){

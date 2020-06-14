@@ -12,6 +12,8 @@ string Vlocal::getEmpleado() const {
 	return this->mozo->getNombre();
 }
 
+
+
 Vlocal::~Vlocal(){
 	
 }

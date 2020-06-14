@@ -1,5 +1,6 @@
 #include "ListIterator.h"
-
+#ifndef LISTITERATOR_CPP
+#define LISTITERATOR_CPP
 using namespace std;
 
 ListIterator::ListIterator(ListNode* n, bool disposeHeadOnDelete):
@@ -37,4 +38,4 @@ ListIterator::~ListIterator()
         
 }
 
-
+#endif

@@ -31,18 +31,29 @@ int Venta::getCodigo(){
 	return this->codigo;
 }
 
-int Venta::getNuevaCantidad(Producto * p, int cantProd){
+int Venta::setNuevaCantidad(Producto * p, int cantProd){
 	IIterator * it = cantidades->getIterator();
 	while(it->hasCurrent()){
 		CantidadProd * cant =(CantidadProd *)it->getCurrent();
 		if(cant->coincideProd(p)){
-			return cant->getCantidadRestada(cantProd);
+			cant->sumarCantidad(cantProd);
 		}
 		it->next();
 	}
 	throw "No se encontro el producto en la venta";
 }
 
+bool Venta::buscarProd(Producto * p){
+	IIterator * it = cantidades->getIterator();
+	while(it->hasCurrent()){
+		CantidadProd * c = (CantidadProd*) it->getCurrent();
+		if(c->coincideProd(p)){
+			return true;
+		}
+		it->next();
+	}
+	return false;
+}
 
 DtFecha * Venta::getFecha(){
 	return this->fecha;
@@ -74,6 +85,11 @@ float Venta::getSubtotal(){
 	}
 	return total;
 }
+
+float Venta::getMontototal(){
+	
+}
+
 Venta::~Venta(){
 	
 }

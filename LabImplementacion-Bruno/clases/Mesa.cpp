@@ -29,8 +29,8 @@ Vlocal * Mesa::getVenta(){
 }
 
 void Mesa::setVenta(Vlocal * venta){
-	if(this->venta==NULL){
-		throw "(Clase Mesa) La mesa no tiene venta actualmente";
+	if(venta==NULL){
+		throw "(Clase Mesa) La venta no puede ser nula";
 	}
 	
 	this->venta=venta;

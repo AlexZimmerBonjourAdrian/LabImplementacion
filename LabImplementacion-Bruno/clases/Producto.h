@@ -2,7 +2,7 @@
 #ifndef PRODUCTO_H
 #define PRODUCTO_H
 
-class Producto : ICollectible {
+class Producto : public ICollectible {
 	
 	private:
 		int codigo;
@@ -11,6 +11,7 @@ class Producto : ICollectible {
 	
 	public:
 		Producto(int,string,float);
+		int getCodigo();
 		DtProducto * getDatos();
 		virtual ~Producto();
 		

@@ -12,6 +12,10 @@ DtProducto * Producto::getDatos(){
 	return  new DtProducto(this->codigo,this->descripcion, this->precio,0);
 }
 
+int Producto::getCodigo(){
+	return this->codigo;
+}
+
 Producto::~Producto(){
 	
 }

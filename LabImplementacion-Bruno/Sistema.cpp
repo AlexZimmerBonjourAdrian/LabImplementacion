@@ -7,8 +7,10 @@ Sistema * Sistema::instance=NULL;
 Sistema::Sistema() {
 
 	mozos = new ListDictionary();
-	VentasLocales = new ListDictionary();
+	ventas = new ListDictionary();
 	mesas = new ListDictionary();
+	productos = new ListDictionary();
+	facturas = new ListDictionary;
 }
 
 Sistema * Sistema::getInstance(){
@@ -20,6 +22,11 @@ Sistema * Sistema::getInstance(){
 
 IDictionary * Sistema::getMozos(){
 	return this->mozos;
+}
+
+void Sistema::agregarProducto(Producto * p){
+	IKey * k = new IntKey(p->getCodigo());
+	productos->add(k,p);
 }
 
 Lista Sistema::listarMesasAsignadas(int idmozo){
@@ -83,7 +90,10 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	while(p!=NULL){
 		IntKey * k = new IntKey(p->info);
 		Mesa* m = (Mesa*) mesas->find(k);
-		if(m!=NULL)m->setVenta(venta);
+		if(m!=NULL){
+			m->setVenta(venta);
+			
+		}
 		p=p->sig;
 		
 	}
@@ -91,14 +101,110 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	
 	IntKey * v = new IntKey(venta->getCodigo());
 	
-	this->VentasLocales->add(v,venta);
+	this->ventas->add(v,venta);
 }
 
 DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
-	IKey * k = new IntKey(idmesa);
-	Mesa * m = (Mesa *) this->mesas->find(k);
+	IKey * k1 = new IntKey(idmesa);
+	Mesa * m = (Mesa *) this->mesas->find(k1);
 	Vlocal * v = m->getVenta();
-	Factura * f = new Factura(v->getFecha(),v->getProductos(),v->getSubtotal(),descuento,v->getMontototal());
+	Factura * f = new Factura(v,descuento);
+	IKey * k2 = new IntKey(f->getCodigo());
+	this->facturas->add(k2,f);
+	DtFactura * df = f->getDatos();
+	delete k1;
+	return df;
+}
+
+void Sistema::ingresarMesa(int idmesa){
+	IKey * k = new IntKey(idmesa);
+	Mesa * m = (Mesa *) mesas->find(k);
+	if(m!=NULL){
+		Vlocal * v = m->getVenta();
+		InsertEnd(this->temp,v->getCodigo());
+	}
+	delete k;
+}
+
+ICollection * Sistema::mostrarProductos(){
+	if(productos!=NULL){
+		IIterator * it = productos->getIterator();
+		ICollection * dp = new List();
+		while(it->hasCurrent()){
+			Producto * p = (Producto *) it->getCurrent();
+			dp->add(p->getDatos());	
+			it->next();
+		}
+		return dp;
+		
+	}
+}
+
+
+bool Sistema::check_prod_venta(int idprod){
+	int idventa = this->temp->info;
+	IKey * k2 = new IntKey(idventa);
+	Vlocal * v = (Vlocal*)this->ventas->find(k2);
+	if(v==NULL){
+		throw "(Sistema) La venta no existe en el sistema";
+	}
+	delete k2;
+	IKey * k1 = new IntKey(idprod);
+	Producto * p = (Producto *)productos->find(k1);
+	delete k1;
+	if(p==NULL){
+		throw "(Sistema) El producto no existe en el sistema";
+	}
+	
+	return v->buscarProd(p);
+}
+
+void Sistema::agregarProducto(int idprod,int cantProd){
+	int idventa = this->temp->info;
+	IKey * k2 = new IntKey(idventa);
+	Vlocal * v = (Vlocal*)this->ventas->find(k2);
+	if(v==NULL){
+		throw "(Sistema) La venta no existe en el sistema";
+	}
+	delete k2;
+	IKey * k1 = new IntKey(idprod);
+	Producto * p = (Producto *)productos->find(k1);
+	delete k1;
+	if(p==NULL){
+		throw "(Sistema) El producto no existe en el sistema";
+	}
+	v->agregarProd(p,cantProd);
+}
+
+void Sistema::modificarCantidad(int idprod, int cantProd){
+	int idventa = this->temp->info;
+	IKey * k2 = new IntKey(idventa);
+	Vlocal * v = (Vlocal *)this->ventas->find(k2);
+	if(v==NULL){
+		throw "(Sistema) La venta no existe en el sistema";
+	}
+	delete k2;
+	IKey * k1 = new IntKey(idprod);
+	Producto * p = (Producto *)productos->find(k1);
+	delete k1;
+	if(p==NULL){
+		throw "(Sistema) El producto no existe en el sistema";
+	}
+	v->setNuevaCantidad(p,cantProd);
+}
+
+
+ICollection * Sistema::getFacturas(){
+	
+	IIterator * it = facturas->getIterator();
+	ICollection * datos = new List();
+	while(it->hasCurrent()){
+		Factura * f = (Factura *)it->getCurrent();
+		DtFactura * df = f->getDatos();
+		datos->add(df);
+		it->next();
+	}
+	return datos;
 }
 
 void Sistema::liberarMemoria(){

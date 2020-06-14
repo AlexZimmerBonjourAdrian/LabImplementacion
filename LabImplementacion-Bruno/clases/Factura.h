@@ -14,10 +14,10 @@ class Factura : public ICollectible{
 		float descuento;
 		float montototal;
 		Venta * venta;
-		static int maximo;
 		
 	public:
-		Factura(DtFecha *,ICollection *, float,float,float);
+		Factura(Venta *, int);
+		int getCodigo();
 		DtFactura * getDatos();
 		~Factura();
 };

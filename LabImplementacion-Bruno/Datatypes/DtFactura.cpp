@@ -26,7 +26,7 @@ ICollection * DtFactura::getProductos()
     return this->productos;
 }
 
-string DtFactura::getNombre_Trabajador()
+string DtFactura::getNombreTrabajador()
 {
 return this->nombre_trabajador;
 }

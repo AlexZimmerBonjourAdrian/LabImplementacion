@@ -6,6 +6,7 @@
 #include "./clases/Factura.cpp"
 #include "./Datatypes/DtFactura.cpp"
 #include "./Datatypes/DtFecha.cpp"
+#include "./clases/Producto.cpp"
 
 struct nodolista{
     int info;
@@ -54,22 +55,39 @@ class Sistema {
 		static Sistema * instance;
 		Sistema();
 		IDictionary * mozos;
-		IDictionary * VentasLocales;
+		IDictionary * ventas;
 		IDictionary * mesas;
+		IDictionary * productos;
+		IDictionary * facturas;
 		Lista temp;
+		bool cond;
 		
 	
 	public:
 		static Sistema * getInstance();
 		IDictionary * getMozos();
+		ICollection * getFacturas();
+		
 		//Caso de uso Iniciar venta en mesa
+		
 		void agregarMozo(Mozo * m);
 		void agregarMesa(Mesa * m);
+		void agregarProducto(Producto *);
 		Lista listarMesasAsignadas(int idmozo);
 		Lista listarMesasSeleccionadas();
 		void seleccionarMesas(int);
 		void confirmarSeleccion(Lista, DtFecha *);
 		void liberarMemoria();
+		
 		//Caso de uso Facturacion de una venta
 		DtFactura * emitirFactura(int, float);
+		
+		//Caso de uso  Agregar producto a una venta
+		
+		void ingresarMesa(int);
+		ICollection * mostrarProductos();
+		bool check_prod_venta(int);
+		void agregarProducto(int,int);
+		void modificarCantidad(int,int);
+		
 };

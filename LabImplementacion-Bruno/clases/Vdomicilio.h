@@ -1,6 +1,7 @@
 #include<iostream>
 #include "Venta.cpp"
 #include "../Datatypes/DtDireccion.cpp"
+#include "../Datatypes/DtFecha.cpp"
 #include "Repartidor.cpp"
 #include "Cliente.cpp"
 #ifndef VDOMICILIO_H
@@ -17,7 +18,7 @@ class Vdomicilio : public Venta{
 		Cliente * cliente;
 		
 	public:
-		Vdomicilio(ICollection *,DtDireccion *,string,string,Repartidor*, Cliente *);
+		Vdomicilio(ICollection *,DtFecha *,DtDireccion *,string,string,Repartidor*, Cliente *);
 		DtDireccion * getDireccion();
 		string getNombre();
 		string getEmpleado() const;

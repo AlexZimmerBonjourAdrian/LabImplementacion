@@ -19,12 +19,13 @@ class Venta : public ICollectible{
 		Venta(ICollection *,DtFecha *);
 		void agregarProd(Producto * p, int cantProd);
 		void borrarProd(Producto * p);
-		int getNuevaCantidad(Producto * p, int cantProd);
+		int setNuevaCantidad(Producto * p, int cantProd);
 		int getCodigo();
 		ICollection * getProductos();
 		ICollection * getCantidades();
 		float getSubtotal();
 		float getMontototal();
+		bool buscarProd(Producto *);
 		DtFecha * getFecha();
 		virtual string getEmpleado() const = 0;
 		~Venta();

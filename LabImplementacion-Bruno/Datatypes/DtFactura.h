@@ -25,7 +25,7 @@ class DtFactura : public ICollectible{
 		int getCodigo();
 		DtFecha * getFecha();
 		ICollection * getProductos();
-		string getNombre_Trabajador();
+		string getNombreTrabajador();
 		float getSubtotal();
 		float getDescuento();
 		float gettotal_iva();
