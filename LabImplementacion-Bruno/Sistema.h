@@ -101,6 +101,9 @@ class Sistema {
 		
 		//Caso de uso Alta empleado
 		
+		void cargarDatos();
+		
+		
 		void ingresarRepartidor(string,string);
 		void ingresarMozo(string);
 		

@@ -15,7 +15,7 @@ private:
     IDictionary * historial;
     Vlocal * venta;
 public:
-     Mesa (int id, IDictionary*);
+     Mesa(int id, IDictionary*);
      void setid(int id);
      bool coincide(Vlocal *);
      int getid();

@@ -56,12 +56,13 @@ void ListDictionary::remove(IKey * key){
     if(current == NULL){ // final de la lista, no estaba
         return;
     } else if(current->getKey()->getId() == k->getId()){ 
-		cout << current->getKey()->getId() << "   " << k->getId();// ya está, se borra
         --size;
-        if(previous == NULL) // se borra el primer elemento
-            head = current->getNext();
-        else
-            previous->setNext(current->getNext());
+        if(previous == NULL) {// se borra el primer elemento
+            this->head = current->getNext();
+    	}
+		else{
+			previous->setNext(current->getNext());
+		}  
         delete current;
     }
 }

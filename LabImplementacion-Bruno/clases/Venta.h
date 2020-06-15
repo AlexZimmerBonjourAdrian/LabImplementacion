@@ -19,7 +19,7 @@ class Venta : public ICollectible{
 		Venta(ICollection *,DtFecha *);
 		void agregarProd(Producto * p, int cantProd);
 		void borrarProd(Producto * p);
-		int setNuevaCantidad(Producto * p, int cantProd);
+		void setNuevaCantidad(Producto * p, int cantProd);
 		int getCodigo();
 		ICollection * getProductos();
 		ICollection * getCantidades();

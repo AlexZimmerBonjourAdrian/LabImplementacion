@@ -19,6 +19,10 @@ ICollectible *ListNodeDictionary::getElem() const
     return elem;
 }
 
+
+
+
+
 void ListNodeDictionary::setElem(ICollectible* elem)
 {
     if(elem == NULL)
@@ -28,7 +32,7 @@ void ListNodeDictionary::setElem(ICollectible* elem)
 
 ListNodeDictionary *ListNodeDictionary::getNext() const
 {
-    return next;
+    return this->next;
 }
 
 IntKey * ListNodeDictionary::getKey(){
@@ -38,5 +42,10 @@ IntKey * ListNodeDictionary::getKey(){
 void ListNodeDictionary::setNext(ListNodeDictionary* next)
 {
     this->next = next;
+}
+
+ListNodeDictionary::~ListNodeDictionary(){
+	delete this->key;
+
 }
 #endif

@@ -14,6 +14,48 @@ Sistema::Sistema() {
 	temp=NULL;
 }
 
+void Sistema::cargarDatos(){
+	Mozo * m1 = new Mozo("Juan",new ListDictionary());
+	IKey * k1 = new IntKey(m1->getId());
+	
+	empleados->add(k1,m1);
+	
+	Comun * c1 = new Comun(1,"Papas",35);
+	IKey * k2 = new IntKey(1);
+	
+	productos->add(k2,c1);
+
+	Comun * c2 = new Comun(2,"Coca",55);
+	IKey * k3 = new IntKey(2);
+	
+	productos->add(k3,c2);
+	
+	Comun * c3 = new Comun(3,"Milanesa",65);
+	IKey * k4 = new IntKey(3);
+
+	productos->add(k4,c3);
+
+	Menu * men1 = new Menu(4,"Menu1",100);
+	IKey * k5 = new IntKey(4);
+
+	men1->agregarProd(c1,2);
+	men1->agregarProd(c2,1);
+	men1->agregarProd(c3,1);
+	
+	productos->add(k5,men1);
+	
+	Mesa * mesa1 = new Mesa(1,new ListDictionary());
+	IKey * mk1 = new IntKey(1);
+	Mesa * mesa2 = new Mesa(2,new ListDictionary());
+	IKey * mk2 = new IntKey(2);
+	Mesa * mesa3 = new Mesa(3,new ListDictionary());
+	IKey * mk3 = new IntKey(3);
+	
+	mesas->add(mk1,mesa1);
+	mesas->add(mk2,mesa2);
+	mesas->add(mk3,mesa3);
+}
+
 Sistema * Sistema::getInstance(){
 	if(instance==NULL){
 		instance = new Sistema(); 
@@ -33,10 +75,13 @@ void Sistema::agregarProdMenu(int codigo,int cantidad){
 }
 
 void Sistema::agregarMenu(int codigo, string descripcion, float precio){
-	
+	Lista nodo = this->temp;
 	Menu * m = new Menu(codigo,descripcion,precio);
-	while(this->temp->sig!=NULL){
-		IKey * k = new IntKey(this->temp->info);
+	while(nodo!=NULL && nodo->sig!=NULL){
+		cout << this->temp->info <<"   la   " << this->temp->sig->info << endl;
+		
+		int cod = nodo->info;
+		IKey * k = new IntKey(cod);
 		Producto * p = (Producto*)this->productos->find(k);
 		if(p==NULL){
 			delete k;
@@ -47,8 +92,9 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 			throw "No se puede agregar un menu dentro de un menu";
 		}
 		Comun * c = (Comun*) p;
-		m->agregarProd(c,this->temp->sig->info);
-		this->temp=this->temp->sig;
+		nodo=nodo->sig;
+		m->agregarProd(c,nodo->info);
+		nodo=nodo->sig;
 		delete k;
 	}
 	IKey * k2 = new IntKey(codigo);
@@ -82,7 +128,10 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 			while(itmesas->hasCurrent()){
 			ICollectible * i = itmesas->getCurrent();
 			Mesa * m = (Mesa *) i;
-			InsertEnd(IDmesas,m->getid());
+			if(m->getVenta()==NULL){
+				InsertEnd(IDmesas,m->getid());
+			}
+		
 			itmesas->next();
 			}
 		}
@@ -157,9 +206,12 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	while(p!=NULL){
 		IntKey * k = new IntKey(p->info);
 		Mesa* m = (Mesa*) mesas->find(k);
-		if(m!=NULL){
+		if(m!=NULL && m->getVenta()==NULL){
 			m->setVenta(venta);
 			
+		}
+		else{
+			throw "La mesa no existe o ya tiene una venta en curso"; 
 		}
 		p=p->sig;
 		
@@ -174,24 +226,32 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 	IKey * k1 = new IntKey(idmesa);
 	Mesa * m = (Mesa *) this->mesas->find(k1);
+
 	Vlocal * v = m->getVenta();
+	m->setVenta(NULL);
 	if(v==NULL){
 		return NULL;
 	}
 	Mozo * mozo = v->getMozo();
 
 	mozo->borrarMesas(v);
+	
 	IKey * k3 = new IntKey(v->getCodigo());
+	
 	if(!facturas->member(k3)){
+		
 		Factura * f = new Factura(v,descuento);
 		IKey * k2 = new IntKey(f->getCodigo());
+		
 		this->facturas->add(k2,f);
 		DtFactura * df = f->getDatos();
 		delete k1;
 		return df;
 	}
+	
 	delete k3,k1;
 	return NULL;
+
 	
 }
 
@@ -239,6 +299,7 @@ bool Sistema::check_prod_venta(int idprod){
 }
 
 void Sistema::agregarProductoVenta(int idprod,int cantProd){
+	cout << "ENTRE" << endl;
 	int idventa = this->temp->info;
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal*)this->ventas->find(k2);
@@ -253,6 +314,7 @@ void Sistema::agregarProductoVenta(int idprod,int cantProd){
 		throw "(Sistema) El producto no existe en el sistema";
 	}
 	v->agregarProd(p,cantProd);
+	cout << "SALI" << endl;
 }
 
 

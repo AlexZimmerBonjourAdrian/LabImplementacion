@@ -31,16 +31,17 @@ int Venta::getCodigo(){
 	return this->codigo;
 }
 
-int Venta::setNuevaCantidad(Producto * p, int cantProd){
+void Venta::setNuevaCantidad(Producto * p, int cantProd){
 	IIterator * it = cantidades->getIterator();
 	while(it->hasCurrent()){
 		CantidadProd * cant =(CantidadProd *)it->getCurrent();
 		if(cant->coincideProd(p)){
 			cant->sumarCantidad(cantProd);
+			return;
 		}
 		it->next();
 	}
-	throw "No se encontro el producto en la venta";
+	throw "(Clase venta)No se encontro el producto en la venta";
 }
 
 bool Venta::buscarProd(Producto * p){
@@ -82,6 +83,7 @@ float Venta::getSubtotal(){
 		CantidadProd * c = (CantidadProd *) it->getCurrent();
 		DtProducto * dp = c->getDtProducto();
 		total+=c->getCantidad()*dp->getPrecio();
+		it->next();
 	}
 	return total;
 }

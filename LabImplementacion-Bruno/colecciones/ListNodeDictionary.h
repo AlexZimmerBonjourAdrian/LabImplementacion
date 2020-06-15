@@ -15,6 +15,7 @@ class ListNodeDictionary{
 	    ListNodeDictionary * getNext() const;
 	    IntKey * getKey();
 	    void setNext(ListNodeDictionary *next);
+	    ~ListNodeDictionary();
 };
 
 #endif
