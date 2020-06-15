@@ -1,6 +1,3 @@
-
-#ifndef DTFACTURADOM_H
-#define DTFACTURADOM_H
 #include "../Datatypes/DtFactura.h"
 #include "../ICollection/interfaces/ICollectible.h"
 #include "string.h"
@@ -14,5 +11,4 @@ public:
     string getMedio_Transporte();
      virtual ~DtFacturaDom();
 };
-#endif
 
