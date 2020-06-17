@@ -31,6 +31,18 @@ int Venta::getCodigo(){
 	return this->codigo;
 }
 
+int Venta::getCantidadProd(Producto *p){
+	IIterator * it = cantidades->getIterator();
+	while(it->hasCurrent()){
+		CantidadProd * c = (CantidadProd *) it->getCurrent();
+		if(c->coincideProd(p)){
+			return c->getCantidad();
+		}
+		it->next();
+	}
+	return 0;
+}
+
 void Venta::setNuevaCantidad(Producto * p, int cantProd){
 	IIterator * it = cantidades->getIterator();
 	while(it->hasCurrent()){

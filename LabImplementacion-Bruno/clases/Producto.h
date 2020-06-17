@@ -9,13 +9,15 @@ class Producto : public ICollectible {
 		string descripcion;
 		float precio;
 		string tipo;
-	
+		 
 	public:
 		Producto(int,string,float);
-		int getCodigo();
-		DtProducto * getDatos();
-		void setTipo(string); 
-		string getTipo();
+		int getCodigo() const;
+		virtual DtProducto * getDatos() const = 0;
+		void setTipo(string);
+		string getTipo() const;
+		string getDescripcion() const;
+		int getPrecio() const;
 		virtual ~Producto();
 		
 };

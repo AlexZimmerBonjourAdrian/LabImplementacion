@@ -1,5 +1,6 @@
 #include "Sistema.h"
 #include <typeinfo>
+#include<stdexcept>
 typedef struct nodolista *Lista;
 
 Sistema * Sistema::instance=NULL;
@@ -14,6 +15,7 @@ Sistema::Sistema() {
 	temp=NULL;
 }
 
+	
 void Sistema::cargarDatos(){
 	Mozo * m1 = new Mozo("Juan",new ListDictionary());
 	IKey * k1 = new IntKey(m1->getId());
@@ -67,7 +69,6 @@ IDictionary * Sistema::getEmpleados(){
 	return this->empleados;
 }
 
-
 void Sistema::agregarProdMenu(int codigo,int cantidad){
 	InsertEnd(this->temp,codigo);
 	InsertEnd(this->temp,cantidad);
@@ -78,18 +79,17 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 	Lista nodo = this->temp;
 	Menu * m = new Menu(codigo,descripcion,precio);
 	while(nodo!=NULL && nodo->sig!=NULL){
-		cout << this->temp->info <<"   la   " << this->temp->sig->info << endl;
 		
 		int cod = nodo->info;
 		IKey * k = new IntKey(cod);
 		Producto * p = (Producto*)this->productos->find(k);
 		if(p==NULL){
 			delete k;
-			throw "(Sistema)No se encontro el producto";
+			throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 		}
 		if(p->getTipo()=="Menu"){
 			delete k;
-			throw "No se puede agregar un menu dentro de un menu";
+			throw "### NO SE PUEDE AGREGAR UN MENU DENTRO DE UN MENU ###";
 		}
 		Comun * c = (Comun*) p;
 		nodo=nodo->sig;
@@ -100,6 +100,18 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 	IKey * k2 = new IntKey(codigo);
 	this->productos->add(k2,m);
 	
+}
+
+bool Sistema::ventaFacturada(int idventa){
+	IKey * k = new IntKey(idventa);
+	if(facturas->member(k)){
+		delete k;
+		return true;
+	}
+	else{
+		delete k;
+		return false;
+	}
 }
 
 void Sistema::agregarProducto(int codigo,string descripcion,float precio){
@@ -115,14 +127,14 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 	
 	Mozo * mo= (Mozo*) empleados->find(k);
 	if(mo==NULL){
-		throw "No existe el mozo en el sistema";
+		throw "### NO EXISTE EL MOZO EN EL SISTEMA ###";
 	}
 	else{
 		Lista IDmesas = NULL;
 		IDictionary * mesas = mo->getMesa();
 		IIterator * itmesas  = mesas->getIterator();
 		if(itmesas->hasCurrent()==false){
-			throw "El mozo no tiene mesas asignadas";
+			throw "### EL MOZO NO TIENE MESAS ASIGNADAS ###";
 		}
 		else{
 			while(itmesas->hasCurrent()){
@@ -151,7 +163,7 @@ void Sistema::agregarMesa(int idmesa){
 	IKey * k = new IntKey(idmesa);
 	if(this->mesas->member(k)){
 		delete k;
-		throw "(Sistema)Existe una mesa con ese codigo";
+		throw "### YA EXISTE UNA MESA CON ESE CODIGO ###";
 	}
 	Mesa * m = new Mesa(idmesa,new ListDictionary());
 	this->mesas->add(k,m);
@@ -183,25 +195,29 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 	}
 	delete k1;
 	delete k2;
-	throw "No se pudo agregar la mesa";
+	throw "### NO SE PUDO AGREGAR LA MESA ###";
 	
 	
 }
 
 Lista Sistema::listarMesasSeleccionadas(){
 	Lista p=this->temp;
-	p=temp->sig;
-	return p;
+	return p->sig;
 }
 
 void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	Lista p;
-	p= this->temp->sig;
+	if(this->temp==NULL){
+		return;
+	}
+	p = this->temp->sig;
 	IKey * mozo_k = new IntKey(temp->info);
 	Mozo * mozo = (Mozo *)this->empleados->find(mozo_k);
 	if(mozo==NULL){
-		throw "No existe el mozo en el sistema";
+		this->liberarMemoria();
+		throw "### NO EXISTE EL MOZO EN EL SISTEMA ###";
 	}
+	
 	Vlocal * venta = new Vlocal(new List(),fecha,mozo);
 	while(p!=NULL){
 		IntKey * k = new IntKey(p->info);
@@ -211,7 +227,8 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 			
 		}
 		else{
-			throw "La mesa no existe o ya tiene una venta en curso"; 
+			this->liberarMemoria();
+			throw "### LA MESA NO EXISTE O YA TIENE UNA VENTA EN CURSO ###"; 
 		}
 		p=p->sig;
 		
@@ -279,27 +296,25 @@ ICollection * Sistema::mostrarProductos(){
 	}
 }
 
-
 bool Sistema::check_prod_venta(int idprod){
 	int idventa = this->temp->info;
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal*)this->ventas->find(k2);
 	if(v==NULL){
-		throw "(Sistema) La venta no existe en el sistema";
+		throw "### LA VENTA NO EXISTE EN EL SISTEMA ###";
 	}
 	delete k2;
 	IKey * k1 = new IntKey(idprod);
 	Producto * p = (Producto *)productos->find(k1);
 	delete k1;
 	if(p==NULL){
-		throw "(Sistema) El producto no existe en el sistema";
+		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
 	
 	return v->buscarProd(p);
 }
 
 void Sistema::agregarProductoVenta(int idprod,int cantProd){
-	cout << "ENTRE" << endl;
 	int idventa = this->temp->info;
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal*)this->ventas->find(k2);
@@ -311,13 +326,28 @@ void Sistema::agregarProductoVenta(int idprod,int cantProd){
 	Producto * p = (Producto *)productos->find(k1);
 	delete k1;
 	if(p==NULL){
-		throw "(Sistema) El producto no existe en el sistema";
+		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
 	v->agregarProd(p,cantProd);
-	cout << "SALI" << endl;
 }
 
-
+DtProducto * Sistema::mostrarProducto(int cod){
+	IKey * k = new IntKey(cod);
+	Producto * p = (Producto*)this->productos->find(k);
+	if(p==NULL){
+		throw "### NO SE ENCONTRO EL PRODUCTO EN EL SISTEMA ###";
+	}
+	DtProducto * dp =  p->getDatos();
+	IIterator * it = this->ventas->getIterator();
+	int total=0;
+	while(it->hasCurrent()){
+		Venta * v = (Venta *) it->getCurrent();
+		total = total + v->getCantidadProd(p);
+		it->next();
+	}
+	dp->setCantidad(total);
+	return dp;
+}
 
 
 
@@ -326,14 +356,14 @@ void Sistema::modificarCantidad(int idprod, int cantProd){
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal *)this->ventas->find(k2);
 	if(v==NULL){
-		throw "(Sistema) La venta no existe en el sistema";
+		throw "### LA VENTA NO EXISTE EN EL SISTEMA ###";
 	}
 	delete k2;
 	IKey * k1 = new IntKey(idprod);
 	Producto * p = (Producto *)productos->find(k1);
 	delete k1;
 	if(p==NULL){
-		throw "(Sistema) El producto no existe en el sistema";
+		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
 	v->setNuevaCantidad(p,cantProd);
 }

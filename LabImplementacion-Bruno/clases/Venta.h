@@ -24,6 +24,7 @@ class Venta : public ICollectible{
 		ICollection * getProductos();
 		ICollection * getCantidades();
 		float getSubtotal();
+		int getCantidadProd(Producto *);
 		float getMontototal();
 		bool buscarProd(Producto *);
 		DtFecha * getFecha();

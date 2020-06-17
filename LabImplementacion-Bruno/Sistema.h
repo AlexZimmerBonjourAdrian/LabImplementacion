@@ -65,6 +65,7 @@ class Sistema {
 		
 	
 	public:
+		void cargarDatos();
 		static Sistema * getInstance();
 		IDictionary * getEmpleados();
 		ICollection * getFacturas();
@@ -100,15 +101,19 @@ class Sistema {
 		void modificarCantidad(int,int);
 		
 		//Caso de uso Alta empleado
-		
-		void cargarDatos();
-		
-		
+
 		void ingresarRepartidor(string,string);
 		void ingresarMozo(string);
+		
+		//Informacion de un producto
+		DtProducto * mostrarProducto(int);  
 		
 		//Agrgar mesas a mozos
 		
 		void agregarMesaMozo(int idmesa, int idmozo);
+		
+		//Utilidades
+		
+		bool ventaFacturada(int);
 		
 };

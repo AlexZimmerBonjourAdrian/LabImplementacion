@@ -32,6 +32,10 @@ float DtProducto::getPrecio()
     return this->Precio;
 }
 
+void DtProducto::setCantidad(int cantidad){
+	this->Cantidad=cantidad;
+}
+
 int DtProducto::getCantidad()
 {
     return this->Cantidad;

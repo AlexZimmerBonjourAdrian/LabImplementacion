@@ -11,17 +11,11 @@
 using namespace std;
 
 main(){
-	Mesa * m1 = new Mesa(1,new ListDictionary());
-//	ListDictionary * dic = new ListDictionary();
-	ICollection * dic = new List();
-//IKey * k1 = new IntKey(m1->getid());
-	dic->add(m1);
-	IIterator * it = dic->getIterator();
-	while(it->hasCurrent()){
-//		IKey * k = new IntKey(1);
-		it->next();
-		dic->remove(m1);
-		cout << "HOLA" << endl;
-//	system("PAUSE");
-	}
+	
+	Menu * m = new Menu(1,"Papas",120);
+	cout << m->getTipo() << endl;
+	system("PAUSE");
+	m->setTipo("Comun");
+	cout << m->getTipo() << endl;
+	system("pause");
 }

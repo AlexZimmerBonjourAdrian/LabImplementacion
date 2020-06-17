@@ -38,11 +38,10 @@ int menuConsultas();
 main(){
 	int agregar = 1;
 	float precio=0;
-	try{
+	
 		string opc1,s1;
 		Sistema * s = Sistema::getInstance();
 		Mesa * me1 = new Mesa(1,new ListDictionary());
-		Producto * p1 = new Producto(1,"Cerveza", 150);
 		int id=1, descuento;
 		
 
@@ -142,6 +141,8 @@ main(){
 			switch(opc){
 				case 1:
 					do{
+						try{
+						
 						system("cls");
 						opc = menuAdministrador();
 						switch(opc){
@@ -200,10 +201,12 @@ main(){
 									}
 									cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
 									int cod;
+									bool check;
+									check=s->check_prod_sistema(cod);
 									do{
 										cout << endl << "\t..Ingrese el codigo ";
 										cin >> cod;
-										if(cod!=0 && !(s->check_prod_sistema(cod))){
+										if(cod!=0 && !(check)){
 											cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
 											break;
 										}
@@ -215,15 +218,21 @@ main(){
 										}
 									
 									}while(cod!=0);
-									cout << endl << endl << "\t..Desea confirmar el alta? ";
-									cin >> opc1;
-									if(opc1=="si"){
-										s->agregarMenu(agregar,s1,precio);
+									if(check){
+											
+										cout << endl << endl << "\t..Desea confirmar el alta? ";
+										cin >> opc1;
+										if(opc1=="si"){
+											s->agregarMenu(agregar,s1,precio);
+											
+										}
+										else{
+											cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
+										}
 										s->liberarMemoria();
 									}
-									else{
-										s->liberarMemoria();
-									}
+									s->liberarMemoria();
+									
 								}
 								
 								break;
@@ -232,13 +241,51 @@ main(){
 								cout <<"Baja producto no implementado" <<endl;
 								Sleep (2000);
 								break;
-							case 3:
-								cout <<"Infromación de un producto no implementado" <<endl;
-								Sleep (2000);
+							case 3:{
+						
+								cout << endl << "### INFORMACION DE UN PRODUCTO ###" <<endl << endl;
+								cout << "\tIngrese el codigo del producto (Si desea volver ingrese 0) ";
+								
+								int cod=1;
+								bool ch=false;
+								do{
+									cin >> cod;
+									if(cod==0){
+										ch=false;
+										break;
+									}
+									ch=s->check_prod_sistema(cod);
+									if(ch==false)cout << endl << endl << "###  CODIGO INCORRECTO ###" << endl;
+									
+								}while(ch==false && cod!=0);
+								DtProducto * dp = s->mostrarProducto(cod);
+								if(ch==true){
+									DtProducto * dp = s->mostrarProducto(cod);
+									cout << endl << "### PRODUCTO ###" << endl << endl;
+									cout << "\tCodigo: " << dp->getCodigo() << endl;
+									cout << "\tDescripcion: " << dp->getDescripcion() << endl;
+									cout << "\tPrecio: " << dp->getPrecio() << endl;
+									cout << "\tCantidad de unidades vendidas: " <<dp->getCantidad() << endl;
+								}
+								if(dp->getTipo()=="Menu"){
+									cout << endl << "### COMPONENTES ###" << endl << endl;
+									DtMenu * dm = (DtMenu*) dp;
+									ICollection * componentes= dm->getComponentes();
+									IIterator * it = componentes->getIterator();
+									while(it->hasCurrent()){
+										DtProducto * dp = (DtProducto*) it->getCurrent();
+										cout << "\tCodigo: " << dp->getCodigo() << endl;
+										cout << "\tDescripcion: " << dp->getDescripcion() << endl;
+										cout << "\tPrecio: " << dp->getPrecio() << endl;
+										cout << "\tCantidad: " <<dp->getCantidad() << endl << endl;
+										it->next();
+									}
+								}
+								system("PAUSE");
 								break;
-							
+						}
 							case 4:{
-								cout << endl << "###INGRESAR EMPLEADO###" << endl << endl << "\t..Ingrese el nombre: " ;
+								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
 								cin >>nombre;
 								cout << "\t..El empleado es repartidor?(si/no)" << endl << endl;
@@ -313,7 +360,7 @@ main(){
 									cout << endl << "### Mesa creada ###" << endl;
 									Sleep(2000);
 									break;
-								}catch(const char * msg){
+								}catch(char const * msg){
 										cout << msg << endl;
 								}
 								break;
@@ -327,6 +374,8 @@ main(){
 								cin >> descuento;
 								s->agregarMesaMozo(descuento,id);
 								cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
+								s->liberarMemoria();
+								
 								Sleep(2000);
 								break;
 							}
@@ -338,12 +387,16 @@ main(){
 								cout << "Opcion incorrecta" << endl;
 								Sleep (2000);
 								system("cls");
-						}		
-					}while((opc<12 || opc>0) && !back);
+						}	
+						
+					}catch(char const * msg){
+						cout << msg << endl;
+					}	
+				}while((opc<12 || opc>0) && !back);
 					break;
 				case 2:{
-					try{
 						do{
+							try{
 							system("cls");
 							opc = menuMozo();
 							switch(opc){
@@ -352,8 +405,9 @@ main(){
 									
 									cout << "\t..Ingrese el id del mozo" << endl << endl;
 									cin >> id;
+									Lista mesas=s->listarMesasAsignadas(id);
 									cout << endl << endl << "### MESAS ASIGNADAS A ESTE MOZO ###" << endl << endl;
-									mostrarLista(s->listarMesasAsignadas(id)); 
+									mostrarLista(mesas); 
 									cout << endl << "\t..Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
 									while(id!=0){
 										cin >> id;
@@ -457,7 +511,7 @@ main(){
 										}
 									}
 									else{
-										cout << endl << "LA MESA YA HA SIDO FACTURADA" << endl;
+										cout << endl << "### LA MESA YA HA SIDO FACTURADA ###" << endl;
 									}
 									system("Pause");
 									break;
@@ -472,12 +526,14 @@ main(){
 									cout << "Opcion incorrecta" << endl;
 									Sleep (2000);
 									system("cls");
-							}		
-						}while((opc<6 || opc>0) && !back);
-					}catch(char * msg){
-						cout << msg << endl;
-					}
-					break;
+							}
+						}catch(char const * msg){
+							cout << msg << endl;
+							system("PAUSE");
+						}		
+					}while((opc<6 || opc>0) && !back);
+					
+					break; 
 				}
 				case 3:
 					do{
@@ -613,12 +669,9 @@ main(){
 		}while(opc<8 || opc>0);
 		return 0;
 	
-	}catch(const char * msg){
-		cout << msg << endl;
-	}
-	
-	
 
+
+	
 	system("PAUSE");
 }
 

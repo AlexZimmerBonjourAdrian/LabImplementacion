@@ -10,6 +10,7 @@ class Comun : public Producto{
 
 	public:
 		Comun(int,string,float);
+		DtProducto * getDatos() const;
 		~Comun();
 };
 

@@ -15,6 +15,14 @@ bool Componente::coincide(Comun * producto){
 	return (this->producto==producto);
 }
 
+int Componente::getCantidad(){
+	return this->cantidad;
+}
+
+Comun * Componente::getProducto(){
+	return this->producto;
+}
+
 Componente::~Componente(){
 	
 }
