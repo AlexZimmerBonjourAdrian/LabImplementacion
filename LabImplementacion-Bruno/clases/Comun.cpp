@@ -13,6 +13,11 @@ DtProducto * Comun::getDatos() const{
 
 }
 
+
+void Comun::borrar(Producto *p){
+	
+}
+
 Comun::~Comun(){
 	
 }

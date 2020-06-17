@@ -22,7 +22,8 @@ ICollectible *ListDIterator::getCurrent()
 
 bool ListDIterator::hasCurrent()
 {
-    return (current != NULL);
+
+    return current != NULL;
 }
 
 void ListDIterator::next()

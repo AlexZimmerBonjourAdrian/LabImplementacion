@@ -102,6 +102,28 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 	
 }
 
+
+bool Sistema::productoFacturado(int idprod){
+	
+		IKey * k = new IntKey(idprod);
+		Producto * p = (Producto*)this->productos->find(k);
+		if(p==NULL){
+			delete k;
+			throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
+		}
+		IIterator * it = ventas->getIterator();
+		while(it->hasCurrent()){
+			Venta * v = (Venta *) it->getCurrent();
+			if(!this->ventaFacturada(v->getCodigo()) && v->buscarProd(p)){
+				return false;
+			}
+			it->next();
+		}
+		return true;
+	
+}
+
+
 bool Sistema::ventaFacturada(int idventa){
 	IKey * k = new IntKey(idventa);
 	if(facturas->member(k)){
@@ -200,6 +222,47 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 	
 }
 
+
+
+void Sistema::eliminarProducto(int idprod){
+	IKey * k = new IntKey(idprod);
+	Producto * p = (Producto*)productos->find(k);
+	if(p==NULL){
+		delete k;
+		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
+	}
+	if(!this->productoFacturado(p->getCodigo())){
+		throw "### NO SE PUEDE ELIMINAR UN PRODUCTO QUE NO HAYA SIDO COMPLETAMENTE FACTURADO ###";
+	}
+	IIterator * it = ventas->getIterator();
+	while(it->hasCurrent()){
+		
+		Venta * v = (Venta *)it->getCurrent();
+
+		v->borrarProd(p);
+		it->next();
+	}
+	delete it;
+	it = productos->getIterator();
+	while(it->hasCurrent()){
+		Producto * p2 = (Producto *) it->getCurrent();
+		
+		if(p2->getTipo()=="Menu"){
+			Menu * m = (Menu *) p2;
+			p2->borrar(p);
+			if(m->vacio()){
+				this->eliminarProducto(m->getCodigo());
+				delete m;
+			}
+		} 
+		
+		it->next();
+	}
+	productos->remove(k);
+	delete p;
+}
+
+
 Lista Sistema::listarMesasSeleccionadas(){
 	Lista p=this->temp;
 	return p->sig;
@@ -283,17 +346,20 @@ void Sistema::ingresarMesa(int idmesa){
 }
 
 ICollection * Sistema::mostrarProductos(){
-	if(productos!=NULL){
-		IIterator * it = productos->getIterator();
+	
+	IIterator * it = productos->getIterator();
+	if(it->hasCurrent()){
 		ICollection * dp = new List();
 		while(it->hasCurrent()){
 			Producto * p = (Producto *) it->getCurrent();
 			dp->add(p->getDatos());	
 			it->next();
 		}
+		//cout << "SALI" << endl;
 		return dp;
 		
 	}
+	return NULL;
 }
 
 bool Sistema::check_prod_venta(int idprod){

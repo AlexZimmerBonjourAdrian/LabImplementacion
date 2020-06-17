@@ -15,6 +15,7 @@ class Menu : public Producto {
 		void sacardeLista(Comun * p);
 		DtProducto * getDatos() const;
 		bool vacio();
+		void borrar(Producto *);
 		~Menu();
 };
 

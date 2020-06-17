@@ -14,8 +14,7 @@ main(){
 	
 	Menu * m = new Menu(1,"Papas",120);
 	cout << m->getTipo() << endl;
-	system("PAUSE");
-	m->setTipo("Comun");
+
 	cout << m->getTipo() << endl;
 	system("pause");
 }

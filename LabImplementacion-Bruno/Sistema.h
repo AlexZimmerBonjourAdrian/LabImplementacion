@@ -92,6 +92,11 @@ class Sistema {
 		void agregarProdMenu(int,int);
 		void agregarMenu(int,string,float);
 		
+		//Caso de uso Baja Producto
+		
+		void eliminarProducto(int);
+		bool productoFacturado(int idprod);
+		
 		//Caso de uso  Agregar producto a una venta
 		
 		void ingresarMesa(int);
