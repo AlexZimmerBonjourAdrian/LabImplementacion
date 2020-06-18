@@ -9,6 +9,12 @@
 #include "./clases/Comun.cpp"
 #include "./clases/Menu.cpp"
 #include "./clases/Repartidor.cpp"
+#include "./clases/Cliente.cpp"
+#include "./colecciones/StringKey.h"
+#include "./Datatypes/DtRepartidor.h"
+#include "./clases/Vdomicilio.h"
+#include "./Datatypes/DtCliente.h"
+
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -51,6 +57,21 @@ void eliminarLista(Lista &L){
 	L=NULL;
 }
 
+void EliminarElementoLista(Lista&L, int codigo)
+{
+	if (L==NULL) return;
+	if (L->info == codigo)
+	{
+		delete L;
+		L=NULL;
+		return;
+		
+	}
+	EliminarElementoLista(L->sig,codigo);
+	//L=NULL;
+	
+}
+
 class Sistema {
 	private:
 		static Sistema * instance;
@@ -60,6 +81,8 @@ class Sistema {
 		IDictionary * mesas;
 		IDictionary * productos;
 		IDictionary * facturas;
+		IDictionary * Clientes;
+		IDictionary * Repartidores;
 		Lista temp;
 		bool cond;
 		
@@ -69,9 +92,9 @@ class Sistema {
 		IDictionary * getEmpleados();
 		ICollection * getFacturas();
 		IDictionary * getProductos();
-		#Region region Pendine
 		IDictionary * getVentas();
-		IDictionary * Cliente();
+		IDictionary * getClienteS();
+		
 		//Caso de uso Iniciar venta en mesa
 		
 		#pragma region Operaciones a realizar
@@ -79,9 +102,10 @@ class Sistema {
 		ICollection * ListarProductos();
 		void seleccionarProducto(int codigoP,int cantidad);
 		ICollection ListarRepartidores();
-		void selecionarRepartidor(integer Codigo);
+		void seleccionarRepartidor(integer Codigo);
 		DtFactura confirmarpedido();
-		void CancelarOperacionventa();
+		void CancelarOperacion();
+		DtCliente altaCliente()
 		#pragma endregion
 
 		void agregarMozo(Mozo * m);

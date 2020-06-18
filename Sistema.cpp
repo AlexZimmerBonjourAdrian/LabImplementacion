@@ -10,7 +10,8 @@ Sistema::Sistema() {
 	ventas = new ListDictionary();
 	mesas = new ListDictionary();
 	productos = new ListDictionary();
-	facturas = new ListDictionary;
+	facturas = new ListDictionary();
+	Clientes = new ListDictionary();
 	temp=NULL;
 }
 
@@ -66,6 +67,7 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 }
 
 
+
 void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	Lista p;
 	p= this->temp->sig;
@@ -91,6 +93,8 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 	
 	this->ventas->add(v,venta);
 }
+
+
 
 
 Lista Sistema::listarMesasAsignadas(int idmozo){
@@ -213,6 +217,135 @@ ICollection * Sistema::ListarProductos()
 	}
 	delete it;
 }
+
+void Sistema::seleccionarRepartidor(int codigo)
+{
+ InsertEnd(this->temp,codigo);
+}
+
+void Sistema::seleccionarProducto(int codigo, int cantidad)
+{
+	InsertEnd(this->temp,codigo, cantidad);
+}
+
+DtFactura Sistema::confirmarpedido(Lista * L)
+{
+	List P;
+	DtFecha * fecha;
+	DtDireccion * dir;
+	p=this->temp->sig;
+	IKey * P_Key= new IntKey(temp->info);
+	Producto * producto=(Producto *)this->productos->find(p_key);
+	if (producto==NULL)
+	{
+		throw "No existel el producto en el sistema"
+	}
+	//List R = this->temp->sig;
+	IKey * K_Rep= new IntKey(temp->info);
+	Repartidor * repart=(Repartidor *)this->Repartidores->find(K_Rep);
+
+	//List C= this->temp->sig;
+	IKey * K_Cli=new StringKey(temp->info);
+	Cliente *clien=(Cliente*)this->Clientes->find(K_Cli);
+	Vdomicilio * venta = new Vdomicilio(new List(),fecha,dir,clien->getNombre(),clien->getTelefono(),repart,clien);
+	Factura * f= new Factura(Vdomicilio,0);
+	return f->getDatos();
+
+	/*
+	IKey * k1 = new IntKey(idmesa);
+	Mesa * m = (Mesa *) this->mesas->find(k1);
+	Vlocal * v = m->getVenta();
+	if(v==NULL){
+		return NULL;
+	}
+	Mozo * mozo = v->getMozo();
+
+	mozo->borrarMesas(v);
+	IKey * k3 = new IntKey(v->getCodigo());
+	if(!facturas->member(k3)){
+		Factura * f = new Factura(v,descuento);
+		IKey * k2 = new IntKey(f->getCodigo());
+		this->facturas->add(k2,f);
+		DtFactura * df = f->getDatos();
+		delete k1;
+		return df;
+	}
+	delete k3,k1;
+	return NULL;
+	*/
+	/* Opcion1
+		Lista p;
+	p= this->temp->sig;
+	IKey * mozo_k = new IntKey(temp->info);
+	Mozo * mozo = (Mozo *)this->empleados->find(mozo_k);
+	if(mozo==NULL){
+		throw "No existe el mozo en el sistema";
+	}
+	Vlocal * venta = new Vlocal(new List(),fecha,mozo);
+	while(p!=NULL){
+		IntKey * k = new IntKey(p->info);
+		Mesa* m = (Mesa*) mesas->find(k);
+		if(m!=NULL){
+			m->setVenta(venta);
+			
+		}
+		p=p->sig;
+		
+	}
+	*/
+	/*
+	IntKey * v = new IntKey(venta->getCodigo());
+	
+	this->ventas->add(v,venta);
+	*/
+
+}
+
+void Sistema::CancelarOperacion()
+{
+	
+ EliminarElementoLista(this->temp->info);
+	
+/*
+	Lista p;
+	p= this->temp->sig;
+	IKey * mozo_k = new IntKey(temp->info);
+	Mozo * mozo = (Mozo *)this->empleados->find(mozo_k);
+	if(mozo==NULL){
+		throw "No existe el mozo en el sistema";
+	}
+	Vlocal * venta = new Vlocal(new List(),fecha,mozo);
+	while(p!=NULL){
+		IntKey * k = new IntKey(p->info);
+		Mesa* m = (Mesa*) mesas->find(k);
+		if(m!=NULL){
+			m->setVenta(venta);
+			
+		}
+		p=p->sig;
+		
+	}
+	
+	
+	IntKey * v = new IntKey(venta->getCodigo());
+	
+	this->ventas->add(v,venta);
+	*/
+}
+/*
+DtCliente altaCliente(string telefono, string nombre,DtDireccion * direccion)
+{
+	//IKey * k = new IntKey(telefono);
+	DtCliente dtC= new DtCliente(telefono,nombre,direccion);
+	//Clientes->add(k,dtC);
+	return dtC;
+}
+
+void cancelarCliente()
+{
+
+}
+*/
 #pragma endregion
 
 void Sistema::agregarProducto(int codigo,string descripcion,float precio){
@@ -351,6 +484,7 @@ ICollection * Sistema::getFacturas(){
 	}
 	return datos;
 }
+
 #pragma endregion
 
 #pragma region Operaciones Generaes Del Sistema

@@ -12,7 +12,7 @@ Cliente::Cliente(string telefono, string nombre, DtDireccion * direccion){
 }
 
 
-string Cliente
+//string Cliente
 
 string Cliente::getNombre(){
 	return this->nombre;
