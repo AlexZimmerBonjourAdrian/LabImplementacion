@@ -435,7 +435,7 @@ main(){
 										cin >> agregar;
 										if(agregar==1){
 											if(ch==true){
-												s->modificarCantidad(id,cant);
+												s->modificarCantidad(id,cant,"suma");
 											}
 											
 											else{
@@ -455,10 +455,46 @@ main(){
 									break;
 								}
 									
-								case 3:
-									cout <<"Quitar producto a una venta no implementado" <<endl;
-									Sleep (2000);
+								case 3:{
+								
+									cout << endl << "### QUITAR PRODUCTO A UNA VENTA ### "<<endl;
+									cout << endl << "\t..Ingrese la mesa a quitar" << endl;
+									cin>>opc;
+									s->ingresarMesa(opc);
+									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
+									ICollection * p = s->mostrarProdVenta(opc);
+									IIterator * it = p->getIterator();
+									while(it->hasCurrent()){
+										DtProducto * dp = (DtProducto *) it->getCurrent();
+										cout << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										it->next();
+									
+									}
+									cin >> id;
+								
+									cout << "\t..Ingrese la cantidad" << endl;
+									int cant = 0;
+									cin >> cant;
+									bool ch = s->check_prod_venta(id);
+									
+									cout << "\t..Desea confirmar?(1 , 0)" << endl;
+									cin >> agregar;
+									if(agregar==1){
+										if(ch==true){
+											s->modificarCantidad(id,cant,"resta");
+										}
+										
+										else{
+											cout << "### EL PRODUCTO SELECCIONADO NO SE ENCUENTRA EN LA VENTA ###" << endl;
+										}
+										
+										Sleep(2000);
+										
+									}
+									
+							
 									break;
+								}
 								case 4:{
 									cout << endl << "### EMITIR FACTURA ###" << endl;
 									cout << endl << "\t..Ingrese la mesa a facturar" << endl;
@@ -477,6 +513,7 @@ main(){
 												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
 												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
 												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
 												cout << endl << endl;
 												it_p->next();
 										

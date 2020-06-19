@@ -107,7 +107,7 @@ class Sistema {
 		ICollection * mostrarProductos();
 		bool check_prod_venta(int);
 		void agregarProductoVenta(int,int);
-		void modificarCantidad(int,int);
+		void modificarCantidad(int,int,string);
 		
 		//Caso de uso Alta empleado
 
@@ -129,5 +129,9 @@ class Sistema {
 		
 		bool ventaFacturada(int);
 		ICollection * mostrarClientes();
+		
+		//Quitar producto a una venta
+		
+		ICollection * mostrarProdVenta(int);
 		
 };

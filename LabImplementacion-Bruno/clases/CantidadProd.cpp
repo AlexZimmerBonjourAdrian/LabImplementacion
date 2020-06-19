@@ -18,12 +18,17 @@ void CantidadProd::sumarCantidad(int cantProd){
 	this->cantidad+=cantProd;
 }
 
+void CantidadProd::restarCantidad(int cantProd){
+	this->cantidad-=cantProd;
+}
+
 Producto * CantidadProd::getProducto(){
 	return this->producto;
 }
 
 DtProducto * CantidadProd::getDtProducto(){
 	DtProducto * dp = this->producto->getDatos();
+	dp->setCantidad(this->cantidad);
 	return dp;
 }
 

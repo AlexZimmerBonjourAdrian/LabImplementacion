@@ -331,14 +331,14 @@ DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 	Mesa * m = (Mesa *) this->mesas->find(k1);
 
 	Vlocal * v = m->getVenta();
-	m->setVenta(NULL);
+	
 	if(v==NULL){
 		return NULL;
 	}
 	Mozo * mozo = v->getMozo();
 
 	mozo->borrarMesas(v);
-	
+	m->setVenta(NULL);
 	IKey * k3 = new IntKey(v->getCodigo());
 	
 	if(!facturas->member(k3)){
@@ -383,6 +383,21 @@ ICollection * Sistema::mostrarProductos(){
 		
 	}
 	return NULL;
+}
+
+ICollection * Sistema::mostrarProdVenta(int idmesa){
+	IKey * k = new IntKey(idmesa);
+	Mesa * m = (Mesa *) mesas->find(k);
+	if(m!=NULL){
+		Venta * v = m->getVenta();
+		return v->getProductos();
+	}
+	else{
+		delete k;
+		throw "### NO SE ENCONTRO LA MESA ###";
+	}
+	delete k;
+	
 }
 
 bool Sistema::check_prod_venta(int idprod){
@@ -440,7 +455,7 @@ DtProducto * Sistema::mostrarProducto(int cod){
 
 
 
-void Sistema::modificarCantidad(int idprod, int cantProd){
+void Sistema::modificarCantidad(int idprod, int cantProd,string op){
 	int idventa = this->temp->info;
 	IKey * k2 = new IntKey(idventa);
 	Vlocal * v = (Vlocal *)this->ventas->find(k2);
@@ -454,7 +469,7 @@ void Sistema::modificarCantidad(int idprod, int cantProd){
 	if(p==NULL){
 		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
-	v->setNuevaCantidad(p,cantProd);
+	v->setNuevaCantidad(p,cantProd,op);
 }
 
 
