@@ -12,13 +12,10 @@ using namespace std;
 
 main(){
 	
-	DtFecha  * f1 = new DtFecha(2017,04,31);
-	DtFecha f2(2018,12,11);
-	if(f1>&f2){
-		cout << "LA FECHA ES MAYOR" << endl;
-	}
-	else{
-		cout << "LA FECHA NO ES MAYOR" << endl;
+	Empleado * m1 = new Mozo("Gustavo", new ListDictionary());
+	Repartidor * r1 = dynamic_cast<Repartidor*>(m1);
+	if(r1==NULL){
+		cout << "FUNCIONA" << endl;
 	}
 	system("pause");
 }

@@ -68,6 +68,13 @@ main(){
 								if(opc1=="comun"){
 									cout << endl << "\t..Ingrese el codigo ";
 									cin >> agregar;
+									if(!cin.good()){
+										cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
+										system("PAUSE");
+										cin.clear();
+										fflush(stdin);
+										break;
+									}
 									if(s->check_prod_sistema(agregar)){
 										cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
 										system("PAUSE");
@@ -77,7 +84,14 @@ main(){
 									cin>>s1;
 									cout << endl << endl << "\t..Ingrese el precio ";
 									cin >> precio;
-									cout << endl << endl << "\t..Desea confirmar el alta? ";
+									if(!cin.good()){
+										cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
+										system("PAUSE");
+										cin.clear();
+										fflush(stdin);
+										break;
+									}
+									cout << endl << endl << "\t..Desea confirmar el alta?(si o no)";
 									cin >> opc1;
 									if(opc1=="si"){
 										s->agregarProducto(agregar,s1,precio);
@@ -90,68 +104,91 @@ main(){
 									
 								}
 								else{
-									cout << endl << "\t..Ingrese el codigo ";
-									cin >> agregar;
-									if(s->check_prod_sistema(agregar)){
-										cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
-										system("PAUSE");
-										break;
-									}
-									cout << endl << endl <<"\t..Ingrese la descripcion ";
-									cin>>s1;
-									cout << endl << endl << "\t..Ingrese el precio ";
-									cin >> precio;
-									cout << endl << endl;
-									ICollection * p = s->mostrarProductos();
-									if(p==NULL){
-										cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
-										Sleep(2000);
-										break;
-									}
-									IIterator * it = p->getIterator();
-									
-									int count=0;
-									while(it->hasCurrent()){
-										DtProducto * dp = (DtProducto *) it->getCurrent();
-										if(dp->getTipo()=="Comun"){
-											count++;
-											cout <<count <<") " << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
-										}
-										it->next();
-									
-									}
-									cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
-									int cod;
-									bool check;
-									check=s->check_prod_sistema(cod);
-									do{
+									if(opc1=="menu"){
+										
 										cout << endl << "\t..Ingrese el codigo ";
-										cin >> cod;
-										if(cod!=0 && !(check)){
-											cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
+										cin >> agregar;
+										if(!cin.good()){
+											cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
+											system("PAUSE");
+											cin.clear();
+											fflush(stdin);
 											break;
 										}
-										if(cod!=0){
-											cout <<  endl <<"\t..Ingrese la cantidad ";
-											int cant;
-											cin >>cant;
-											s->agregarProdMenu(cod,cant);
+										if(s->check_prod_sistema(agregar)){
+											cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
+											system("PAUSE");
+											break;
 										}
-									
-									}while(cod!=0);
-									if(check){
+										cout << endl << endl <<"\t..Ingrese la descripcion ";
+										cin>>s1;
+										cout << endl << endl << "\t..Ingrese el precio ";
+										cin >> precio;
+										cout << endl << endl;
+										ICollection * p = s->mostrarProductos();
+										if(p==NULL){
+											cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+											Sleep(2000);
+											break;
+										}
+										IIterator * it = p->getIterator();
+										
+										int count=0;
+										while(it->hasCurrent()){
+											DtProducto * dp = (DtProducto *) it->getCurrent();
+											if(dp->getTipo()=="Comun"){
+												count++;
+												cout <<count <<") " << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+											}
+											it->next();
+										
+										}
+										cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
+										int cod;
+										bool check;
+										check=s->check_prod_sistema(cod);
+										do{
+											cout << endl << "\t..Ingrese el codigo ";
+											cin >> cod;
+											if(!cin.good()){
+												cout << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
+												cin.clear();
+     											cin.ignore();
+											}
+											if(cod!=0 && !(check)){
+												cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
+												break;
+											}
+											if(cod!=0){
+												cout <<  endl <<"\t..Ingrese la cantidad ";
+												int cant;
+												cin >>cant;
+												s->agregarProdMenu(cod,cant);
+											}
+										
+										}while(cod!=0);
+										if(check){
+												
+											cout << endl << endl << "\t..Desea confirmar el alta? ";
+											cin >> opc1;
+											if(opc1=="si"){
+												s->agregarMenu(agregar,s1,precio);
+												cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
+											}
+											else{
+												cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
+											}
+											s->liberarMemoria();
+										}
 											
-										cout << endl << endl << "\t..Desea confirmar el alta? ";
-										cin >> opc1;
-										if(opc1=="si"){
-											s->agregarMenu(agregar,s1,precio);
-											cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
 										}
 										else{
-											cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
+											cout << "### OPCION INCORRECTA ###" << endl;
+											system("PAUSE");
+											s->liberarMemoria();
+											break;
 										}
-										s->liberarMemoria();
-									}
+								
 									s->liberarMemoria();
 									
 								}
@@ -164,6 +201,11 @@ main(){
 								cout << endl << "\t..Seleccione el producto a eliminar de la lista" << endl << endl ;
 									
 								ICollection * p = s->mostrarProductos();
+								if(p==NULL){
+									cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+									Sleep(2000);
+									break;
+								}
 								IIterator * it = p->getIterator();
 								
 								while(it->hasCurrent()){
@@ -174,6 +216,13 @@ main(){
 								}
 								int idprod=0;
 								cin >> idprod;
+								bool check;
+								check=s->check_prod_sistema(idprod);
+								if(!check){
+									cout << "### NO EXISTE UN PRODUCTO CON ESE CODIGO ###" << endl;
+									system("PAUSE");
+									break;
+								}
 								cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
 								cin >> opc;
 								if(opc==1){
@@ -202,7 +251,10 @@ main(){
 										break;
 									}
 									ch=s->check_prod_sistema(cod);
-									if(ch==false)cout << endl << endl << "###  CODIGO INCORRECTO ###" << endl;
+									if(ch==false){
+										cout << endl << endl << "###  CODIGO INCORRECTO ###" << endl;
+										cout << endl << "\tIngrese el codigo del producto nuevamente (Si desea cancelar ingrese 0) ";
+									}
 									
 								}while(ch==false && cod!=0);
 								DtProducto * dp = s->mostrarProducto(cod);
@@ -367,6 +419,7 @@ main(){
 								}catch(char const * msg){
 										cout << msg << endl;
 								}
+								system("PAUSE");
 								break;
 							}	
 							
@@ -655,7 +708,16 @@ main(){
 									Empleado * e = (Empleado *) it->getCurrent();
 									cout << "\t..Codigo: " << e->getId() << endl;
 									cout << "\t..Nombre: " << e->getNombre() << endl;
-									cout << "\t..Tipo: " << endl << endl << endl;
+									cout << "\t..Tipo: ";
+									
+									Repartidor * r1 = dynamic_cast<Repartidor*>(e);
+									if(r1==NULL){
+										cout << "Mozo" << endl;
+									}
+									else{
+										cout << "Repartidor" << endl;
+									}
+									cout << endl << endl;
 									it->next();
 								}
 								system("Pause");
