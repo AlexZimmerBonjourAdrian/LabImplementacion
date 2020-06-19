@@ -38,100 +38,12 @@ int menuConsultas();
 main(){
 	int agregar = 1;
 	float precio=0;
-	try{
+	
 		string opc1,s1;
 		Sistema * s = Sistema::getInstance();
 		Mesa * me1 = new Mesa(1,new ListDictionary());
-		Producto * p1 = new Producto(1,"Cerveza", 150);
 		int id=1, descuento;
 		
-
-//		//Iniciar Venta en mesa
-//		
-//		
-//		cout << "Ingrese el id del mozo" << endl;
-//		cin >> id;
-//		mostrarLista(s->listarMesasAsignadas(id));
-//		cout << "Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
-//		while(id!=0){
-//			cin >> id;
-//			if(id!=0)s->seleccionarMesas(id);
-//			
-//		}
-//		Lista selec = s->listarMesasSeleccionadas();
-//		mostrarLista(selec);
-//		cout << "Ingrese 1 para confirmar o 0 para cancelar" << endl;
-//		cin >>id;
-//		if(id==0){
-//			s->liberarMemoria();
-//			cout << "No se inicio la venta" << endl;
-//		}
-//		else{
-//			s->confirmarSeleccion(selec,new DtFecha(2018,12,01));
-//			s->liberarMemoria();
-//			cout << "Se inicio la venta" << endl;
-//		}
-//		
-//		//Agregar Producto a una venta
-//		cout << endl << "Ingrese la mesa a agregar" << endl;
-//		s->ingresarMesa(1);
-//		cout << "Seleccione los productos de la lista disponible" << endl ;
-//		
-//		ICollection * p = s->mostrarProductos();
-//		IIterator * it = p->getIterator();
-//		while(it->hasCurrent()){
-//		
-//			DtProducto * dp = (DtProducto *) it->getCurrent();
-//			cout << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
-//			it->next();
-//		
-//		}
-//		cout << "Ingrese 0 para detenerse" << endl << endl;
-//		cin >> id;
-//		do{
-//			
-//			cout << "Ingrese la cantidad" << endl;
-//			int cant = 0;
-//			cin >> cant;
-//			bool ch = s->check_prod_venta(id);
-//			cout << "Desea confirmar?(1 , 0)" << endl;
-//			cin >> agregar;
-//			if(agregar==1){
-//				if(ch==true){
-//					s->modificarCantidad(id,cant);
-//				}
-//				
-//				else{
-//					s->agregarProducto(id,cant);
-//				}
-//				cout << "Producto agregado" << endl;
-//				s->liberarMemoria();
-//			}
-//			else{
-//				s->liberarMemoria();
-//			}
-//			cin >> id;
-//	
-//		}while(id!=0);
-//		cout << "LPM1" << endl;
-//		ICollection * cant = v1->getCantidades();
-//		if(cant==NULL)cout << "LPM" << endl;
-//		IIterator * it2 = cant->getIterator();
-//		while(it2->hasCurrent()){
-//			
-//			CantidadProd * c = (CantidadProd*) it2->getCurrent();
-//			DtProducto * dt = c->getDtProducto();
-//			cout << dt->getDescripcion() << endl;
-//			it2->next();
-//		}
-//		
-//		//Facturacion de una venta
-//		
-//		DtFactura * f = s->emitirFactura(1,10);
-//		if(f!=NULL){
-//			cout << f->getCodigo() << "   " << f->getNombreTrabajador() << "   " << f->getSubtotal() << "   " << f->getDescuento() << endl;
-//		}
-
 		int opc;
 		int mozopc;
 		bool back = false;
@@ -142,6 +54,8 @@ main(){
 			switch(opc){
 				case 1:
 					do{
+						try{
+						
 						system("cls");
 						opc = menuAdministrador();
 						switch(opc){
@@ -200,10 +114,12 @@ main(){
 									}
 									cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
 									int cod;
+									bool check;
+									check=s->check_prod_sistema(cod);
 									do{
 										cout << endl << "\t..Ingrese el codigo ";
 										cin >> cod;
-										if(cod!=0 && !(s->check_prod_sistema(cod))){
+										if(cod!=0 && !(check)){
 											cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
 											break;
 										}
@@ -215,49 +131,143 @@ main(){
 										}
 									
 									}while(cod!=0);
-									cout << endl << endl << "\t..Desea confirmar el alta? ";
-									cin >> opc1;
-									if(opc1=="si"){
-										s->agregarMenu(agregar,s1,precio);
+									if(check){
+											
+										cout << endl << endl << "\t..Desea confirmar el alta? ";
+										cin >> opc1;
+										if(opc1=="si"){
+											s->agregarMenu(agregar,s1,precio);
+											
+										}
+										else{
+											cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
+										}
 										s->liberarMemoria();
 									}
-									else{
-										s->liberarMemoria();
-									}
-									}
+									s->liberarMemoria();
+									
+								}
 								
 								break;
 							}
-							case 2:
-								cout <<"Baja producto no implementado" <<endl;
-								Sleep (2000);
-								break;
-							case 3:
-								cout <<"Infromación de un producto no implementado" <<endl;
-								Sleep (2000);
-								break;
+							case 2:{
 							
+								cout <<"### BAJA PRODUCTO ###" <<endl;
+								cout << endl << "\t..Seleccione el producto a eliminar de la lista" << endl << endl ;
+									
+								ICollection * p = s->mostrarProductos();
+								IIterator * it = p->getIterator();
+								
+								while(it->hasCurrent()){
+									DtProducto * dp = (DtProducto *) it->getCurrent();
+									cout  << "\tProducto # "<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+									it->next();
+								
+								}
+								int idprod=0;
+								cin >> idprod;
+								cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
+								cin >> opc;
+								if(opc==1){
+									s->eliminarProducto(idprod);
+									s->liberarMemoria();
+									cout << endl << "### SE HA ELIMINADO EL PRODUCTO ###" << endl;
+								}
+								else{
+									s->liberarMemoria();
+									cout << endl << "### NO SE HA ELIMINADO EL PRODUCTO ###" << endl;
+								}
+								system("PAUSE");
+								break;
+							}
+							case 3:{
+						
+								cout << endl << "### INFORMACION DE UN PRODUCTO ###" <<endl << endl;
+								cout << "\tIngrese el codigo del producto (Si desea volver ingrese 0) ";
+								
+								int cod=1;
+								bool ch=false;
+								do{
+									cin >> cod;
+									if(cod==0){
+										ch=false;
+										break;
+									}
+									ch=s->check_prod_sistema(cod);
+									if(ch==false)cout << endl << endl << "###  CODIGO INCORRECTO ###" << endl;
+									
+								}while(ch==false && cod!=0);
+								DtProducto * dp = s->mostrarProducto(cod);
+								if(ch==true){
+									DtProducto * dp = s->mostrarProducto(cod);
+									cout << endl << "### PRODUCTO ###" << endl << endl;
+									cout << "\tCodigo: " << dp->getCodigo() << endl;
+									cout << "\tDescripcion: " << dp->getDescripcion() << endl;
+									cout << "\tPrecio: " << dp->getPrecio() << endl;
+									cout << "\tCantidad de unidades vendidas: " <<dp->getCantidad() << endl;
+								}
+								if(dp->getTipo()=="Menu"){
+									cout << endl << "### COMPONENTES ###" << endl << endl;
+									DtMenu * dm = (DtMenu*) dp;
+									ICollection * componentes= dm->getComponentes();
+									IIterator * it = componentes->getIterator();
+									while(it->hasCurrent()){
+										DtProducto * dp = (DtProducto*) it->getCurrent();
+										cout << "\tCodigo: " << dp->getCodigo() << endl;
+										cout << "\tDescripcion: " << dp->getDescripcion() << endl;
+										cout << "\tPrecio: " << dp->getPrecio() << endl;
+										cout << "\tCantidad: " <<dp->getCantidad() << endl << endl;
+										it->next();
+									}
+								}
+								system("PAUSE");
+								break;
+						}
 							case 4:{
-								cout << endl << "###INGRESAR EMPLEADO###" << endl << endl << "\t..Ingrese el nombre:" << endl;
+								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
 								cin >>nombre;
 								cout << "\t..El empleado es repartidor?(si/no)" << endl << endl;
 								cin >> opc1;
+								if(opc1 != "si" && opc1!="no"){
+									cout << "### OPCION INCORRECTA ###" << endl;
+									break;
+								}
 								if(opc1=="si"){
 										cout << "\t..Seleccione un medio de transporte" << endl << endl;
-										cout << "\t\t..--A pie" << endl;
-										cout << "\t\t..--Bicicleta" << endl;
-										cout << "\t\t..--Moto" << endl;
+										cout << "\t\t1)..A pie" << endl;
+										cout << "\t\t2)..Bicicleta" << endl;
+										cout << "\t\t3)..Moto" << endl;
+										int op;
+										cin >>op;
+										bool m=true;
 										string mt;
-										cin >>mt;
-										s->ingresarRepartidor(nombre,mt);
+										switch(op){
+											case 1:
+												mt="A pie";
+												break;
+											case 2:
+												mt="Bicicleta";
+												break;
+											case 3:
+												mt="Moto";
+												break;
+											default:
+												cout << "### OPCION INCORRECTA ###" << endl;
+												m=false;
+												break;
+												
+										}
+										if(m){
+											s->ingresarRepartidor(nombre,mt);
+											cout << "###EL EMPLEADO HA SIDO DADO DE ALTA###" << endl; 
+										}
 								}
 								else{
 									s->ingresarMozo(nombre);
+									cout << "###EL EMPLEADO HA SIDO DADO DE ALTA###" << endl; 
 								}
-								
-								cout << "###EL EMPLEADO HA SIDO DADO DE ALTA###" << endl; 
-								
+	
 								Sleep (2000);
 								break;
 							}
@@ -289,7 +299,7 @@ main(){
 									cout << endl << "### Mesa creada ###" << endl;
 									Sleep(2000);
 									break;
-								}catch(const char * msg){
+								}catch(char const * msg){
 										cout << msg << endl;
 								}
 								break;
@@ -303,6 +313,8 @@ main(){
 								cin >> descuento;
 								s->agregarMesaMozo(descuento,id);
 								cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
+								s->liberarMemoria();
+								
 								Sleep(2000);
 								break;
 							}
@@ -314,97 +326,154 @@ main(){
 								cout << "Opcion incorrecta" << endl;
 								Sleep (2000);
 								system("cls");
-						}		
-					}while((opc<12 || opc>0) && !back);
+						}	
+						
+					}catch(char const * msg){
+						cout << msg << endl;
+					}	
+				}while((opc<12 || opc>0) && !back);
 					break;
-				case 2:
-					do{
-						system("cls");
-						opc = menuMozo();
-						switch(opc){
-							case 1:{
-								cout << "###INICIAR VENTA EN MESA###" << endl << endl;
-								
-								cout << "\t..Ingrese el id del mozo" << endl << endl;
-								cin >> id;
-								cout << endl << endl << "### MESAS ASIGNADAS A ESTE MOZO ###" << endl << endl;
-								mostrarLista(s->listarMesasAsignadas(id)); 
-								cout << endl << "\t..Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
-								while(id!=0){
-									cin >> id;
-									if(id!=0)s->seleccionarMesas(id);
+				case 2:{
+						do{
+							try{
+							system("cls");
+							opc = menuMozo();
+							switch(opc){
+								case 1:{
+									cout << "###INICIAR VENTA EN MESA###" << endl << endl;
 									
-								}
-								cout << "\t..Las mesas seleccionadas son:" << endl << endl;
-								Lista selec = s->listarMesasSeleccionadas();
-								mostrarLista(selec);
-								cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
-								cin >>id;
-								if(id==0){
-									s->liberarMemoria();
-									cout << endl << "\t..No se inicio la venta" << endl;
-								}
-								else{
-									s->confirmarSeleccion(selec,new DtFecha(2018,12,01));
-									s->liberarMemoria();
-									cout << endl << "### Se inicio la venta ###" << endl;
-								}	
-								Sleep (2000);
-								break;
-							}
-							
-							case 2:{
-									//Agregar Producto a una venta
-								
-								break;
-							}
-								
-							case 3:
-								cout <<"Quitar producto a una venta no implementado" <<endl;
-								Sleep (2000);
-								break;
-							case 4:{
-								cout << endl << "### EMITIR FACTURA ###" << endl;
-								cout << endl << "\t..Ingrese la mesa a facturar" << endl;
-								cin >> id;
-								cout << endl << "\t..Ingrese el descuento a aplicar" << endl;
-								cin >> descuento;
-								DtFactura * df = s->emitirFactura(id,descuento);
-								if(df!=NULL){
-									cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
-										cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl << "\t..Subtotal: " << df->getSubtotal() << endl << "\t..Descuento: "<< df->getDescuento()<< endl << endl;
-										cout << "\t --Productos--" << endl << endl;
-										ICollection * prod = df->getProductos();
-										IIterator * it_p = prod->getIterator();
-										while(it_p->hasCurrent()){
-										DtProducto * dp = (DtProducto *) it_p->getCurrent();
-										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-										cout << "\t ..Precio: " << dp->getPrecio() << endl;
-										cout << endl << endl;
+									cout << "\t..Ingrese el id del mozo" << endl << endl;
+									cin >> id;
+									Lista mesas=s->listarMesasAsignadas(id);
+									cout << endl << endl << "### MESAS ASIGNADAS A ESTE MOZO ###" << endl << endl;
+									mostrarLista(mesas); 
+									cout << endl << "\t..Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
+									while(id!=0){
+										cin >> id;
+										if(id!=0)s->seleccionarMesas(id);
 										
+									}
+									cout << "\t..Las mesas seleccionadas son:" << endl << endl;
+									Lista selec = s->listarMesasSeleccionadas();
+									mostrarLista(selec);
+									cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
+									cin >>id;
+									if(id==0){
+										s->liberarMemoria();
+										cout << endl << "\t..No se inicio la venta" << endl;
+									}
+									else{
+										s->confirmarSeleccion(selec,new DtFecha(2018,12,01));
+										s->liberarMemoria();
+										cout << endl << "### Se inicio la venta ###" << endl;
+									}	
+									Sleep (2000);
+									break;
+								}
+								
+								case 2:{
+										//Agregar Producto a una venta
+									cout << "### INGRESAR PRODUCTO A UNA VENTA ###" << endl;
+									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
+									cin>>opc;
+									s->ingresarMesa(opc);
+									cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
+									
+									ICollection * p = s->mostrarProductos();
+									IIterator * it = p->getIterator();
+									int count=0;
+									while(it->hasCurrent()){
+										count++;
+										DtProducto * dp = (DtProducto *) it->getCurrent();
+										cout << count << ") "<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										it->next();
 									
 									}
+									cout << "\t..Ingrese 0 para detenerse" << endl << endl;
+									cin >> id;
+									do{
+										
+										cout << "\t..Ingrese la cantidad" << endl;
+										int cant = 0;
+										cin >> cant;
+										bool ch = s->check_prod_venta(id);
+										
+										cout << "\t..Desea confirmar?(1 , 0)" << endl;
+										cin >> agregar;
+										if(agregar==1){
+											if(ch==true){
+												s->modificarCantidad(id,cant);
+											}
+											
+											else{
+												s->agregarProductoVenta(id,cant);
+											}
+											
+											Sleep(2000);
+											
+										}
+										else{
+											cout << "### PRODUCTO NO AGREGADO ###" << endl;	
+										}
+										cin >> id;
+								
+									}while(id!=0);
+									s->liberarMemoria();
+									break;
 								}
-								else{
-									cout << endl << "LA MESA YA HA SIDO FACTURADA" << endl;
+									
+								case 3:
+									cout <<"Quitar producto a una venta no implementado" <<endl;
+									Sleep (2000);
+									break;
+								case 4:{
+									cout << endl << "### EMITIR FACTURA ###" << endl;
+									cout << endl << "\t..Ingrese la mesa a facturar" << endl;
+									cin >> id;
+									cout << endl << "\t..Ingrese el descuento a aplicar" << endl;
+									cin >> descuento;
+									DtFactura * df = s->emitirFactura(id,descuento);
+									if(df!=NULL){
+										cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
+											cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl << "\t..Subtotal: " << df->getSubtotal() << endl << "\t..Descuento: "<< df->getDescuento()<< endl << endl;
+											cout << "\t --Productos--" << endl << endl;
+											ICollection * prod = df->getProductos();
+											IIterator * it_p = prod->getIterator();
+											while(it_p->hasCurrent()){
+												DtProducto * dp = (DtProducto *) it_p->getCurrent();
+												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << endl << endl;
+												it_p->next();
+										
+										}
+									}
+									else{
+										cout << endl << "### LA MESA YA HA SIDO FACTURADA ###" << endl;
+									}
+									system("Pause");
+									break;
 								}
-								system("Pause");
-								break;
+									
+								
+									
+								case 5:
+									back=true;
+									break;
+								default:
+									cout << "Opcion incorrecta" << endl;
+									Sleep (2000);
+									system("cls");
 							}
-								
-							
-								
-							case 5:
-								back=true;
-								break;
-							default:
-								cout << "Opcion incorrecta" << endl;
-								Sleep (2000);
-								system("cls");
+						}catch(char const * msg){
+							cout << msg << endl;
+							system("PAUSE");
 						}		
 					}while((opc<6 || opc>0) && !back);
-					break;
+					
+					break; 
+				}
 				case 3:
 					do{
 						system("cls");
@@ -444,8 +513,8 @@ main(){
 					}while((opc<3 || opc>0) && !back);
 					break;
 				case 5:
-					cout << "Funcion Cargar datos de prueba no implementada" << endl;
-					Sleep (2000);
+					s->cargarDatos();
+				
 					break;
 				
 				case 6:{
@@ -468,8 +537,7 @@ main(){
 										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
 										cout << "\t ..Precio: " << dp->getPrecio() << endl;
 										cout << endl << endl;
-										
-										it->next();
+										it_p->next();
 									}
 									it->next();
 								}
@@ -499,6 +567,11 @@ main(){
 							case 4:{
 								cout << "\t --Productos--" << endl << endl;
 								ICollection * prod = s->mostrarProductos();
+								if(prod==NULL){
+									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+									Sleep(2000);
+									break;
+								}
 								IIterator * it_p = prod->getIterator();
 								while(it_p->hasCurrent()){
 									DtProducto * dp = (DtProducto *) it_p->getCurrent();
@@ -540,12 +613,9 @@ main(){
 		}while(opc<8 || opc>0);
 		return 0;
 	
-	}catch(const char * msg){
-		cout << msg << endl;
-	}
-	
-	
 
+
+	
 	system("PAUSE");
 }
 
@@ -570,7 +640,7 @@ int menuAdministrador(){
 	cout << "\t **MENU ADMINISTRADOR***" << endl;
 	cout << "1. Alta producto" << endl;
  	cout << "2. Baja producto" << endl;
-	cout << "3. Infromación de un producto" << endl;
+	cout << "3. Información de un producto" << endl;
 	cout << "4. Alta empleado" << endl;
 	cout << "5. Asignar mozos a mesas" << endl;
 	cout << "6. Resumen facturación de 1 día dada la fecha" << endl;

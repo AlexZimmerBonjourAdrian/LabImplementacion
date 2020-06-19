@@ -1,5 +1,7 @@
 #include <iostream>
 #include "./DtDireccion.h"
+#ifndef DtCliente_H
+#define DTCliente_H
 using namespace std;
 class DtCliente
 {
@@ -16,4 +18,4 @@ public:
     virtual ~DtCliente();
 };
 
-
+#endif

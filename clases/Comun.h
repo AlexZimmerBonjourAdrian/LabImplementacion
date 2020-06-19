@@ -1,4 +1,4 @@
-#include "Producto.cpp"
+#include "Producto.h"
 #include<iostream>
 #ifndef COMUN_H
 #define COMUN_H

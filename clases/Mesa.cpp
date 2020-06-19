@@ -5,7 +5,7 @@
 #ifndef MESA_CPP
 #define MESA_CPP
 
-Mesa::Mesa(int id, IDictionary * historial)
+Mesa::Mesa(int id, IDictionary * historial) : venta(NULL)
 {
     this->id=id;
     this->historial=historial;
@@ -33,9 +33,7 @@ Vlocal * Mesa::getVenta(){
 }
 
 void Mesa::setVenta(Vlocal * venta){
-	if(venta==NULL){
-		throw "(Clase Mesa) La venta no puede ser nula";
-	}
+
 	
 	this->venta=venta;
 }

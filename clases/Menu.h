@@ -13,7 +13,9 @@ class Menu : public Producto {
 		Menu(int,string,float);
 		void agregarProd(Comun*,int);
 		void sacardeLista(Comun * p);
+		DtProducto * getDatos() const;
 		bool vacio();
+		void borrar(Producto *);
 		~Menu();
 };
 

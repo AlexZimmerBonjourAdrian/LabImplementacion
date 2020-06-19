@@ -11,22 +11,10 @@ Cliente::Cliente(string telefono, string nombre, DtDireccion * direccion){
 	this->direccion=direccion;
 }
 
-
-//string Cliente
-
 string Cliente::getNombre(){
 	return this->nombre;
 }
 
-string Cliente::getTelefono()
-{
-	return this->telefono;
-}
-
-DtDireccion * getDireccion()
-{
-	return this->direccion;
-}
 Cliente::~Cliente(){
 	
 }

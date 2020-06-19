@@ -12,6 +12,8 @@ class Componente : public ICollectible{
 		Comun * producto;
 	public:
 		Componente(int,Comun*);
+		int getCantidad();
+		Comun * getProducto();
 		bool coincide(Comun *);
 		~Componente();
 		

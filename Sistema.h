@@ -14,7 +14,6 @@
 #include "./Datatypes/DtRepartidor.h"
 #include "./clases/Vdomicilio.h"
 #include "./Datatypes/DtCliente.h"
-
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -81,33 +80,22 @@ class Sistema {
 		IDictionary * mesas;
 		IDictionary * productos;
 		IDictionary * facturas;
-		IDictionary * Clientes;
-		IDictionary * Repartidores;
+		IDictionary * clientes;
+		IDictionary * repartidores;
 		Lista temp;
 		bool cond;
 		
 	
 	public:
+		void cargarDatos();
 		static Sistema * getInstance();
 		IDictionary * getEmpleados();
 		ICollection * getFacturas();
 		IDictionary * getProductos();
 		IDictionary * getVentas();
 		IDictionary * getClienteS();
-		
 		//Caso de uso Iniciar venta en mesa
 		
-		#pragma region Operaciones a realizar
-		bool ingresartelefono(string telefono);
-		ICollection * ListarProductos();
-		void seleccionarProducto(int codigoP,int cantidad);
-		ICollection ListarRepartidores();
-		void seleccionarRepartidor(integer Codigo);
-		DtFactura confirmarpedido();
-		void CancelarOperacion();
-		DtCliente altaCliente()
-		#pragma endregion
-
 		void agregarMozo(Mozo * m);
 		void agregarMesa(int);
 	
@@ -116,6 +104,28 @@ class Sistema {
 		void seleccionarMesas(int);
 		void confirmarSeleccion(Lista, DtFecha *);
 		void liberarMemoria();
+
+			#pragma region Operaciones a realizar
+			altaCliente(string telefono, string nombre,DtDireccion * direccion)
+{
+	IKey * k = new IntKey(telefono);
+	DtCliente dtC= new DtCliente(telefono,nombre,direccion);
+	
+	Clientes->add(k,dtC);
+
+	return dtC;
+}
+		DtCliente altaCliente(string telefono, string nombre,DtDireccion * direccion);
+		bool ingresartelefono(string telefono);
+		ICollection * ListarProductos();
+		void seleccionarProducto(int codigoP,int cantidad);
+		ICollection ListarRepartidores();
+		void seleccionarRepartidor(integer Codigo);
+		DtFactura confirmarpedido();
+		void CancelarOperacion();
+		void CancelarCliente();
+		void confirmarCliente();
+		#pragma endregion
 		
 		//Caso de uso Facturacion de una venta
 		
@@ -128,6 +138,11 @@ class Sistema {
 		void agregarProdMenu(int,int);
 		void agregarMenu(int,string,float);
 		
+		//Caso de uso Baja Producto
+		
+		void eliminarProducto(int);
+		bool productoFacturado(int idprod);
+		
 		//Caso de uso  Agregar producto a una venta
 		
 		void ingresarMesa(int);
@@ -137,12 +152,19 @@ class Sistema {
 		void modificarCantidad(int,int);
 		
 		//Caso de uso Alta empleado
-		
+
 		void ingresarRepartidor(string,string);
 		void ingresarMozo(string);
+		
+		//Informacion de un producto
+		DtProducto * mostrarProducto(int);  
 		
 		//Agrgar mesas a mozos
 		
 		void agregarMesaMozo(int idmesa, int idmozo);
+		
+		//Utilidades
+		
+		bool ventaFacturada(int);
 		
 };

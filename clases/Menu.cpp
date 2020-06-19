@@ -3,8 +3,7 @@
 #include<iostream>
 #include "../iterators/IIterator.cpp"
 #include "../colecciones/List.cpp"
-#ifndef MENU_CPP
-#define MENU_CPP
+
 
 Menu::Menu(int codigo,string descripcion, float precio) : Producto(codigo, descripcion,precio){
 	this->componentes = new List();
@@ -39,7 +38,3 @@ Menu::~Menu(){
 }
 
 
-
-
-
-#endif

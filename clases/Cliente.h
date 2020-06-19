@@ -15,11 +15,7 @@ class Cliente : public ICollectible{
 		DtDireccion * direccion;
 	public:
 		Cliente(string,string,DtDireccion *);
-		void setNombre(string);
-		void setTelefono(string);
 		string getNombre();
-		string getTelefono();
-		DtDireccion * getDireccion();
 		~Cliente(); 	
 		
 };

@@ -15,4 +15,6 @@ public:
     string getNombre();   
     virtual ~DtEmpleado();
     
-}
+};
+
+#endif

@@ -22,9 +22,12 @@ IDictionary * Mozo::getMesa()
 void Mozo::borrarMesas(Vlocal * venta){
 	IIterator * it = this->mesas->getIterator();
 	while(it->hasCurrent()){
-		cout << "LALALALALA" << endl;
+		cout << "HOLA" << endl;
 		Mesa * m = (Mesa*) it->getCurrent();
+		cout << m->getid() << endl;
+		system("PAUSE");
 		if(m->coincide(venta)){
+			it->next();
 			IKey * k = new IntKey(m->getid());
 			this->mesas->remove(k);
 			delete k;

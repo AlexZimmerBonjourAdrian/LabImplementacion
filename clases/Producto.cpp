@@ -8,37 +8,26 @@ Producto::Producto(int codigo, string descripcion,float precio){
 	this->precio=precio;
 }
 
-DtProducto * Producto::getDatos(){
-	return  new DtProducto(this->codigo,this->descripcion, this->precio,0,this->tipo);
-}
 
 void Producto::setTipo(string tipo){
 	this->tipo=tipo;
 }
 
-void Producto::setCodigo(int codigo)
-{
-	this->codigo=codigo;
-}
-
-void Producto::setPrecio(int Precio)
-{
-this->precio=Precio;
-}
-
-string Producto::getTipo(){
+string Producto::getTipo() const{
 	return this->tipo;
 }
 
-int Producto::getCodigo(){
+string Producto::getDescripcion() const{
+	return this->descripcion;
+}
+
+int Producto::getCodigo() const{
 	return this->codigo;
 }
 
-float Producto::getPrecio()
-{
+int Producto::getPrecio() const{
 	return this->precio;
 }
-
 
 
 Producto::~Producto(){
