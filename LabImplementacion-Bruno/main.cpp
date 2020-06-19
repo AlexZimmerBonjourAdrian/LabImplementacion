@@ -310,10 +310,42 @@ main(){
 								
 								break;
 							}
-							case 6:
-								cout <<"Resumen facturación de 1 día dada la fecha no implementado" <<endl;
+							case 6:{
+							
+								cout << "### FACTURACION DE UN DIA ###" << endl;
+								cout << endl << "\t..Ingrese la fecha a consultar:" << endl;
+								cout << endl << "\t..Anio: ";
+								int anio;
+								cin>>anio;
+								cout << endl << "\t..Mes: ";
+								int mes;
+								cin >> mes;
+								cout << endl << "\t..Dia: ";
+								int dia;
+								cin >> dia;
+								DtFecha * f = new DtFecha(anio,mes,dia);
+								ICollection * facturas = s->getFacturasFecha(f);
+								IIterator * it = facturas->getIterator();
+								while(it->hasCurrent()){
+									DtFactura * df =(DtFactura *) it->getCurrent();
+									cout << endl <<"##Factura " << df->getCodigo() << " ##" << endl << "Subtotal: " << df->getSubtotal() << endl << " Descuento: "<< df->getDescuento()<< endl << endl;
+									cout << "\t --Productos--" << endl << endl;
+									ICollection * prod = df->getProductos();
+									IIterator * it_p = prod->getIterator();
+									while(it_p->hasCurrent()){
+										DtProducto * dp = (DtProducto *) it_p->getCurrent();
+										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+										cout << "\t ..Precio: " << dp->getPrecio() << endl;
+										cout << endl << endl;
+										it_p->next();
+									}
+									it->next();
+								}
+								system("PAUSE");
 								Sleep (2000);
 								break;
+							}
 							case 7:
 								cout <<"Venta a domicilio no implementado" <<endl;
 								Sleep (2000);

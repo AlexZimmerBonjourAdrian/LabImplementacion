@@ -12,9 +12,13 @@ using namespace std;
 
 main(){
 	
-	Menu * m = new Menu(1,"Papas",120);
-	cout << m->getTipo() << endl;
-
-	cout << m->getTipo() << endl;
+	DtFecha  * f1 = new DtFecha(2017,04,31);
+	DtFecha f2(2018,12,11);
+	if(f1>&f2){
+		cout << "LA FECHA ES MAYOR" << endl;
+	}
+	else{
+		cout << "LA FECHA NO ES MAYOR" << endl;
+	}
 	system("pause");
 }

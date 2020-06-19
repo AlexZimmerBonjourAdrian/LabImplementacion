@@ -30,6 +30,10 @@ DtFactura * Factura::getDatos(){
 	return df;
 }
 
+DtFecha * Factura::getFecha(){
+	return this->fecha;
+}
+
 Factura::~Factura(){
 	
 }

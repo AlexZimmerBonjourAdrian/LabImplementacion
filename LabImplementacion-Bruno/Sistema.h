@@ -134,4 +134,12 @@ class Sistema {
 		
 		ICollection * mostrarProdVenta(int);
 		
+		//Facturacion de 1 dia
+		
+		ICollection * getFacturasFecha(DtFecha*);
+		
+		//Venta a domicilio
+		
+		
+		
 };
