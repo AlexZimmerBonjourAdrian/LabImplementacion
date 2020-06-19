@@ -8,6 +8,7 @@
 #include "./clases/Cliente.cpp"
 #include <windows.h>
 #include <typeinfo>
+
 using namespace std;
  
 bool verificarMesaAtendida(Sistema * s, Mesa * m){
@@ -80,6 +81,7 @@ main(){
 									cin >> opc1;
 									if(opc1=="si"){
 										s->agregarProducto(agregar,s1,precio);
+										cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
 										s->liberarMemoria();
 									}
 									else{
@@ -101,7 +103,13 @@ main(){
 									cin >> precio;
 									cout << endl << endl;
 									ICollection * p = s->mostrarProductos();
+									if(p==NULL){
+										cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+										Sleep(2000);
+										break;
+									}
 									IIterator * it = p->getIterator();
+									
 									int count=0;
 									while(it->hasCurrent()){
 										DtProducto * dp = (DtProducto *) it->getCurrent();
@@ -137,7 +145,7 @@ main(){
 										cin >> opc1;
 										if(opc1=="si"){
 											s->agregarMenu(agregar,s1,precio);
-											
+											cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
 										}
 										else{
 											cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
@@ -147,7 +155,7 @@ main(){
 									s->liberarMemoria();
 									
 								}
-								
+								system("PAUSE");
 								break;
 							}
 							case 2:{
@@ -272,11 +280,36 @@ main(){
 								break;
 							}
 							
-							case 5:
-								cout <<"Alta empleado no implementado" <<endl;
-								Sleep (2000);
-								break;
+							case 5:{
+							
+								cout <<"### ALTA CLIENTE ###" <<endl << endl;
+								cout << "\t..Ingrese el nombre: ";
+								string nombre;
+								fflush(stdin);
+								getline(cin, nombre);
+								cout << endl << endl << "\t..Ingrese el telefono: ";
+								long int telefono;
+								cin >> telefono;
+								cout << endl << endl << "\t..Ingrese la calle: ";
+								string calle;
+								fflush(stdin);
+								getline(cin,calle);
+								cout << endl << endl << "\t..Ingrese el numero: ";
+								int nro;
+								cin >> nro;
+								cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
+								cin >> opc;
+								if(opc==1){
+									s->crearCliente(nombre,telefono,calle,nro);
+									
+								}
+								else{
+									cout << endl << "### NO SE CREO EL CLIENTE ###" << endl;
+									Sleep (2000);
+								}
 								
+								break;
+							}
 							case 6:
 								cout <<"Resumen facturación de 1 día dada la fecha no implementado" <<endl;
 								Sleep (2000);
@@ -565,7 +598,7 @@ main(){
 							}
 								
 							case 4:{
-								cout << "\t --Productos--" << endl << endl;
+								cout << "### Productos ###" << endl << endl;
 								ICollection * prod = s->mostrarProductos();
 								if(prod==NULL){
 									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
@@ -584,7 +617,27 @@ main(){
 								system("PAUSE");
 								break;
 							}
+							
+							
 							case 5:{
+								cout << endl <<  "### Clientes ###" << endl;
+								ICollection * clientes = s->mostrarClientes();
+								IIterator * it = clientes->getIterator();
+								while(it->hasCurrent()){
+									DtCliente * dc = (DtCliente *) it->getCurrent();
+									cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
+									cout << "\t..Nombre: " << dc->getNombre() << endl;
+									DtDireccion * dd = dc->getDireccion();
+									cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+									cout << "          -------------------------" << endl;
+									it->next();
+									
+								}
+								system("PAUSE");
+								break;
+							}
+							
+							case 6:{
 								back=true;
 								break;
 							}
@@ -597,13 +650,13 @@ main(){
 							}
 							
 						}		
-					}while((opc<6 || opc>0) && !back);
+					}while((opc<7 || opc>0) && !back);
 					break;
 				}
 				
 				
 				case 7:
-					cout << "Gracias por usar el sistema" << endl;
+					cout << "### Gracias por usar el sistema ###" << endl;
 					return 0;
 				default:
 					cout << "Opcion incorrecta" << endl;
@@ -642,7 +695,7 @@ int menuAdministrador(){
  	cout << "2. Baja producto" << endl;
 	cout << "3. Información de un producto" << endl;
 	cout << "4. Alta empleado" << endl;
-	cout << "5. Asignar mozos a mesas" << endl;
+	cout << "5. Alta cliente" << endl;
 	cout << "6. Resumen facturación de 1 día dada la fecha" << endl;
 	cout << "7. Venta a domicilio" << endl;
 	cout << "8. Consultar actualizaciones de pedidos a domicilio" << endl;
@@ -695,7 +748,8 @@ int menuConsultas(){
 	cout << "2. Consultar empleados" << endl;
 	cout << "3. Consultar mesas" << endl;
 	cout << "4. Consultar productos" << endl;
-	cout << "5. Volver a menu anterior" << endl;
+	cout << "5. Consultar cliente" << endl;
+	cout << "6. Volver a menu anterior" << endl;
 	cin >> opc;
 	return opc;
 	

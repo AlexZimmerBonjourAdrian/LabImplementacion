@@ -12,6 +12,7 @@ Sistema::Sistema() {
 	mesas = new ListDictionary();
 	productos = new ListDictionary();
 	facturas = new ListDictionary;
+	clientes = new ListDictionary();
 	temp=NULL;
 }
 
@@ -65,8 +66,30 @@ Sistema * Sistema::getInstance(){
 	return instance;
 }
 
+
+void Sistema::crearCliente(string nombre, int telefono, string calle, int nro){
+	IKey * k = new IntKey(telefono);
+	DtDireccion * dt = new DtDireccion(calle,nro);
+	Cliente * c = new Cliente(telefono,nombre,dt);
+	clientes->add(k,c);
+	
+}
+
+
 IDictionary * Sistema::getEmpleados(){
 	return this->empleados;
+}
+
+ICollection * Sistema::mostrarClientes(){
+	ICollection *dtclientes= new List();
+	IIterator * it = clientes->getIterator();
+	while(it->hasCurrent()){
+		Cliente * c = (Cliente*) it->getCurrent();
+		DtCliente * dt = new DtCliente(c->getTelefono(),c->getNombre(),c->getDireccion());
+		dtclientes->add(dt);
+		it->next();
+	}
+	return dtclientes;
 }
 
 void Sistema::agregarProdMenu(int codigo,int cantidad){

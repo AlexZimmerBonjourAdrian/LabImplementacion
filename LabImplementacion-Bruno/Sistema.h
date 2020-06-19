@@ -9,6 +9,9 @@
 #include "./clases/Comun.cpp"
 #include "./clases/Menu.cpp"
 #include "./clases/Repartidor.cpp"
+#include "./clases/Cliente.cpp"
+#include "./Datatypes/DtCliente.cpp"
+
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -60,6 +63,7 @@ class Sistema {
 		IDictionary * mesas;
 		IDictionary * productos;
 		IDictionary * facturas;
+		IDictionary * clientes;
 		Lista temp;
 		bool cond;
 		
@@ -117,8 +121,13 @@ class Sistema {
 		
 		void agregarMesaMozo(int idmesa, int idmozo);
 		
+		//Caso de uso Alta cliente
+		
+		void crearCliente(string,int,string,int);
+		
 		//Utilidades
 		
 		bool ventaFacturada(int);
+		ICollection * mostrarClientes();
 		
 };
