@@ -12,10 +12,15 @@
 using namespace std;
 
 main(){
-	int dia, mes, ano;  
-	time_t tiempo = time (NULL);  
-	struct tm *fecha = localtime (&tiempo); 
-	cout << fecha->tm_year+1900 << "-" << fecha->tm_mon << "-" <<fecha->tm_mday<< endl;
+	Empleado * m = new Mozo("jorhe",new ListDictionary());
+	Repartidor * r = dynamic_cast<Repartidor*>(m);
+	if(r==NULL){
+		cout << "FUNCIONA" << endl;
+	}
+	else{
+		cout << r->getMedio() << endl;
+		cout << "NO FUNCIONA" << endl;
+	}
 	system("PAUSE");
 	
 }

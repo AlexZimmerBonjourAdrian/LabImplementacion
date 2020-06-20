@@ -35,7 +35,18 @@ int menuCliente();
 int menuRepartidor();
 int menuConsultas();
 
-
+bool checkNum(){
+	if(!cin.good()){
+		cout << endl << "### EL VALOR SOLO PUEDE SER NUMERICO ###" << endl;
+		system("PAUSE");
+		cin.clear();
+		fflush(stdin);
+		return false;
+	}
+	else{
+		return true;
+	}
+}
 
 main(){
 	int agregar = 1;
@@ -65,14 +76,10 @@ main(){
 							
 								cout << endl << "\t..DESEA AGREGAR UN PRODUCTO COMUN O UN MENU?" << endl;
 								cin >> opc1;
-								if(opc1=="comun"){
+								if(opc1=="comun" || opc1=="COMUN" || opc1=="Comun"){
 									cout << endl << "\t..Ingrese el codigo ";
 									cin >> agregar;
-									if(!cin.good()){
-										cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
-										system("PAUSE");
-										cin.clear();
-										fflush(stdin);
+									if(!checkNum()){
 										break;
 									}
 									if(s->check_prod_sistema(agregar)){
@@ -81,21 +88,23 @@ main(){
 										break;
 									}
 									cout << endl << endl <<"\t..Ingrese la descripcion ";
-									cin>>s1;
+								    getline(cin,s1);
 									cout << endl << endl << "\t..Ingrese el precio ";
 									cin >> precio;
-									if(!cin.good()){
-										cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
-										system("PAUSE");
-										cin.clear();
-										fflush(stdin);
+									if(!checkNum()){
 										break;
+									}
+									if(precio<=0){
+										cout << "### EL PRECIO DEBE SER MAYOR QUE 0 ###" << endl;
+										break;
+
 									}
 									cout << endl << endl << "\t..Desea confirmar el alta?(si o no)";
 									cin >> opc1;
 									if(opc1=="si"){
 										s->agregarProducto(agregar,s1,precio);
 										cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
+										system("PAUSE");
 										s->liberarMemoria();
 									}
 									else{
@@ -104,15 +113,11 @@ main(){
 									
 								}
 								else{
-									if(opc1=="menu"){
+									if(opc1=="menu" || opc1=="MENU" || opc1=="Menu"){
 										
 										cout << endl << "\t..Ingrese el codigo ";
 										cin >> agregar;
-										if(!cin.good()){
-											cout << endl << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
-											system("PAUSE");
-											cin.clear();
-											fflush(stdin);
+										if(!checkNum()){
 											break;
 										}
 										if(s->check_prod_sistema(agregar)){
@@ -122,8 +127,16 @@ main(){
 										}
 										cout << endl << endl <<"\t..Ingrese la descripcion ";
 										cin>>s1;
+										getline(cin,s1);
 										cout << endl << endl << "\t..Ingrese el precio ";
 										cin >> precio;
+										if(!checkNum()){
+											break;
+										}
+										if(precio<=0){
+											cout << "### EL PRECIO DEBE SER MAYOR QUE 0 ###" << endl;
+											break;
+										}
 										cout << endl << endl;
 										ICollection * p = s->mostrarProductos();
 										if(p==NULL){
@@ -150,12 +163,10 @@ main(){
 										do{
 											cout << endl << "\t..Ingrese el codigo ";
 											cin >> cod;
-											if(cod!=0)check=s->check_prod_sistema(cod);
-											if(!cin.good()){
-												cout << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
-												cin.clear();
-     											cin.ignore();
+											if(!checkNum()){
+												break;
 											}
+											if(cod!=0)check=s->check_prod_sistema(cod);
 											if(cod!=0 && !(check)){
 												cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
 												break;
@@ -164,6 +175,9 @@ main(){
 												cout <<  endl <<"\t..Ingrese la cantidad ";
 												int cant;
 												cin >>cant;
+												if(!checkNum()){
+													break;
+												}
 												s->agregarProdMenu(cod,cant);
 											}
 										
@@ -197,16 +211,18 @@ main(){
 								break;
 							}
 							case 2:{
-							
-								cout <<"### BAJA PRODUCTO ###" <<endl;
-								cout << endl << "\t..Seleccione el producto a eliminar de la lista" << endl << endl ;
-									
+								
 								ICollection * p = s->mostrarProductos();
 								if(p==NULL){
 									cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
 									Sleep(2000);
 									break;
 								}
+								cout <<"### BAJA PRODUCTO ###" <<endl;
+								
+									
+								
+								cout << endl << "\t..Seleccione el producto a eliminar de la lista" << endl << endl ;
 								IIterator * it = p->getIterator();
 								
 								while(it->hasCurrent()){
@@ -217,6 +233,9 @@ main(){
 								}
 								int idprod=0;
 								cin >> idprod;
+								if(!checkNum()){
+									break;
+								}
 								bool check;
 								check=s->check_prod_sistema(idprod);
 								if(!check){
@@ -226,6 +245,9 @@ main(){
 								}
 								cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
 								cin >> opc;
+								if(!checkNum()){
+									break;
+								}
 								if(opc==1){
 									s->eliminarProducto(idprod);
 									s->liberarMemoria();
@@ -247,6 +269,9 @@ main(){
 								bool ch=false;
 								do{
 									cin >> cod;
+									if(!checkNum()){
+										break;
+									}
 									if(cod==0){
 										ch=false;
 										break;
@@ -287,10 +312,10 @@ main(){
 							case 4:{
 								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
-								cin >>nombre;
+								getline(cin,nombre);
 								cout << "\t..El empleado es repartidor?(si/no)" << endl << endl;
 								cin >> opc1;
-								if(opc1 != "si" && opc1!="no"){
+								if(opc1 != "si" && opc1!="SI" && opc1!="NO" && opc1!="no"){
 									cout << "### OPCION INCORRECTA ###" << endl;
 									break;
 								}
@@ -301,6 +326,9 @@ main(){
 										cout << "\t\t3)..Moto" << endl;
 										int op;
 										cin >>op;
+										if(!checkNum()){
+											break;
+										}
 										bool m=true;
 										string mt;
 										switch(op){
@@ -350,6 +378,9 @@ main(){
 								cout << endl << endl << "\t..Ingrese el numero: ";
 								int nro;
 								cin >> nro;
+								if(!checkNum()){
+									break;
+								}
 								cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
 								cin >> opc;
 								if(opc==1){
@@ -370,12 +401,21 @@ main(){
 								cout << endl << "\t..Anio: ";
 								int anio;
 								cin>>anio;
+								if(!checkNum()){
+									break;
+								}
 								cout << endl << "\t..Mes: ";
 								int mes;
 								cin >> mes;
+								if(!checkNum()){
+									break;
+								}
 								cout << endl << "\t..Dia: ";
 								int dia;
 								cin >> dia;
+								if(!checkNum()){
+									break;
+								}
 								DtFecha * f = new DtFecha(anio,mes,dia);
 								ICollection * facturas = s->getFacturasFecha(f);
 								IIterator * it = facturas->getIterator();
@@ -413,6 +453,9 @@ main(){
 									cout << endl << "### Alta mesa ###" << endl << endl;
 									cout << "\t..Ingrese el id  de la mesa" << endl;
 									cin >> id;
+									if(!checkNum()){
+										break;
+									}
 									s->agregarMesa(id);
 									cout << endl << "### Mesa creada ###" << endl;
 									Sleep(2000);
@@ -429,8 +472,14 @@ main(){
 									cout << endl << "### Agregar mesa a un mozo ###" << endl;
 									cout << endl << "\t..Ingrese el id del mozo" << endl;
 									cin >> id;
+									if(!checkNum()){
+										break;
+									}
 									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
 									cin >> descuento;
+									if(!checkNum()){
+										break;
+									}
 									s->agregarMesaMozo(descuento,id);
 									cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
 									s->liberarMemoria();
@@ -462,10 +511,13 @@ main(){
 							opc = menuMozo();
 							switch(opc){
 								case 1:{
-									cout << "###INICIAR VENTA EN MESA###" << endl << endl;
+									cout << endl << "###INICIAR VENTA EN MESA###" << endl << endl;
 									
 									cout << "\t..Ingrese el id del mozo" << endl << endl;
 									cin >> id;
+									if(!checkNum()){
+										break;
+									}
 									Lista mesas=s->listarMesasAsignadas(id);
 									cout << endl << endl << "### MESAS ASIGNADAS A ESTE MOZO ###" << endl << endl;
 									mostrarLista(mesas); 
@@ -473,14 +525,20 @@ main(){
 									while(id!=0){
 										cin >> id;
 										
-										if(id!=0)s->seleccionarMesas(id);
+										if(id!=0 )s->seleccionarMesas(id);
 										
+									}
+									if(!checkNum()){
+										break;
 									}
 									cout << "\t..Las mesas seleccionadas son:" << endl << endl;
 									Lista selec = s->listarMesasSeleccionadas();
 									mostrarLista(selec);
 									cout << endl << "\t..Ingrese 1 para confirmar o 0 para cancelar" << endl;
 									cin >>id;
+									if(!checkNum()){
+										break;
+									}
 									if(id==0){
 										s->liberarMemoria();
 										cout << endl << "\t..No se inicio la venta" << endl;
@@ -511,6 +569,9 @@ main(){
 									}
 									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
 									cin>>opc;
+									if(!checkNum()){
+										break;
+									}
 									s->ingresarMesa(opc);
 									cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
 									
@@ -526,11 +587,21 @@ main(){
 									}
 									cout << "\t..Ingrese 0 para detenerse" << endl << endl;
 									cin >> id;
+									if(!checkNum()){
+										break;
+									}
 									do{
 										
 										cout << "\t..Ingrese la cantidad" << endl;
 										int cant = 0;
 										cin >> cant;
+										if(!checkNum()){
+											break;
+										}
+										if(cant<=0){
+											cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
+											break;
+										}
 										bool ch = s->check_prod_venta(id);
 										
 										cout << "\t..Desea confirmar?(1 , 0)" << endl;
@@ -562,6 +633,9 @@ main(){
 									cout << endl << "### QUITAR PRODUCTO A UNA VENTA ### "<<endl;
 									cout << endl << "\t..Ingrese la mesa a quitar" << endl;
 									cin>>opc;
+									if(!checkNum()){
+										break;
+									}
 									s->ingresarMesa(opc);
 									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
 									ICollection * p = s->mostrarProdVenta(opc);
@@ -573,10 +647,20 @@ main(){
 									
 									}
 									cin >> id;
-								
+									if(!checkNum()){
+										break;
+									}
 									cout << "\t..Ingrese la cantidad" << endl;
 									int cant = 0;
 									cin >> cant;
+									if(!checkNum()){
+										break;
+									}
+								
+									if(cant<=0){
+										cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
+										break;
+									}
 									bool ch = s->check_prod_venta(id);
 									
 									cout << "\t..Desea confirmar?(1 , 0)" << endl;
@@ -601,8 +685,14 @@ main(){
 									cout << endl << "### EMITIR FACTURA ###" << endl;
 									cout << endl << "\t..Ingrese la mesa a facturar" << endl;
 									cin >> id;
+									if(!checkNum()){
+										break;
+									}
 									cout << endl << "\t..Ingrese el descuento a aplicar" << endl;
 									cin >> descuento;
+									if(!checkNum()){
+										break;
+									}
 									DtFactura * df = s->emitirFactura(id,descuento);
 									if(df!=NULL){
 										cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
@@ -699,7 +789,7 @@ main(){
 								IIterator * it = facturas->getIterator();
 								while(it->hasCurrent()){
 									DtFactura * df =(DtFactura *) it->getCurrent();
-									cout << "##Factura " << df->getCodigo() << " ##" << endl << endl << "Subtotal: " << df->getSubtotal() << endl << "Descuento: "<< df->getDescuento()<< endl;
+									cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl << "Subtotal: " << df->getSubtotal() << endl << "Descuento: "<< df->getDescuento()<< endl;
 									DtFecha * dtf = df->getFecha();
 									cout << "Fecha: " << dtf->getAnio() << "-" << dtf->getMes() << "-" << dtf->getDia() << endl << endl; 
 									cout << "\t --Productos--" << endl << endl;
@@ -710,6 +800,7 @@ main(){
 										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
 										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
 										cout << "\t ..Precio: " << dp->getPrecio() << endl;
+										cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
 										cout << endl << endl;
 										it_p->next();
 									}

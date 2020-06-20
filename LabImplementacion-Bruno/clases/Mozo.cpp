@@ -37,6 +37,21 @@ void Mozo::borrarMesas(Vlocal * venta){
 	}
 }
 
+
+bool Mozo::check_mesa(Mesa * m){
+	
+	IKey * k = new IntKey(m->getid());
+	bool ck;
+	if(this->mesas->member(k)){
+		ck=true;
+	}
+	else{
+		ck=false;
+	}
+	delete k;
+	return ck;
+}
+
 void Mozo::agregarMesa(Mesa * mesa){
 	
 	this->mesas->add(new IntKey(mesa->getid()),mesa);

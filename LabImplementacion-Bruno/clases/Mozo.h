@@ -17,6 +17,7 @@ public:
     IDictionary * getMesa();
     void borrarMesas(Vlocal *);
     void agregarMesa(Mesa *);
+    bool  check_mesa(Mesa * m);
     virtual ~Mozo();
 };
 #endif

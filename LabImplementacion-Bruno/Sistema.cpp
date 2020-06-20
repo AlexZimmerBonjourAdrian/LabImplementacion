@@ -294,6 +294,25 @@ Lista Sistema::listarMesasSeleccionadas(){
 }
 
 void Sistema::seleccionarMesas(int idmesa){
+	IKey * k1 = new IntKey(idmesa);
+	Mesa * m1=(Mesa *)this->mesas->find(k1);
+	if(m1==NULL){
+		delete k1;
+		this->liberarMemoria();
+		throw "### NO EXISTE LA MESA SELECCIONADA ###";
+	}
+	IKey * k2 = new IntKey(this->temp->info);
+	Mozo * m2 =  dynamic_cast<Mozo*>(this->empleados->find(k2));
+	if(m2==NULL){
+		delete k1,k2;
+		this->liberarMemoria();
+		throw "### NO EXISTE EL MOZO SELECCIONADO ###";
+	}
+	if(!m2->check_mesa(m1)){
+		delete k1,k2;
+		this->liberarMemoria();
+		throw "### LA MESA SELECCIONADA NO CORRESPONDE AL MOZO ###";
+	}
 	InsertEnd(this->temp,idmesa);
 }
 
@@ -348,7 +367,7 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 		Empleado * e = (Empleado *)it->getCurrent();
 		Mozo * r1 = dynamic_cast<Mozo*>(e);
 		if(r1!=NULL){
-			if(r1->getMesa()->member(k1)){
+			if(r1->check_mesa(m1)){
 				throw "### LA MESA YA HA SIDO ASIGNADA A UN MOZO ###";
 			}
 		}
@@ -382,27 +401,31 @@ void Sistema::eliminarProducto(int idprod){
 		
 		Venta * v = (Venta *)it->getCurrent();
 
-		v->borrarProd(p);
+		if(v!=NULL)v->borrarProd(p);
 		it->next();
 	}
 	delete it;
 	it = productos->getIterator();
-	while(it->hasCurrent()){
-		Producto * p2 = (Producto *) it->getCurrent();
+	cout << "WHILE" << endl;
+	if(p->getTipo()=="Comun"){	
+		while(it->hasCurrent()){
+			Producto * p2 = (Producto *) it->getCurrent();
+			if(p2->getTipo()=="Menu" && p2!=p){
+				Menu * m = (Menu *) p2;
+				p2->borrar(p);
+				if(m->vacio()){
+					this->eliminarProducto(m->getCodigo());
+				
+				}
+			} 
+			
+			it->next();
+		}
 		
-		if(p2->getTipo()=="Menu"){
-			Menu * m = (Menu *) p2;
-			p2->borrar(p);
-			if(m->vacio()){
-				this->eliminarProducto(m->getCodigo());
-				delete m;
-			}
-		} 
-		
-		it->next();
 	}
 	productos->remove(k);
 	delete p;
+	cout << "SALI" << endl;
 }
 
 //Verificaciones
@@ -474,7 +497,9 @@ bool Sistema::check_prod_venta(int idprod){
 DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 	IKey * k1 = new IntKey(idmesa);
 	Mesa * m = (Mesa *) this->mesas->find(k1);
-
+	if(m==NULL){
+		throw "### LA MESA INGRESADA NO EXISTE ###";
+	}
 	Vlocal * v = m->getVenta();
 	
 	if(v==NULL){
@@ -535,7 +560,10 @@ DtProducto * Sistema::mostrarProducto(int cod){
 	int total=0;
 	while(it->hasCurrent()){
 		Venta * v = (Venta *) it->getCurrent();
-		total = total + v->getCantidadProd(p);
+		if((this->ventaFacturada(v->getCodigo()))){
+			total = total + v->getCantidadProd(p);
+		}
+		
 		it->next();
 	}
 	dp->setCantidad(total);
