@@ -25,7 +25,7 @@ int Factura::getCodigo(){
 
 DtFactura * Factura::getDatos(){
 	
-
+	
 	DtFactura * df = new DtFactura(this->codigo,this->fecha,this->productos,this->venta->getEmpleado(),this->subtotal,this->descuento,this->montototal);
 	return df;
 }

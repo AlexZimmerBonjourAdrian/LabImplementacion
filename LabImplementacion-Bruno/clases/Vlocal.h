@@ -3,7 +3,7 @@
 #include "../interfaces/IDictionary.cpp"
 #include "../interfaces/ICollection.cpp"
 #include "Mozo.cpp"
-
+#include "../Datatypes/DtMozo.cpp"
 #ifndef VLOCAL_H
 #define VLOCAL_H
 
@@ -18,7 +18,7 @@ class Vlocal : public Venta{
 	
 	public:
 		Vlocal(ICollection *,DtFecha *,Mozo*);
-		string getEmpleado() const;
+		DtEmpleado * getEmpleado() const;
 		Mozo * getMozo();
 	
 		~Vlocal();

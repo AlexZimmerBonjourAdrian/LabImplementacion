@@ -8,8 +8,10 @@ Vlocal::Vlocal(ICollection * cantidades,DtFecha * fecha, Mozo* mozo) : Venta(can
 	this->mozo=mozo;
 }
 
-string Vlocal::getEmpleado() const {
-	return this->mozo->getNombre();
+DtEmpleado* Vlocal::getEmpleado() const {
+
+	
+	return new DtMozo(this->mozo->getId(),this->mozo->getNombre(),this->mozo->getDTMesa());
 }
 
 Mozo * Vlocal::getMozo(){

@@ -4,6 +4,7 @@
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/ICollection.cpp"
 #include "../Datatypes/DtFecha.cpp"
+#include "../Datatypes/DtEmpleado.cpp"
 #ifndef DTFACTURA_H
 #define DTFACTURA_H
 
@@ -15,17 +16,17 @@ class DtFactura : public ICollectible{
 	    int codigo;
 	    DtFecha * fecha;
 	    ICollection * productos;
-	    string nombre_trabajador;
+	    DtEmpleado * trabajador;
 	    float subtotal;
 	    float descuento;
 	    float total_iva;
 	    
 	public:
-		DtFactura(int, DtFecha *, ICollection * ,string, float, float ,float);
+		DtFactura(int, DtFecha *, ICollection * ,DtEmpleado*, float, float ,float);
 		int getCodigo();
 		DtFecha * getFecha();
 		ICollection * getProductos();
-		string getNombreTrabajador();
+		DtEmpleado * getTrabajador();
 		float getSubtotal();
 		float getDescuento();
 		float gettotal_iva();

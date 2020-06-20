@@ -1,8 +1,9 @@
 
 
 #include <iostream>
-#include "../interfaces/ICollectible.h"
+#include "../colecciones/List.cpp"
 #include "../interfaces/IDictionary.h"
+#include "../Datatypes/DtMesa.cpp"
 #include "Empleado.cpp"
 #include "Mesa.cpp"
 
@@ -14,6 +15,7 @@ private:
     IDictionary * mesas;
 public:
     Mozo(string, IDictionary *);
+    ICollection * getDTMesa();
     IDictionary * getMesa();
     void borrarMesas(Vlocal *);
     void agregarMesa(Mesa *);

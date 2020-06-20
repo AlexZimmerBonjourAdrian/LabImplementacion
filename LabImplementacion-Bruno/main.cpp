@@ -424,7 +424,7 @@ main(){
 								while(it->hasCurrent()){
 									DtFactura * df =(DtFactura *) it->getCurrent();
 									cout << endl <<"##Factura " << df->getCodigo() << " ##" << endl << "Subtotal: " << df->getSubtotal() << endl << " Descuento: "<< df->getDescuento()<< endl << endl;
-									cout << "\t --Productos--" << endl << endl;
+									cout << endl <<"\t --Productos--" << endl << endl;
 									ICollection * prod = df->getProductos();
 									IIterator * it_p = prod->getIterator();
 									while(it_p->hasCurrent()){
@@ -438,13 +438,171 @@ main(){
 									it->next();
 								}
 								system("PAUSE");
-								Sleep (2000);
+								
 								break;
 							}
-							case 7:
-								cout <<"Venta a domicilio no implementado" <<endl;
-								Sleep (2000);
+							case 7:{
+							
+								cout <<"### VENTA A DOMICILIO ###" <<endl;
+								cout << endl << "\t..Ingresar telefono del cliente: ";
+								int telefono=0;
+								cin >> telefono;
+								if(!checkNum()){
+									cout << "### EL VALOR DEBE SER NUMERICO ###" << endl;
+									system("PAUSE");
+									break;
+								}
+								bool ck = s->check_cliente(telefono);
+								if(ck==false){
+									cout << endl << "\t.. El cliente ingresado no existe. Desea agregarlo? " << endl;
+									cin>>s1;
+									if(s1!="si" && s1!="no"){
+										cout << "### OPCION INCORRECTA ###" << endl;
+										break;
+									}
+									if(s1=="si"){
+										cout << "\t..Ingrese el nombre: ";
+										string nombre;
+										fflush(stdin);
+										getline(cin, nombre);
+										cout << endl << endl << "\t..Ingrese la calle: ";
+										string calle;
+										fflush(stdin);
+										getline(cin,calle);
+										cout << endl << endl << "\t..Ingrese el numero: ";
+										int nro;
+										cin >> nro;
+										if(!checkNum()){
+											break;
+										}
+										cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
+										cin >> opc;
+										if(opc==1){
+											s->crearCliente(nombre,telefono,calle,nro);
+											cout << endl << "### SE CREO EL CLIENTE ###" << endl;
+											Sleep (2000);
+										}
+										else{
+											cout << endl << "### NO SE CREO EL CLIENTE ###" << endl;
+											Sleep (2000);
+											break;
+										}
+									}
+									else{
+										cout << "### NO SE AGREGO EL CLIENTE ###" << endl;
+										system("PAUSE");
+										break;
+									}
+								}
+								
+								ICollection * p = s->mostrarProductos();
+								if(p==NULL){
+									cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###" << endl;
+									system("PAUSE");
+									break;
+									
+								}
+								cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
+								IIterator * itp = p->getIterator(); 
+								while(itp->hasCurrent()){
+									DtProducto * dp = (DtProducto *) itp->getCurrent();
+									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+									cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+									cout << "\t ..Precio: " << dp->getPrecio() << endl;
+									cout << endl << endl;
+									itp->next();
+								}
+								
+								cout << "\t..Ingrese 0 para detenerse" << endl << endl;
+								cin >> id;
+								if(!checkNum()){
+									break;
+								}
+								do{
+									
+									cout << "\t..Ingrese la cantidad" << endl;
+									int cant = 0;
+									cin >> cant;
+									if(!checkNum()){
+										break;
+									}
+									if(cant<=0){
+										cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
+										break;
+									}
+									
+									cout << "\t..Desea confirmar?(1 , 0)" << endl;
+									cin >> agregar;
+									if(agregar==1){
+										
+										s->ingresarProducto(id,cant);
+										Sleep(2000);
+									}
+									else{
+										cout << "### PRODUCTO NO AGREGADO ###" << endl;	
+									}
+									cin >> id;
+							
+								}while(id!=0);
+							
+								
+								cout << endl << "### REPARTIDORES ###" << endl << endl;
+								ICollection * emp = s->mostrarRepartidores();
+								if(emp==NULL){
+									cout << "### NO HAY REPARTIDORES EN EL SISTEMA ###" << endl;
+								}
+								IIterator * it = emp->getIterator();
+								while(it->hasCurrent()){
+									DtEmpleado * e = (DtEmpleado *) it->getCurrent();
+									cout << "\t..Codigo: " << e->getId() << endl;
+									cout << "\t..Nombre: " << e->getNombre() << endl;
+									cout << "\t..Tipo: ";
+									
+									DtRepartidor * r1 = dynamic_cast<DtRepartidor*>(e);
+									if(r1==NULL){
+										cout << "Mozo" << endl;
+									}
+									else{
+										cout << "Repartidor" << endl;
+									}
+									cout << endl << endl;
+									it->next();
+								}
+								cout << endl << "\t..Ingrese el repartidor: ";
+								int repartidor;
+								cin >> repartidor;
+								if(!checkNum()){
+									break;
+								}
+								DtFactura * df = s->crearVdomicilio(repartidor,telefono);
+								if(df!=NULL){
+									cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
+										cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl << "\t..Subtotal: " << df->getSubtotal() << endl << "\t..Descuento: "<< df->getDescuento()<< endl << endl;
+										DtEmpleado * de = df->getTrabajador();
+										cout << endl << "Empleado: " << de->getNombre() << endl << endl; 
+										cout << "\t --Productos--" << endl << endl;
+										ICollection * prod = df->getProductos();
+										IIterator * it_p = prod->getIterator();
+										while(it_p->hasCurrent()){
+											DtProducto * dp = (DtProducto *) it_p->getCurrent();
+											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+											cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+											cout << "\t ..Precio: " << dp->getPrecio() << endl;
+											cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
+											cout << endl << endl;
+											
+											it_p->next();
+									
+									}
+								}
+								s->liberarMemoria();
+								
+								
+								system("Pause");
+								
+								
 								break;
+							}
 							case 8:
 								cout <<"Consultar actualizaciones de pedidos a domicilio no implementado" <<endl;
 								Sleep (2000);

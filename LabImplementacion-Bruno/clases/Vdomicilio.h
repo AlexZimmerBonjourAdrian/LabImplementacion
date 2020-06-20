@@ -4,6 +4,7 @@
 #include "../Datatypes/DtFecha.cpp"
 #include "Repartidor.cpp"
 #include "Cliente.cpp"
+#include "../Datatypes/DtRepartidor.cpp"
 #ifndef VDOMICILIO_H
 #define VDOMICILIO_H
 
@@ -13,15 +14,15 @@ class Vdomicilio : public Venta{
 	private:
 		DtDireccion * direccion;
 		string nombre_rec;
-		string telefono_rec;
+		long int telefono_rec;
 		Repartidor * repartidor;
 		Cliente * cliente;
 		
 	public:
-		Vdomicilio(ICollection *,DtFecha *,DtDireccion *,string,string,Repartidor*, Cliente *);
+		Vdomicilio(ICollection *,DtFecha *,DtDireccion *,string,long int,Repartidor*, Cliente *);
 		DtDireccion * getDireccion();
 		string getNombre();
-		string getEmpleado() const;
+		DtEmpleado * getEmpleado() const;
 		~Vdomicilio();
 };
 

@@ -14,11 +14,20 @@ Mozo::Mozo(string nombre, IDictionary * mesas) : Empleado(nombre){
     this->mesas=mesas;
 }
 
-IDictionary * Mozo::getMesa()
+ICollection * Mozo::getDTMesa()
 {
- return this->mesas;
+	ICollection * mes = new List();
+	IIterator * it = this->mesas->getIterator();
+	while(it->hasCurrent()){
+		Mesa * m = (Mesa*) it->getCurrent();
+		DtMesa * dm = new DtMesa(m->getid());
+		mes->add(dm); 
+	}
+	return mes;
 }
-
+IDictionary * Mozo::getMesa(){
+	return this->mesas;
+}
 void Mozo::borrarMesas(Vlocal * venta){
 	IIterator * it = this->mesas->getIterator();
 	while(it->hasCurrent()){

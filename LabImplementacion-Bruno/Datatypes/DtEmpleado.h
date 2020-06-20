@@ -10,6 +10,7 @@ class DtEmpleado : public ICollectible{
 		int codigo;
 		string nombre;
 		
+		
 	public:
 		DtEmpleado(int,string);
 		int getId();

@@ -3,6 +3,7 @@
 #include "./clases/Mozo.cpp"
 #include "./colecciones/List.cpp"
 #include "./clases/Vlocal.cpp"
+#include "./clases/Vdomicilio.cpp"
 #include "./clases/Factura.cpp"
 #include "./Datatypes/DtFactura.cpp"
 #include "./Datatypes/DtFecha.cpp"
@@ -11,8 +12,7 @@
 #include "./clases/Repartidor.cpp"
 #include "./clases/Cliente.cpp"
 #include "./Datatypes/DtCliente.cpp"
-#include "./Datatypes/DtEmpleado.cpp"
-#include "./Datatypes/DtEmpleado.cpp"
+#include "./Datatypes/DtRepartidor.cpp"
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -142,6 +142,11 @@ class Sistema {
 		
 		//Venta a domicilio
 		
+		bool check_cliente(int);
+		void agregarVdomicilio(int repartidor);
+		ICollection * mostrarRepartidores();
+		DtFactura * crearVdomicilio(int repartidor,int telefono);
+		void ingresarProducto(int, int);
 		
 		
 };

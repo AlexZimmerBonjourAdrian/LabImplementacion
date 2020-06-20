@@ -1,6 +1,7 @@
 #include "Sistema.h"
 #include <typeinfo>
 #include<stdexcept>
+#include<ctime>
 typedef struct nodolista *Lista;
 
 Sistema * Sistema::instance=NULL;
@@ -22,6 +23,19 @@ void Sistema::cargarDatos(){
 	IKey * k1 = new IntKey(m1->getId());
 	
 	empleados->add(k1,m1);
+	
+	Repartidor * r1 = new Repartidor("Daniel","A pie",new ListDictionary());
+	IKey * k6 = new IntKey(r1->getId());
+	
+	empleados->add(k6,r1);
+	
+	DtDireccion * dd = new DtDireccion("Herrera", 154);
+	
+	Cliente * c = new Cliente(1,"Gustavo",dd);
+	IKey * ck = new IntKey(1);
+	
+	clientes->add(ck,c);
+	
 	
 	Comun * c1 = new Comun(1,"Papas",35);
 	IKey * k2 = new IntKey(1);
@@ -415,7 +429,7 @@ void Sistema::eliminarProducto(int idprod){
 	}
 	delete it;
 	it = productos->getIterator();
-	cout << "WHILE" << endl;
+
 	if(p->getTipo()=="Comun"){	
 		while(it->hasCurrent()){
 			Producto * p2 = (Producto *) it->getCurrent();
@@ -434,7 +448,7 @@ void Sistema::eliminarProducto(int idprod){
 	}
 	productos->remove(k);
 	delete p;
-	cout << "SALI" << endl;
+
 }
 
 //Verificaciones
@@ -500,6 +514,17 @@ bool Sistema::check_prod_venta(int idprod){
 	return v->buscarProd(p);
 }
 
+bool Sistema::check_cliente(int telefono){
+	IKey * k = new IntKey(telefono);
+	bool ck;
+	if(this->clientes->find(k)){
+		ck=true;
+	}
+	else{
+		ck=false;
+	}
+	return ck;
+}
 
 //Facturacion de una venta
 
@@ -580,7 +605,85 @@ DtProducto * Sistema::mostrarProducto(int cod){
 }
 
 
+ICollection * Sistema::mostrarRepartidores(){
+	IIterator * it = empleados->getIterator();
+	ICollection * dtr = new List();
+	while(it->hasCurrent()){
+		Repartidor * r1 = dynamic_cast<Repartidor*>(it->getCurrent());
+		if(r1!=NULL){
+			DtEmpleado * dt = new DtRepartidor(r1->getId(),r1->getNombre(),r1->getMedio());
+			dtr->add(dt);
+		}
+		it->next();
+	}
+	return dtr;
+}
 
+void Sistema::ingresarProducto(int idprod, int cant){
+	if(!this->check_prod_sistema(idprod)){
+		this->liberarMemoria();
+		throw "### EL PRODUCTO INGRESADO NO EXISTE ###";
+	}
+	InsertEnd(this->temp,idprod);
+	InsertEnd(this->temp,cant);
+}
+
+DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
+		IKey * k = new IntKey(telefono);
+		Cliente * c = (Cliente*)this->clientes->find(k);
+		if(c==NULL){
+			this->liberarMemoria();
+			throw "### NO EXISTE EL CLIENTE SELECCIONADO ###";
+		}
+		IKey * k2 = new IntKey(repartidor);
+		Empleado * e = (Empleado*)this->empleados->find(k2);
+		Repartidor * r = dynamic_cast<Repartidor*>(e);
+		if(r==NULL){
+			this->liberarMemoria();
+			throw "### NO SE ENCONTRO EL REPARTIDOR ###";
+		}
+		int dia, mes, anio;  
+		time_t tiempo = time (NULL);  
+		struct tm *fecha = localtime (&tiempo); 
+		dia=fecha->tm_mday;
+		mes=fecha->tm_mon+1;
+		anio= fecha->tm_year+1900;		
+		DtFecha * fecha_actual = new DtFecha(anio,mes,dia);
+		DtDireccion * dir = c->getDireccion();
+		Venta * v = new Vdomicilio(new List(),fecha_actual,dir,c->getNombre(),c->getTelefono(),r,c);
+		IKey * k3 = new IntKey(v->getCodigo());
+		Lista p = this->temp;
+	
+		while(p!=NULL && p->sig!=NULL){
+			IKey * k4 = new IntKey(p->info);
+			Producto * p1 = (Producto *) this->productos->find(k4);
+			if(p1==NULL){
+				this->liberarMemoria();
+				throw "### NO SE ENCONTRO EL PRODUCTO ###";
+			}
+			
+			p=p->sig;
+			int cant = p->info;
+			if(v->buscarProd(p1)){
+				v->setNuevaCantidad(p1,cant,"suma");
+			}
+			else{
+				v->agregarProd(p1,cant);	
+			}
+			p=p->sig;
+			
+		}
+		
+			
+		Factura * f = new Factura(v,0);
+		DtFecha * f11=f->getFecha();
+	
+		IKey * kf = new IntKey(v->getCodigo());
+		this->facturas->add(kf,f);
+		DtFactura * df = f->getDatos();
+		this->ventas->add(k3,v);
+		return df;
+}
 
 
 

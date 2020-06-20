@@ -1,6 +1,7 @@
 #include "Producto.cpp"
 #include "../interfaces/ICollection.cpp"
 #include "Empleado.cpp"
+#include"../Datatypes/DtEmpleado.cpp"
 #include "../Datatypes/DtFecha.cpp"
 #ifndef VENTA_H
 #define VENTA_H
@@ -28,7 +29,7 @@ class Venta : public ICollectible{
 		float getMontototal();
 		bool buscarProd(Producto *);
 		DtFecha * getFecha();
-		virtual string getEmpleado() const = 0;
+		virtual DtEmpleado * getEmpleado() const = 0;
 		~Venta();
 };
 
