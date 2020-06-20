@@ -119,6 +119,7 @@ class Sistema {
 		
 		//Agrgar mesas a mozos
 		
+		bool check_mesa_mozo(int,int);
 		void agregarMesaMozo(int idmesa, int idmozo);
 		
 		//Caso de uso Alta cliente

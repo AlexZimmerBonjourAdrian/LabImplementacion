@@ -8,14 +8,14 @@
 #include "./clases/Cliente.cpp"
 #include <windows.h>
 #include <typeinfo>
+#include<ctime>
 using namespace std;
 
 main(){
+	int dia, mes, ano;  
+	time_t tiempo = time (NULL);  
+	struct tm *fecha = localtime (&tiempo); 
+	cout << fecha->tm_year+1900 << "-" << fecha->tm_mon << "-" <<fecha->tm_mday<< endl;
+	system("PAUSE");
 	
-	Empleado * m1 = new Mozo("Gustavo", new ListDictionary());
-	Repartidor * r1 = dynamic_cast<Repartidor*>(m1);
-	if(r1==NULL){
-		cout << "FUNCIONA" << endl;
-	}
-	system("pause");
 }

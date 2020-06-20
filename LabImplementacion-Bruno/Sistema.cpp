@@ -241,10 +241,16 @@ void Sistema::agregarProducto(int codigo,string descripcion,float precio){
 void Sistema::ingresarMesa(int idmesa){
 	IKey * k = new IntKey(idmesa);
 	Mesa * m = (Mesa *) mesas->find(k);
-	if(m!=NULL){
-		Vlocal * v = m->getVenta();
-		InsertEnd(this->temp,v->getCodigo());
+	if(m==NULL){
+		throw "### NO SE ENCONTRO LA MESA ###";
 	}
+	
+	Vlocal * v = m->getVenta();
+	if(v==NULL){
+		throw "### LA MESA NO TIENE VENTAS EN ESTE MOMENTO ###";
+	}
+	InsertEnd(this->temp,v->getCodigo());
+	
 	delete k;
 }
 
@@ -334,13 +340,26 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 	IKey * k2 = new IntKey(idmozo);
 	Mesa * m1 = (Mesa*) this->mesas->find(k1);
 	Mozo * m2 = (Mozo*)this->empleados->find(k2);
-	if(m1 != NULL && m2 != NULL){
-		m2->agregarMesa(m1);
-		return;
+	if(m1 == NULL || m2 == NULL){
+		throw "### NO SE PUDO AGREGAR LA MESA ###";
 	}
+	IIterator * it = empleados->getIterator();
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado *)it->getCurrent();
+		Mozo * r1 = dynamic_cast<Mozo*>(e);
+		if(r1!=NULL){
+			if(r1->getMesa()->member(k1)){
+				throw "### LA MESA YA HA SIDO ASIGNADA A UN MOZO ###";
+			}
+		}
+		it->next();
+	}
+
+	m2->agregarMesa(m1);
+	return;
 	delete k1;
 	delete k2;
-	throw "### NO SE PUDO AGREGAR LA MESA ###";
+
 	
 	
 }

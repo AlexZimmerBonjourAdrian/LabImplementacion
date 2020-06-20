@@ -8,6 +8,7 @@
 #include "./clases/Cliente.cpp"
 #include <windows.h>
 #include <typeinfo>
+#include<ctime>
 
 using namespace std;
  
@@ -44,7 +45,6 @@ main(){
 		Sistema * s = Sistema::getInstance();
 		Mesa * me1 = new Mesa(1,new ListDictionary());
 		int id=1, descuento;
-		
 		int opc;
 		int mozopc;
 		bool back = false;
@@ -146,10 +146,11 @@ main(){
 										cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
 										int cod;
 										bool check;
-										check=s->check_prod_sistema(cod);
+										
 										do{
 											cout << endl << "\t..Ingrese el codigo ";
 											cin >> cod;
+											if(cod!=0)check=s->check_prod_sistema(cod);
 											if(!cin.good()){
 												cout << "### EL CODIGO SOLO PUEDE SER NUMERICO ###" << endl;
 												cin.clear();
@@ -424,17 +425,19 @@ main(){
 							}	
 							
 							case 10:{
-								cout << endl << "### Agregar mesa a un mozo ###" << endl;
-								cout << endl << "\t..Ingrese el id del mozo" << endl;
-								cin >> id;
-								cout << endl << "\t..Ingrese la mesa a agregar" << endl;
-								cin >> descuento;
-								s->agregarMesaMozo(descuento,id);
-								cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
-								s->liberarMemoria();
 								
-								Sleep(2000);
-								break;
+									cout << endl << "### Agregar mesa a un mozo ###" << endl;
+									cout << endl << "\t..Ingrese el id del mozo" << endl;
+									cin >> id;
+									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
+									cin >> descuento;
+									s->agregarMesaMozo(descuento,id);
+									cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
+									s->liberarMemoria();
+									system("PAUSE");
+									break;	
+								
+								
 							}
 							
 							case 11:
@@ -448,6 +451,7 @@ main(){
 						
 					}catch(char const * msg){
 						cout << msg << endl;
+						system("PAUSE");
 					}	
 				}while((opc<12 || opc>0) && !back);
 					break;
@@ -468,6 +472,7 @@ main(){
 									cout << endl << "\t..Seleccione en que mesas iniciar la venta. Para terminar ingrese 0" << endl;
 									while(id!=0){
 										cin >> id;
+										
 										if(id!=0)s->seleccionarMesas(id);
 										
 									}
@@ -481,7 +486,14 @@ main(){
 										cout << endl << "\t..No se inicio la venta" << endl;
 									}
 									else{
-										s->confirmarSeleccion(selec,new DtFecha(2018,12,01));
+											
+										int dia, mes, anio;  
+										time_t tiempo = time (NULL);  
+										struct tm *fecha = localtime (&tiempo); 
+										dia=fecha->tm_mday;
+										mes=fecha->tm_mon+1;
+										anio= fecha->tm_year+1900;								
+										s->confirmarSeleccion(selec,new DtFecha(anio,mes,dia));
 										s->liberarMemoria();
 										cout << endl << "### Se inicio la venta ###" << endl;
 									}	
@@ -492,12 +504,17 @@ main(){
 								case 2:{
 										//Agregar Producto a una venta
 									cout << "### INGRESAR PRODUCTO A UNA VENTA ###" << endl;
+									ICollection * p = s->mostrarProductos();
+									if(p==NULL){
+										cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###";
+										break;
+									}
 									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
 									cin>>opc;
 									s->ingresarMesa(opc);
 									cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
 									
-									ICollection * p = s->mostrarProductos();
+									
 									IIterator * it = p->getIterator();
 									int count=0;
 									while(it->hasCurrent()){
@@ -605,7 +622,7 @@ main(){
 										}
 									}
 									else{
-										cout << endl << "### LA MESA YA HA SIDO FACTURADA ###" << endl;
+										cout << endl << "### LA MESA NO TIENE UNA VENTA EN CURSO O YA HA SIDO FACTURADA ###" << endl;
 									}
 									system("Pause");
 									break;
@@ -682,7 +699,9 @@ main(){
 								IIterator * it = facturas->getIterator();
 								while(it->hasCurrent()){
 									DtFactura * df =(DtFactura *) it->getCurrent();
-									cout << "##Factura " << df->getCodigo() << " ##" << endl << "Subtotal: " << df->getSubtotal() << endl << " Descuento: "<< df->getDescuento()<< endl << endl;
+									cout << "##Factura " << df->getCodigo() << " ##" << endl << endl << "Subtotal: " << df->getSubtotal() << endl << "Descuento: "<< df->getDescuento()<< endl;
+									DtFecha * dtf = df->getFecha();
+									cout << "Fecha: " << dtf->getAnio() << "-" << dtf->getMes() << "-" << dtf->getDia() << endl << endl; 
 									cout << "\t --Productos--" << endl << endl;
 									ICollection * prod = df->getProductos();
 									IIterator * it_p = prod->getIterator();
