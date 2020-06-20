@@ -12,21 +12,21 @@
 
 using namespace std;
  
-bool verificarMesaAtendida(Sistema * s, Mesa * m){
-	IDictionary * mozos= s->getEmpleados();
-	IIterator * it = mozos->getIterator();
-	IKey * k = new IntKey(m->getid());
-	while(it->hasCurrent()){
-		Mozo * mo =(Mozo *) it->getCurrent();
-		IDictionary * mesas = mo->getMesa();
-		if(mesas->member(k)){
-			return true;
-		}
-		it->next();
-	}
-	delete k;
-	return false;
-}
+//bool verificarMesaAtendida(Sistema * s, Mesa * m){
+//	IDictionary * mozos= s->getEmpleados();
+//	IIterator * it = mozos->getIterator();
+//	IKey * k = new IntKey(m->getid());
+//	while(it->hasCurrent()){
+//		Mozo * mo =(Mozo *) it->getCurrent();
+//		IDictionary * mesas = mo->getMesa();
+//		if(mesas->member(k)){
+//			return true;
+//		}
+//		it->next();
+//	}
+//	delete k;
+//	return false;
+//}
 
 int menu();
 int menuMozo();
@@ -312,7 +312,9 @@ main(){
 							case 4:{
 								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
+								fflush(stdin);
 								getline(cin,nombre);
+								
 								cout << "\t..El empleado es repartidor?(si/no)" << endl << endl;
 								cin >> opc1;
 								if(opc1 != "si" && opc1!="SI" && opc1!="NO" && opc1!="no"){
@@ -812,21 +814,21 @@ main(){
 														
 							case 2:{
 								cout << "### EMPLEADOS ###" << endl << endl;
-								IDictionary * emp = s->getEmpleados();
+								ICollection * emp = s->getEmpleados();
 								IIterator * it = emp->getIterator();
 								while(it->hasCurrent()){
-									Empleado * e = (Empleado *) it->getCurrent();
+									DtEmpleado * e = (DtEmpleado *) it->getCurrent();
 									cout << "\t..Codigo: " << e->getId() << endl;
 									cout << "\t..Nombre: " << e->getNombre() << endl;
 									cout << "\t..Tipo: ";
 									
-									Repartidor * r1 = dynamic_cast<Repartidor*>(e);
-									if(r1==NULL){
-										cout << "Mozo" << endl;
-									}
-									else{
-										cout << "Repartidor" << endl;
-									}
+//									Repartidor * r1 = dynamic_cast<Repartidor*>(e);
+//									if(r1==NULL){
+//										cout << "Mozo" << endl;
+//									}
+//									else{
+//										cout << "Repartidor" << endl;
+//									}
 									cout << endl << endl;
 									it->next();
 								}

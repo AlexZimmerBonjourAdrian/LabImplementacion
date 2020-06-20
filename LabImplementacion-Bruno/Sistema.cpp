@@ -77,8 +77,17 @@ void Sistema::crearCliente(string nombre, int telefono, string calle, int nro){
 
 //Obtener datos del sistema
 
-IDictionary * Sistema::getEmpleados(){
-	return this->empleados;
+ICollection * Sistema::getEmpleados(){
+	IIterator * it = empleados->getIterator();
+	ICollection * de = new List();
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado *) it->getCurrent();
+		DtEmpleado * dt = new DtEmpleado(e->getId(),e->getNombre());
+		de->add(dt);
+		it->next();
+	}
+	return de;
+	
 }
 
 ICollection * Sistema::mostrarClientes(){
@@ -588,6 +597,8 @@ void Sistema::ingresarRepartidor(string nombre, string mt){
 	IKey * k = new IntKey(r->getId());
 	this->empleados->add(k,r);
 }
+
+
 
 
 

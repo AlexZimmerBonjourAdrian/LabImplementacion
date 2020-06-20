@@ -11,7 +11,8 @@
 #include "./clases/Repartidor.cpp"
 #include "./clases/Cliente.cpp"
 #include "./Datatypes/DtCliente.cpp"
-
+#include "./Datatypes/DtEmpleado.cpp"
+#include "./Datatypes/DtEmpleado.cpp"
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -71,7 +72,7 @@ class Sistema {
 	public:
 		void cargarDatos();
 		static Sistema * getInstance();
-		IDictionary * getEmpleados();
+		ICollection * getEmpleados();
 		ICollection * getFacturas();
 		
 		//Caso de uso Iniciar venta en mesa
