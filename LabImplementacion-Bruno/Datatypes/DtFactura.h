@@ -19,10 +19,11 @@ class DtFactura : public ICollectible{
 	    DtEmpleado * trabajador;
 	    float subtotal;
 	    float descuento;
+	    float montototal;
 	    float total_iva;
 	    
 	public:
-		DtFactura(int, DtFecha *, ICollection * ,DtEmpleado*, float, float ,float);
+		DtFactura(int, DtFecha *, ICollection * ,DtEmpleado*, float, float,float,float);
 		int getCodigo();
 		DtFecha * getFecha();
 		ICollection * getProductos();
@@ -30,6 +31,7 @@ class DtFactura : public ICollectible{
 		float getSubtotal();
 		float getDescuento();
 		float gettotal_iva();
+		float getMonto();
     	virtual ~DtFactura();
     	
 };

@@ -1,5 +1,7 @@
 #include "../interfaces/IDictionary.cpp"
 #include "ListNodeDictionary.cpp"
+#ifndef LISTDICTIONARY_H
+#define LISTDICTIONARY_H
 class ListDictionary : public IDictionary{
 	
 	private:
@@ -18,3 +20,5 @@ class ListDictionary : public IDictionary{
 		virtual ~ListDictionary();
 	
 };
+
+#endif

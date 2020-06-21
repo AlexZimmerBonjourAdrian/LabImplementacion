@@ -13,6 +13,7 @@ class Factura : public ICollectible{
 		float subtotal;
 		float descuento;
 		float montototal;
+		float montototal_iva;
 		Venta * venta;
 		
 	public:

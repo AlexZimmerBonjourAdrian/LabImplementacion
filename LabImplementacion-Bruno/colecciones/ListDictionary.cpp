@@ -2,6 +2,10 @@
 #include "../iterators/ListDIterator.cpp"
 #include<iostream>
 #include<stdio.h>
+
+#ifndef LISTDICTIONARY_CPP
+#define LISTDICTIONARY_CPP
+
 ListDictionary::ListDictionary(){
 	this->head=NULL;
 	this->size=0;
@@ -101,3 +105,5 @@ ListDictionary::~ListDictionary(){
         current = next;
     }
 }
+
+#endif

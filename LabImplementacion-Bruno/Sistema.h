@@ -36,11 +36,11 @@ void InsertEnd(Lista &L,int valor) {
 }
 
 void mostrarLista(Lista L) {
-    int i = 0;
+    
     while(L != NULL) {
-        cout<<i+1<<")"<<L->info<<endl;
+        cout<<"Mesa # "<<L->info<<endl;
         L = L->sig;
-        i++;
+        
     }
 }
 
@@ -95,7 +95,7 @@ class Sistema {
 		bool check_prod_sistema(int);
 		void agregarProducto(int,string,float);
 		void agregarProdMenu(int,int);
-		void agregarMenu(int,string,float);
+		void agregarMenu(int,string);
 		
 		//Caso de uso Baja Producto
 		
@@ -122,6 +122,11 @@ class Sistema {
 		
 		bool check_mesa_mozo(int,int);
 		void agregarMesaMozo(int idmesa, int idmozo);
+		void asignarMesasAutomatico();
+		int cantMesas();
+		int cantMozos();
+		bool mesaAsignada(Mesa*);
+		Mozo * mozoVago();
 		
 		//Caso de uso Alta cliente
 		
@@ -147,6 +152,7 @@ class Sistema {
 		ICollection * mostrarRepartidores();
 		DtFactura * crearVdomicilio(int repartidor,int telefono);
 		void ingresarProducto(int, int);
+		Repartidor * check_repartidor();
 		
 		
 };

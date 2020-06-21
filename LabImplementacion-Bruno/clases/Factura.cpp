@@ -7,16 +7,17 @@ using namespace std;
 
 
 Factura::Factura(Venta* venta_, int descuento){
-	
+	float subtotal_=venta_->getSubtotal();
 	this->codigo=venta_->getCodigo();
-	
 	this->fecha=venta_->getFecha();
-	
 	this->productos=venta_->getProductos();
-	this->subtotal=venta_->getSubtotal();
+	this->subtotal=subtotal_;
 	this->descuento=descuento;
-	this->montototal=venta_->getMontototal();
+	float monto=subtotal_-((subtotal_*descuento)/100);
+	this->montototal=monto;
+	this->montototal_iva=monto*1.22;
 	this->venta=venta_;
+	
 }
 
 int Factura::getCodigo(){
@@ -25,8 +26,7 @@ int Factura::getCodigo(){
 
 DtFactura * Factura::getDatos(){
 	
-	
-	DtFactura * df = new DtFactura(this->codigo,this->fecha,this->productos,this->venta->getEmpleado(),this->subtotal,this->descuento,this->montototal);
+	DtFactura * df = new DtFactura(this->codigo,this->fecha,this->productos,this->venta->getEmpleado(),this->subtotal,this->descuento,this->montototal,this->montototal_iva);
 	return df;
 }
 

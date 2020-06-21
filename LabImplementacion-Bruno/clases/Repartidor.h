@@ -3,6 +3,7 @@
 #ifndef REPARTIDOR_H
 #define REPARTIDOR_H
 #include "../interfaces/IDictionary.cpp"
+#include "../Datatypes/DtRepartidor.cpp"
 using namespace std;
 
 class Repartidor : public Empleado{
@@ -14,6 +15,7 @@ class Repartidor : public Empleado{
 		Repartidor(string,string,IDictionary *);
 		string getMedio();
 		IDictionary * getVentas();
+		DtEmpleado * getDatos() const;
 		~Repartidor();
 	
 };

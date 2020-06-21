@@ -15,11 +15,13 @@ private:
     IDictionary * mesas;
 public:
     Mozo(string, IDictionary *);
-    ICollection * getDTMesa();
+    ICollection * getDTMesa()  const;
     IDictionary * getMesa();
     void borrarMesas(Vlocal *);
     void agregarMesa(Mesa *);
     bool  check_mesa(Mesa * m);
+    DtEmpleado * getDatos() const;
+    int cantMesas();
     virtual ~Mozo();
 };
 #endif

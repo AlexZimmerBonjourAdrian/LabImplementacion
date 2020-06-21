@@ -19,6 +19,7 @@ class Producto : public ICollectible {
 		int getPrecio() const;
 		virtual ~Producto();
 		virtual void borrar(Producto *) = 0;
+		void setPrecio(float);
 	protected:
 		void setTipo(string);
 		

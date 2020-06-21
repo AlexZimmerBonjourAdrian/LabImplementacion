@@ -10,7 +10,7 @@ Vlocal::Vlocal(ICollection * cantidades,DtFecha * fecha, Mozo* mozo) : Venta(can
 
 DtEmpleado* Vlocal::getEmpleado() const {
 
-	
+
 	return new DtMozo(this->mozo->getId(),this->mozo->getNombre(),this->mozo->getDTMesa());
 }
 

@@ -52,7 +52,7 @@ void Sistema::cargarDatos(){
 
 	productos->add(k4,c3);
 
-	Menu * men1 = new Menu(4,"Menu1",100);
+	Menu * men1 = new Menu(4,"Menu1",171);
 	IKey * k5 = new IntKey(4);
 
 	men1->agregarProd(c1,2);
@@ -96,7 +96,7 @@ ICollection * Sistema::getEmpleados(){
 	ICollection * de = new List();
 	while(it->hasCurrent()){
 		Empleado * e = (Empleado *) it->getCurrent();
-		DtEmpleado * dt = new DtEmpleado(e->getId(),e->getNombre());
+		DtEmpleado * dt = e->getDatos();
 		de->add(dt);
 		it->next();
 	}
@@ -187,9 +187,10 @@ void Sistema::agregarProdMenu(int codigo,int cantidad){
 	
 }
 
-void Sistema::agregarMenu(int codigo, string descripcion, float precio){
+void Sistema::agregarMenu(int codigo, string descripcion){
 	Lista nodo = this->temp;
-	Menu * m = new Menu(codigo,descripcion,precio);
+	Menu * m = new Menu(codigo,descripcion,0);
+	float total=0;
 	while(nodo!=NULL && nodo->sig!=NULL){
 		
 		int cod = nodo->info;
@@ -205,10 +206,13 @@ void Sistema::agregarMenu(int codigo, string descripcion, float precio){
 		}
 		Comun * c = (Comun*) p;
 		nodo=nodo->sig;
+		total = total + (c->getPrecio()*nodo->info);
 		m->agregarProd(c,nodo->info);
 		nodo=nodo->sig;
 		delete k;
 	}
+	total = total - ((total*10)/100);
+	m->setPrecio(total);
 	IKey * k2 = new IntKey(codigo);
 	this->productos->add(k2,m);
 	
@@ -278,30 +282,34 @@ void Sistema::ingresarMesa(int idmesa){
 }
 
 Lista Sistema::listarMesasAsignadas(int idmozo){
-	
+	this->liberarMemoria();
 	InsertEnd(this->temp,idmozo);
 	IKey * k = new IntKey(idmozo);
 	
-	Mozo * mo= (Mozo*) empleados->find(k);
+	Empleado * e= (Empleado *) empleados->find(k);
+	Mozo * mo = dynamic_cast<Mozo *>(e);
 	if(mo==NULL){
 		throw "### NO EXISTE EL MOZO EN EL SISTEMA ###";
 	}
 	else{
 		Lista IDmesas = NULL;
-		IDictionary * mesas = mo->getMesa();
-		IIterator * itmesas  = mesas->getIterator();
+		IDictionary * mes = mo->getMesa();
+		IIterator * itmesas  = mes->getIterator();
+		
 		if(itmesas->hasCurrent()==false){
 			throw "### EL MOZO NO TIENE MESAS ASIGNADAS ###";
 		}
 		else{
 			while(itmesas->hasCurrent()){
-			ICollectible * i = itmesas->getCurrent();
-			Mesa * m = (Mesa *) i;
-			if(m->getVenta()==NULL){
-				InsertEnd(IDmesas,m->getid());
-			}
-		
-			itmesas->next();
+				
+				ICollectible * i = itmesas->getCurrent();
+				Mesa * m = (Mesa *) i;
+				
+				if(m->getVenta()==NULL){
+					InsertEnd(IDmesas,m->getid());
+				}
+			
+				itmesas->next();
 			}
 		}
 		return IDmesas;
@@ -331,10 +339,10 @@ void Sistema::seleccionarMesas(int idmesa){
 		this->liberarMemoria();
 		throw "### NO EXISTE EL MOZO SELECCIONADO ###";
 	}
-	if(!m2->check_mesa(m1)){
+	if(!m2->check_mesa(m1) || m1->getVenta()!=NULL){
 		delete k1,k2;
 		this->liberarMemoria();
-		throw "### LA MESA SELECCIONADA NO CORRESPONDE AL MOZO ###";
+		throw "### LA MESA SELECCIONADA NO CORRESPONDE AL MOZO O YA TIENE UNA VENTA ###";
 	}
 	InsertEnd(this->temp,idmesa);
 }
@@ -362,7 +370,7 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 		}
 		else{
 			this->liberarMemoria();
-			throw "### LA MESA NO EXISTE O YA TIENE UNA VENTA EN CURSO ###"; 
+			throw "### ALGUNA DE LAS MESAS NO EXISTE O YA TIENE UNA VENTA EN CURSO ###"; 
 		}
 		p=p->sig;
 		
@@ -375,6 +383,20 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 }
 
 
+bool Sistema::mesaAsignada(Mesa * m1){
+	IIterator * it = empleados->getIterator();
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado *)it->getCurrent();
+		Mozo * r1 = dynamic_cast<Mozo*>(e);
+		if(r1!=NULL){
+			if(r1->check_mesa(m1)){
+				return true;
+			}
+		}
+		it->next();
+	}
+}
+
 //Agregar meza a mozo
 
 void Sistema::agregarMesaMozo(int idmesa, int idmozo){
@@ -385,16 +407,8 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 	if(m1 == NULL || m2 == NULL){
 		throw "### NO SE PUDO AGREGAR LA MESA ###";
 	}
-	IIterator * it = empleados->getIterator();
-	while(it->hasCurrent()){
-		Empleado * e = (Empleado *)it->getCurrent();
-		Mozo * r1 = dynamic_cast<Mozo*>(e);
-		if(r1!=NULL){
-			if(r1->check_mesa(m1)){
-				throw "### LA MESA YA HA SIDO ASIGNADA A UN MOZO ###";
-			}
-		}
-		it->next();
+	if(this->mesaAsignada(m1)){
+		throw "### LA MESA YA HA SIDO ASIGNADA ###";
 	}
 
 	m2->agregarMesa(m1);
@@ -449,6 +463,100 @@ void Sistema::eliminarProducto(int idprod){
 	productos->remove(k);
 	delete p;
 
+}
+
+int Sistema::cantMesas(){
+	IIterator * it = mesas->getIterator();
+	int mesas = 0;
+	while(it->hasCurrent()){
+		Mesa * m = (Mesa*)it->getCurrent();
+		if(!this->mesaAsignada(m)){
+			mesas++;	
+		}
+		
+		it->next();
+	}
+	return mesas;
+}
+
+int Sistema::cantMozos(){
+	IIterator * it = empleados->getIterator();
+	int mozos = 0;
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado*) it->getCurrent();
+		Mozo * m = dynamic_cast<Mozo*>(e);
+		if(m!=NULL){
+			mozos++;	
+		}
+		
+		it->next();
+	}
+	return mozos;
+}
+
+
+
+void Sistema::asignarMesasAutomatico(){
+	IIterator * it = ventas->getIterator();
+	while(it->hasCurrent()){
+		Venta * venta = (Venta *) it->getCurrent();
+		Vlocal * v = dynamic_cast<Vlocal *>(venta);
+		if(v!=NULL){
+			IKey * k = new IntKey(v->getCodigo());
+			if(!this->facturas->member(k)){
+				throw "### LAS VENTAS DEBEN ESTAR FACTURADAS ###";
+			}	
+		}
+		it->next();
+	}
+	int mesas = this->cantMesas();
+	int mozos=this->cantMozos();
+	if(mesas==0 || mozos == 0){
+		throw "### DEBEN HABER MOZOS Y MESAS DISPONIBLES";
+	}
+	delete it;
+
+	IIterator * it2= this->mesas->getIterator();
+	
+	while(it2->hasCurrent()){
+		Mesa * m2=(Mesa*)it2->getCurrent();
+		if(!this->mesaAsignada(m2)){
+			Mozo * m1 = this->mozoVago();
+			m1->agregarMesa(m2);
+		}
+		
+		it2->next();
+			
+	}
+}
+
+	
+
+Mozo * Sistema::mozoVago(){
+	IIterator * it = empleados->getIterator();
+	bool pri=true;
+	Mozo * vago=NULL;
+	int menor=0;
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado*) it->getCurrent();
+		Mozo * m = dynamic_cast<Mozo*>(e);
+		
+		if(m!=NULL){
+			int cant=m->cantMesas();
+			
+			if(pri){
+				menor=cant;
+				vago=m;
+				pri=false;
+			}
+			if(cant<menor){
+				menor=cant;
+				vago=m;
+			}
+		}
+		it->next();
+	}
+	return vago;
 }
 
 //Verificaciones
@@ -540,7 +648,7 @@ DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 		return NULL;
 	}
 	Mozo * mozo = v->getMozo();
-
+            
 	mozo->borrarMesas(v);
 	m->setVenta(NULL);
 	IKey * k3 = new IntKey(v->getCodigo());
@@ -621,12 +729,22 @@ ICollection * Sistema::mostrarRepartidores(){
 
 void Sistema::ingresarProducto(int idprod, int cant){
 	if(!this->check_prod_sistema(idprod)){
-		this->liberarMemoria();
+		
 		throw "### EL PRODUCTO INGRESADO NO EXISTE ###";
 	}
 	InsertEnd(this->temp,idprod);
 	InsertEnd(this->temp,cant);
 }
+
+
+//	IKey * k2 = new IntKey(repartidor);
+//	Empleado * e = (Empleado*)this->empleados->find(k2);
+//	Repartidor * r = dynamic_cast<Repartidor*>(e);
+//	if(r==NULL){
+//		this->liberarMemoria();
+//		throw "### NO SE ENCONTRO EL REPARTIDOR ###";
+//	}
+
 
 DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
 		IKey * k = new IntKey(telefono);

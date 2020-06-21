@@ -29,6 +29,9 @@ int Producto::getPrecio() const{
 	return this->precio;
 }
 
+void Producto::setPrecio(float precio){
+	this->precio=precio;
+}
 
 Producto::~Producto(){
 	

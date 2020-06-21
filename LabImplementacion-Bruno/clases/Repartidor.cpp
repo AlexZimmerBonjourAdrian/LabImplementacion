@@ -15,6 +15,10 @@ string Repartidor::getMedio(){
 	return this->medio_de_transporte;
 }
 
+DtEmpleado * Repartidor::getDatos() const{
+	return new DtRepartidor(this->getId(),this->getNombre(),this->medio_de_transporte);
+}
+
 IDictionary * Repartidor::getVentas(){
 	return this->ventas;
 }

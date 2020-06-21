@@ -2,14 +2,19 @@
 #ifndef DTFACTURA_CPP
 #define DTFACTURA_CPP
 
-DtFactura::DtFactura(int codigo, DtFecha * fecha, ICollection * productos, DtEmpleado * trabajador,float subtotal,float descuento, float total_iva){
+DtFactura::DtFactura(int codigo, DtFecha * fecha, ICollection * productos, DtEmpleado * trabajador,float subtotal,float descuento,float montototal, float total_iva){
 	this->codigo=codigo;
 	this->fecha = fecha;
 	this->trabajador=trabajador;
 	this->descuento= descuento;
 	this->productos= productos;
 	this->subtotal=subtotal;
+	this->montototal=montototal;
 	this->total_iva = total_iva;
+}
+
+float DtFactura::getMonto(){
+	return this->montototal;
 }
 
 int DtFactura::getCodigo()

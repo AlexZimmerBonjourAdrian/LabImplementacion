@@ -1,5 +1,6 @@
 #include "../interfaces/ICollectible.cpp"
 #include<iostream>
+#include "../Datatypes/DtEmpleado.cpp"
 #ifndef EMPLEADO_H
 #define EMPLEADO_H
 
@@ -14,8 +15,9 @@ class Empleado : public ICollectible{
 	
 	public:
 		Empleado(string);
-		int getId();
-		string getNombre();
+		int getId() const;
+		string getNombre() const;
+		virtual DtEmpleado * getDatos() const = 0;
 		~Empleado();
 		
 }; 
