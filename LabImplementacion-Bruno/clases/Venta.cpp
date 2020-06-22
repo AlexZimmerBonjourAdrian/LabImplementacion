@@ -67,6 +67,7 @@ int Venta::getCantidadProd(Producto *p){
 		}
 		it->next();
 	}
+	delete it;
 	return 0;
 }
 
@@ -90,6 +91,7 @@ void Venta::setNuevaCantidad(Producto * p, int cantProd,string op){
 		}
 		it->next();
 	}
+	delete it;
 	throw "(Clase venta)No se encontro el producto en la venta";
 }
 
@@ -106,6 +108,7 @@ bool Venta::buscarProd(Producto * p){
 		}
 		it->next();
 	}
+	delete it;
 	return false;
 }
 
@@ -126,6 +129,7 @@ ICollection * Venta::getProductos(){
 		dtprod->add(c->getDtProducto());
 		it->next();
 	}
+	delete it;
 	return dtprod;
 }
 
@@ -138,6 +142,7 @@ float Venta::getSubtotal(){
 		total+=c->getCantidad()*dp->getPrecio();
 		it->next();
 	}
+	delete it;
 	return total;
 }
 

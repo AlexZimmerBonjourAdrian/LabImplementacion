@@ -37,10 +37,9 @@ bool checkNum(){
 main(){
 	int agregar = 1;
 	float precio=0;
-	
+	bool cargar = false;
 		string opc1,s1;
 		Sistema * s = Sistema::getInstance();
-		Mesa * me1 = new Mesa(1,new ListDictionary());
 		int id=1, descuento;
 		int opc;
 		int mozopc;
@@ -55,7 +54,24 @@ main(){
 						try{
 						
 						system("cls");
+						if(cargar==false){
+							cout << "### ADVERTENCIA ###" << endl;
+							cout << "\t..Si agrega datos antes de cargar los datos de prueba se pueden" << endl;
+							cout << "\t  producir errores en la consistencia de los datos" << endl;
+							cout << endl << "\t Desea continuar?(si o no)" << endl;
+							cin >> s1;
+							if(s1=="si"||s1=="SI" || s1=="Si"){
+								cargar=true;
+								system("cls");
+							}
+							else{
+								break;
+							}
+						}
+						
+						
 						opc = menuAdministrador();
+						
 						switch(opc){
 							case 1:{
 								cout << endl << "### ALTA PRODUCTO ###" << endl << endl;
@@ -104,7 +120,8 @@ main(){
 								else{
 									if(opc1=="menu" || opc1=="MENU" || opc1=="Menu"){
 										ICollection * p = s->mostrarProductos();
-										if(p==NULL){
+										IIterator * it = p->getIterator();
+										if(!it->hasCurrent()){
 											cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
 											Sleep(2000);
 											break;
@@ -125,7 +142,7 @@ main(){
 									
 										cout << endl << endl;
 									
-										IIterator * it = p->getIterator();
+										
 										
 										
 										while(it->hasCurrent()){
@@ -134,9 +151,11 @@ main(){
 												
 												cout <<"Producto #" << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
 											}
+											delete dp;
 											it->next();
 										
 										}
+										delete p, it;
 										cout << endl << endl << "\t..Ingrese los componentes del menu (para finalizar escriba 0) " << endl;
 										int cod;
 										bool check;
@@ -218,9 +237,11 @@ main(){
 								while(it->hasCurrent()){
 									DtProducto * dp = (DtProducto *) it->getCurrent();
 									cout  << "\tProducto # "<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+									delete dp;
 									it->next();
 								
 								}
+								delete it,p;
 								int idprod=0;
 								cin >> idprod;
 								if(!checkNum()){
@@ -265,11 +286,12 @@ main(){
 									DtProducto * dp = (DtProducto *) it_p->getCurrent();
 									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
 									cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-									cout << endl << endl;	
+									cout << endl << endl;
+									delete dp;	
 									it_p->next();
 								}
 								cout << "\tIngrese el codigo del producto (Si desea volver ingrese 0) ";
-								
+								delete it_p,prod;
 								int cod=1;
 								bool ch=false;
 								do{
@@ -296,6 +318,7 @@ main(){
 									cout << "\tDescripcion: " << dp->getDescripcion() << endl;
 									cout << "\tPrecio: " << dp->getPrecio() << endl;
 									cout << "\tCantidad de unidades vendidas: " <<dp->getCantidad() << endl;
+									
 								}
 								if(dp->getTipo()=="Menu"){
 									cout << endl << "### COMPONENTES ###" << endl << endl;
@@ -308,12 +331,15 @@ main(){
 										cout << "\tDescripcion: " << dp->getDescripcion() << endl;
 										cout << "\tPrecio: " << dp->getPrecio() << endl;
 										cout << "\tCantidad: " <<dp->getCantidad() << endl << endl;
+										delete dp;
 										it->next();
 									}
+									delete dm,it;
 								}
+								delete dp;
 								system("PAUSE");
 								break;
-						}
+							}
 							case 4:{
 								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
@@ -430,6 +456,7 @@ main(){
 								}
 								DtFecha * f = new DtFecha(anio,mes,dia);
 								ICollection * facturas = s->getFacturasFecha(f);
+								delete f;
 								IIterator * it = facturas->getIterator();
 								while(it->hasCurrent()){
 									DtFactura * df =(DtFactura *) it->getCurrent();
@@ -1130,7 +1157,7 @@ main(){
 					break;
 				case 5:
 					s->cargarDatos();
-				
+					cargar=true;
 					break;
 				
 				case 6:{
@@ -1208,6 +1235,7 @@ main(){
 														cout << "\t\tMesa #" << dtm->getId() << endl;
 														it_mesas->next();
 													}
+													cout << "          -------------------------" << endl;
 													delete it_mesas; 
 												}
 												
@@ -1215,6 +1243,7 @@ main(){
 											else{
 												cout << "Repartidor" << endl;
 												cout << "\t..Medio de transporte: " << r1->getMedio() << endl;
+												cout << "          -------------------------" << endl;
 											}
 											cout << endl << endl;
 											it->next();
@@ -1384,6 +1413,9 @@ int menuAdministrador(){
 	
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 }
 
@@ -1397,6 +1429,9 @@ int menuMozo(){
 	cout << "5. Volver a menu anterior" << endl << endl;
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 }
 
@@ -1407,6 +1442,9 @@ int menuCliente(){
 	cout << "2. Volver a menu anterior" << endl << endl;
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 }
 
@@ -1417,6 +1455,9 @@ int menuRepartidor(){
 	cout << "2. Volver a menu anterior" << endl << endl;
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 }
 
@@ -1431,6 +1472,9 @@ int menuConsultas(){
 	cout << "6. Consultar ventas" << endl;
 	cout << "7. Volver a menu anterior" << endl;
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 	
 }

@@ -21,6 +21,7 @@ DtMozo::~DtMozo(){
 		this->mesas->remove(dp);
 		delete dp;
 	}
+	delete it;
 	delete this->mesas;
 }
 #endif

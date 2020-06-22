@@ -27,7 +27,7 @@ string DtVenta::getEstado(){
 }
 
 DtVenta::~DtVenta(){
-	
+	delete productos;
 }
 
 #endif

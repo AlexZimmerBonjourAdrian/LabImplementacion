@@ -68,20 +68,46 @@ class Sistema {
 		IDictionary * facturas;
 		IDictionary * clientes;
 		Lista temp;
+		Mozo * mozoVago();
 		bool cond;
 		
 	
 	public:
+		//Instancia
+		
 		void cargarDatos();
 		static Sistema * getInstance();
+		
+		//Informacion
+		
 		ICollection * getEmpleados();
 		ICollection * getFacturas();
+		ICollection * getMesas();
+		ICollection * getVentas();
+		ICollection * mostrarClientes();
+		ICollection * mostrarProductos();
+		ICollection * mostrarMozos();
+		ICollection * mostrarProdVenta(int);
+		ICollection * getPedidos(int);
+		ICollection * getTodosPedidos(int);
+		ICollection * getPedidosCliente(int);
+		ICollection * getFacturasFecha(DtFecha*);
+		ICollection * mostrarRepartidores();
+		
+		//Verificaciones
+		
+		bool check_prod_sistema(int);
+		bool productoFacturado(int idprod);
+		bool ventaFacturada(int);
+		bool check_mesa_menu(int);
+		bool check_prod_venta(int);
+		bool mesaAsignada(Mesa*);
+		bool check_cliente(int);
 		
 		//Caso de uso Iniciar venta en mesa
 		
 		void agregarMozo(Mozo * m);
 		void agregarMesa(int);
-	
 		Lista listarMesasAsignadas(int idmozo);
 		Lista listarMesasSeleccionadas();
 		void seleccionarMesas(int);
@@ -91,10 +117,10 @@ class Sistema {
 		//Caso de uso Facturacion de una venta
 		
 		DtFactura * emitirFactura(int, float);
-		bool check_mesa_menu(int);
+		
+		
 		//Caso de uso Alta Producto
 		
-		bool check_prod_sistema(int);
 		void agregarProducto(int,string,float);
 		void agregarProdMenu(int,int);
 		void agregarMenu(int,string);
@@ -102,13 +128,11 @@ class Sistema {
 		//Caso de uso Baja Producto
 		
 		void eliminarProducto(int);
-		bool productoFacturado(int idprod);
+		
 		
 		//Caso de uso  Agregar producto a una venta
 		
 		void ingresarMesa(int);
-		ICollection * mostrarProductos();
-		bool check_prod_venta(int);
 		void agregarProductoVenta(int,int);
 		void modificarCantidad(int,int,string);
 		
@@ -116,51 +140,30 @@ class Sistema {
 
 		int ingresarRepartidor(string,string);
 		int ingresarMozo(string);
-		ICollection * mostrarMozos();
+		
 		
 		//Informacion de un producto
+		
 		DtProducto * mostrarProducto(int);  
 		
-		//Agrgar mesas a mozos
+		//Agregar mesas a mozos
 		
-		bool check_mesa_mozo(int,int);
 		void agregarMesaMozo(int idmesa, int idmozo);
 		void asignarMesasAutomatico();
 		int cantMesas();
 		int cantMozos();
-		bool mesaAsignada(Mesa*);
-		Mozo * mozoVago();
-		ICollection * getMesas();
+
 		
-		ICollection * getTodosPedidos(int);
-		
-		ICollection * getVentas();
 		//Caso de uso Alta cliente
 		
 		void crearCliente(string,int,string,int);
 		
-		//Utilidades
-		ICollection * getPedidosCliente(int);
-		bool ventaFacturada(int);
-		ICollection * mostrarClientes();
+		//Venta a domicilio	
 		
-		//Quitar producto a una venta
-		
-		ICollection * mostrarProdVenta(int);
-		
-		//Facturacion de 1 dia
-		
-		ICollection * getFacturasFecha(DtFecha*);
-		
-		//Venta a domicilio
-		
-		bool check_cliente(int);
-		void agregarVdomicilio(int repartidor);
-		ICollection * mostrarRepartidores();
 		DtFactura * crearVdomicilio(int repartidor,int telefono);
 		void ingresarProducto(int, int);
-		Repartidor * check_repartidor();
-		ICollection * getPedidos(int);
 		void cambiarEstado(int,int,int);
+
 		
+	
 };

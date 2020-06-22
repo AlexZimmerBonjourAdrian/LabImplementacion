@@ -21,6 +21,7 @@ DtMenu::~DtMenu(){
 		this->componentes->remove(dp);
 		delete dp;
 	}
+	delete it;
 	delete this->componentes;
 }
 
