@@ -14,6 +14,14 @@ ICollection * DtMenu::getComponentes(){
 }
 
 DtMenu::~DtMenu(){
+	IIterator * it = this->componentes->getIterator();
+	while(it->hasCurrent()){
+		DtProducto * dp = (DtProducto*)it->getCurrent();
+		it->next();
+		this->componentes->remove(dp);
+		delete dp;
+	}
+	delete this->componentes;
 }
 
 #endif

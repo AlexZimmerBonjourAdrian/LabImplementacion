@@ -1,4 +1,5 @@
 #include "CantidadProd.h"
+#include "Menu.cpp"
 #ifndef CANTIDADPROD_CPP
 #define CANTIDADPROD_CPP
 
@@ -30,6 +31,11 @@ DtProducto * CantidadProd::getDtProducto(){
 	DtProducto * dp = this->producto->getDatos();
 	dp->setCantidad(this->cantidad);
 	return dp;
+}
+
+bool CantidadProd::esMenu(){
+	Menu * m = dynamic_cast<Menu*>(this->producto);
+	return (m!=NULL);
 }
 
 int CantidadProd::getCantidadRestada(int cantProd){

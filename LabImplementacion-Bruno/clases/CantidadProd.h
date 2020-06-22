@@ -14,6 +14,7 @@ class CantidadProd : public ICollectible{
 		void sumarCantidad(int cantProd);
 		void restarCantidad(int cantProd);
 		Producto * getProducto();
+		bool esMenu();
 		DtProducto * getDtProducto();
 		int getCantidadRestada(int cantProd);
 		virtual ~CantidadProd();

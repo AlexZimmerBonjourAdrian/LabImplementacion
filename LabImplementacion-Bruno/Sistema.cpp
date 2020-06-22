@@ -133,6 +133,32 @@ ICollection * Sistema::mostrarProductos(){
 	return NULL;
 }
 
+ICollection * Sistema::getTodosPedidos(int idrep){
+	
+	IKey * k = new IntKey(idrep);
+	Empleado *e = (Empleado *) this->empleados->find(k);
+	Repartidor * r = dynamic_cast<Repartidor*>(e);
+	if(r==NULL){
+		throw "### NO SE ENCONTRO EL REPARTIDOR ###";
+	}
+	IDictionary * ventas = r->getVentas();
+	IIterator * it = ventas->getIterator();
+	if(!it->hasCurrent()){
+		throw "### EL REPARTIDOR NO TIENE VENTAS INCOMPLETAS ###";
+	}
+	ICollection * dtventas = new List();
+	while(it->hasCurrent()){
+		Venta * v = (Venta *) it->getCurrent();
+		DtVenta * dv = new DtVenta(v->getCodigo(),v->getProductos(),v->getFecha(),v->getEstado());
+		dtventas->add(dv);
+		it->next();
+	}
+	delete k, it;
+	return dtventas;
+	
+}
+
+
 ICollection * Sistema::mostrarProdVenta(int idmesa){
 	IKey * k = new IntKey(idmesa);
 	Mesa * m = (Mesa *) mesas->find(k);
@@ -360,7 +386,7 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 		throw "### NO EXISTE EL MOZO EN EL SISTEMA ###";
 	}
 	
-	Vlocal * venta = new Vlocal(new List(),fecha,mozo);
+	Vlocal * venta = new Vlocal(new List(),fecha,"En curso",mozo);
 	while(p!=NULL){
 		IntKey * k = new IntKey(p->info);
 		Mesa* m = (Mesa*) mesas->find(k);
@@ -370,6 +396,7 @@ void Sistema::confirmarSeleccion(Lista L, DtFecha * fecha){
 		}
 		else{
 			this->liberarMemoria();
+			delete venta;
 			throw "### ALGUNA DE LAS MESAS NO EXISTE O YA TIENE UNA VENTA EN CURSO ###"; 
 		}
 		p=p->sig;
@@ -421,6 +448,24 @@ void Sistema::agregarMesaMozo(int idmesa, int idmozo){
 }
 
 
+ICollection * Sistema::getMesas(){
+	IIterator * it = mesas->getIterator();
+	if(!it->hasCurrent()){
+		delete it;
+		throw "### NO HAY MESAS EN EL SISTEMA ###";
+	}
+	ICollection * mes = new List();
+	while(it->hasCurrent()){
+		Mesa * m = (Mesa*)it->getCurrent();
+		DtMesa * dm = new DtMesa(m->getid());
+		mes->add(dm);
+		it->next();
+	}
+	delete it;
+	return mes;
+}
+
+
 //Baja producto
 
 void Sistema::eliminarProducto(int idprod){
@@ -464,6 +509,55 @@ void Sistema::eliminarProducto(int idprod){
 	delete p;
 
 }
+
+ICollection * Sistema::getVentas(){
+	IIterator * it = ventas->getIterator();
+	if(!it->hasCurrent()){
+		delete it;
+		throw "### NO EXISTEN VENTAS EN EL SISTEMA ###";
+	}
+	ICollection * dtventas = new List();
+	while(it->hasCurrent()){
+		Venta * v = (Venta *) it ->getCurrent();
+		DtVenta * dv = new DtVenta(v->getCodigo(),v->getProductos(),v->getFecha(),v->getEstado());
+		dtventas->add(dv);
+		it->next();
+	}
+	delete it;
+	return dtventas;
+}
+
+
+ICollection * Sistema::getPedidosCliente(int cliente){
+	IKey * k = new IntKey(cliente);
+	Cliente * c = (Cliente *)this->clientes->find(k);
+	delete k;
+	if(c==NULL){
+		throw "### NO SE ENCONTRO EL CLIENTE ###";
+	}
+	IIterator * it = ventas->getIterator();
+	if(!it->hasCurrent()){
+		delete it;
+		throw "### NO EXISTEN VENTAS EN EL SISTEMA ###";
+	}
+	ICollection * dtventas = new List();
+	while(it->hasCurrent()){
+		Venta * v = (Venta *) it ->getCurrent();
+		Vdomicilio * vdom = dynamic_cast<Vdomicilio *>(v);
+		if(vdom !=NULL && vdom->getCliente()==c){
+			DtVenta * dv = new DtVenta(v->getCodigo(),v->getProductos(),v->getFecha(),v->getEstado());
+			dtventas->add(dv);
+		}
+		
+		it->next();
+	}
+	delete it;
+	return dtventas;
+	
+	
+}
+
+
 
 int Sistema::cantMesas(){
 	IIterator * it = mesas->getIterator();
@@ -634,6 +728,23 @@ bool Sistema::check_cliente(int telefono){
 	return ck;
 }
 
+
+bool Sistema::check_mesa_menu(int idmesa){
+	IKey * k = new IntKey(idmesa);
+	Mesa * m = (Mesa*) this->mesas->find(k);
+	if(m==NULL){
+		delete k;
+		throw "### NO SE ENCONTRO LA MESA ###";
+	}
+	Venta * v = m->getVenta();
+	if(v==NULL){
+		throw "### LA MESA NO TIENE VENTA ASIGNADA ###";
+	}
+	delete k;
+	return v->tieneMenu();
+}
+
+
 //Facturacion de una venta
 
 DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
@@ -647,19 +758,22 @@ DtFactura * Sistema::emitirFactura(int idmesa, float descuento){
 	if(v==NULL){
 		return NULL;
 	}
-	Mozo * mozo = v->getMozo();
-            
+	Mozo * mozo = v->getMozo(); 
 	mozo->borrarMesas(v);
 	m->setVenta(NULL);
 	IKey * k3 = new IntKey(v->getCodigo());
-	
+	v->setEstado("Facturada");
 	if(!facturas->member(k3)){
-		
+		if(v->tieneMenu()){
+			descuento=0;
+		}
 		Factura * f = new Factura(v,descuento);
 		IKey * k2 = new IntKey(f->getCodigo());
 		
 		this->facturas->add(k2,f);
+	
 		DtFactura * df = f->getDatos();
+		
 		delete k1;
 		return df;
 	}
@@ -768,7 +882,7 @@ DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
 		anio= fecha->tm_year+1900;		
 		DtFecha * fecha_actual = new DtFecha(anio,mes,dia);
 		DtDireccion * dir = c->getDireccion();
-		Venta * v = new Vdomicilio(new List(),fecha_actual,dir,c->getNombre(),c->getTelefono(),r,c);
+		Venta * v = new Vdomicilio(new List(),fecha_actual,"Preparandose",dir,c->getNombre(),c->getTelefono(),r,c);
 		IKey * k3 = new IntKey(v->getCodigo());
 		Lista p = this->temp;
 	
@@ -792,36 +906,122 @@ DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
 			
 		}
 		
-			
-		Factura * f = new Factura(v,0);
-		DtFecha * f11=f->getFecha();
-	
+		Vdomicilio * vd = (Vdomicilio *) v;
+		Factura * f = new Factura(vd,0);
 		IKey * kf = new IntKey(v->getCodigo());
 		this->facturas->add(kf,f);
 		DtFactura * df = f->getDatos();
 		this->ventas->add(k3,v);
+		r->agregarVenta(v);
 		return df;
 }
 
 
+void Sistema::cambiarEstado(int idventa, int opc, int rep){
+	IKey * k = new IntKey(rep);
+	Empleado *e = (Empleado *) this->empleados->find(k);
+	Repartidor * r = dynamic_cast<Repartidor*>(e);
+	delete k;
+	if(r==NULL){
+		throw "### NO SE ENCONTRO EL REPARTIDOR ###";
+	}
+	
+	IKey * k2 = new IntKey(idventa);
+	Venta * v =(Venta *) this->ventas->find(k2);
+	Vdomicilio * v1 = dynamic_cast<Vdomicilio*>(v);
+	delete k2;
+	
+	if(v1==NULL){
+		throw "### NO SE ENCONTRO LA VENTA ###";
+	}
+	if(v1->esRepartidor(r)){
+		if(opc==2){
+			if(v->getEstado()=="En camino"){
+				throw "### LA VENTA YA ESTA EN CAMINO ###";
+			}
+			if(v->getEstado()=="Entregada"){
+				throw "### LA VENTA YA HA SIDO ENTREGADA ###";
+			}
+			v->setEstado("En camino");
+			}
+		if(opc==1){
+			if(v->getEstado()=="Entregada"){
+				throw "### LA VENTA YA HA SIDO ENTREGADA ###";
+			}
+			if(v->getEstado()=="Preparandose"){
+				throw "### LA MESA AUN NO ESTA EN VIAJE ###";
+			}
+			v->setEstado("Entregada");
+		}
+	}
+	else{
+		throw "### LA VENTA INGRESADA NO CORRESPONDE AL REPARTIDOR SELECCIONADO ###";
+	}
+	
+}
+
+
+ICollection * Sistema::getPedidos(int idrep){
+	IKey * k = new IntKey(idrep);
+	Empleado *e = (Empleado *) this->empleados->find(k);
+	Repartidor * r = dynamic_cast<Repartidor*>(e);
+	if(r==NULL){
+		throw "### NO SE ENCONTRO EL REPARTIDOR ###";
+	}
+	IDictionary * ventas = r->getVentas();
+	IIterator * it = ventas->getIterator();
+	if(!it->hasCurrent()){
+		throw "### EL REPARTIDOR NO TIENE VENTAS INCOMPLETAS ###";
+	}
+	ICollection * dtventas = new List();
+	while(it->hasCurrent()){
+		Venta * v = (Venta *) it->getCurrent();
+		if(v->getEstado()!="Entregada"){
+			DtVenta * dv = new DtVenta(v->getCodigo(),v->getProductos(),v->getFecha(),v->getEstado());
+			dtventas->add(dv);
+		}
+		
+		it->next();
+	}
+	delete k, it;
+	return dtventas;
+	
+	
+}
+
 
 //Alta empleado
 
-void Sistema::ingresarMozo(string nombre){
+int Sistema::ingresarMozo(string nombre){
 	Mozo * m = new Mozo(nombre,new ListDictionary());
 	IKey * k = new IntKey(m->getId());
 	this->empleados->add(k,m);
+	return m->getId();
 }
 
-void Sistema::ingresarRepartidor(string nombre, string mt){
+int Sistema::ingresarRepartidor(string nombre, string mt){
 	Repartidor * r = new Repartidor(nombre,mt,new ListDictionary());
 	IKey * k = new IntKey(r->getId());
 	this->empleados->add(k,r);
+	return r->getId();
 }
 
 
 
-
+ICollection * Sistema::mostrarMozos(){
+	IIterator * it = empleados->getIterator();
+	ICollection * mozos = new List();
+	while(it->hasCurrent()){
+		Empleado * e = (Empleado*)it->getCurrent();
+		Mozo * m = dynamic_cast<Mozo*>(e);
+		if(m!=NULL){
+			DtMozo * dm = new DtMozo(m->getId(),m->getNombre(),m->getDTMesa());
+			mozos->add(dm);
+		}
+		it->next();
+	}
+	return mozos;
+}
 
 void Sistema::liberarMemoria(){
 	eliminarLista(this->temp);

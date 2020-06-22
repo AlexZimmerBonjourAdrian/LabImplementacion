@@ -1,6 +1,7 @@
+#include "ICollectible.h"
 #ifndef _ICOLLECTIBLE_CPP
 #define	_ICOLLECTIBLE_CPP
-#include "ICollectible.h"
+
 
 
 ICollectible::ICollectible(){

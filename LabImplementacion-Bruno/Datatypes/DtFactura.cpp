@@ -17,6 +17,8 @@ float DtFactura::getMonto(){
 	return this->montototal;
 }
 
+
+
 int DtFactura::getCodigo()
 {
     return this->codigo;
@@ -52,7 +54,7 @@ float DtFactura::gettotal_iva()
 }
 
 DtFactura::~DtFactura(){
-	
+	delete trabajador;
 }
 
 

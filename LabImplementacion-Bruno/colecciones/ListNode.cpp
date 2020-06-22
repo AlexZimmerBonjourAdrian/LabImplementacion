@@ -33,4 +33,7 @@ void ListNode::setNext(ListNode* next)
 {
     this->next = next;
 }
+ListNode::~ListNode(){
+	
+}
 #endif

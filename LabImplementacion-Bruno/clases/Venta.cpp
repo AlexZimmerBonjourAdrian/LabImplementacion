@@ -6,8 +6,9 @@
 
 int Venta::maximo = 1;
 
-Venta::Venta(ICollection * cantidades, DtFecha * fecha) : codigo(maximo++){
+Venta::Venta(ICollection * cantidades, DtFecha * fecha,string estado) : codigo(maximo++){
 	this->cantidades=cantidades;
+	this->estado=estado;
 	this->fecha=fecha;
 	
 }
@@ -19,12 +20,38 @@ void Venta::agregarProd(Producto * p, int cantProd){
 void Venta::borrarProd(Producto * p){
 	IIterator * it = cantidades->getIterator();
 	while(it->hasCurrent()){
+		
 		CantidadProd * cant =(CantidadProd *)it->getCurrent();
 		if(cant->coincideProd(p)){
+			cout << "BORRE" << endl;
+			this->cantidades->remove(cant);
 			delete cant;
+			
 		}
 		it->next();
 	}
+	delete it;
+}
+
+bool Venta::tieneMenu(){
+	IIterator * it = cantidades->getIterator();
+	while(it->hasCurrent()){
+		CantidadProd * cant = (CantidadProd *) it->getCurrent();
+		if(cant->esMenu()){
+			return true;
+		}
+		it->next();
+	}
+	delete it;
+	return false;
+}
+
+string Venta::getEstado(){
+	return this->estado;
+}
+
+void Venta::setEstado(string estado){
+	this->estado=estado;
 }
 
 int Venta::getCodigo(){
@@ -50,7 +77,7 @@ void Venta::setNuevaCantidad(Producto * p, int cantProd,string op){
 		if(cant->coincideProd(p)){
 			if(op=="suma"){
 				cant->sumarCantidad(cantProd);
-				cout << "SUME" << endl;
+			
 			}
 			else{
 				cant->restarCantidad(cantProd);
@@ -119,7 +146,7 @@ float Venta::getMontototal(){
 }
 
 Venta::~Venta(){
-	
+	delete this->cantidades;
 }
 
 

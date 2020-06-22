@@ -24,6 +24,6 @@ DtDireccion * Cliente::getDireccion(){
 }
 
 Cliente::~Cliente(){
-	
+	delete this->direccion;
 }
 #endif

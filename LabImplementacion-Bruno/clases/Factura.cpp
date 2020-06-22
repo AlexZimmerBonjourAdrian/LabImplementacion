@@ -20,9 +20,6 @@ Factura::Factura(Venta* venta_, int descuento){
 	
 }
 
-int Factura::getCodigo(){
-	return this->codigo;
-}
 
 DtFactura * Factura::getDatos(){
 	
@@ -30,11 +27,27 @@ DtFactura * Factura::getDatos(){
 	return df;
 }
 
+int Factura::getCodigo(){
+	return this->codigo;
+}
+
+
+
+
+
 DtFecha * Factura::getFecha(){
 	return this->fecha;
 }
 
 Factura::~Factura(){
-	
+	IIterator * it = this->productos->getIterator();
+	while(it->hasCurrent()){
+		DtProducto * dp = (DtProducto*)it->getCurrent();
+		it->next();
+		this->productos->remove(dp);
+		delete dp;
+	}
+	delete this->productos;
+	delete it;
 }
 #endif

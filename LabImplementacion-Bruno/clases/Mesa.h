@@ -2,12 +2,12 @@
 #include <iostream>
 #include "../interfaces/ICollectible.h"
 #include "../interfaces/IDictionary.h"
-class Vlocal;
+
 
 #ifndef MESA_H
 #define MESA_H
 
-
+class Vlocal;
 class  Mesa : public ICollectible
 {
 private:
@@ -21,7 +21,7 @@ public:
      int getid();
      void setVenta(Vlocal *);
      Vlocal * getVenta();
-    virtual ~Mesa(); 
+    ~Mesa(); 
 };
 
 #endif

@@ -22,6 +22,6 @@ class DtProducto : public ICollectible{
 	    string getTipo();
 	    void setCantidad(int);
 	    int getCantidad();
-	    virtual ~DtProducto();
+	    ~DtProducto();
 };
 #endif

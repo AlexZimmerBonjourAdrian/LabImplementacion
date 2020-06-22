@@ -1,10 +1,11 @@
 
 
-#include "Mesa.h"
 
+#include "../colecciones/IntKey.cpp"
 #ifndef MESA_CPP
 #define MESA_CPP
-
+#include "Mesa.h"
+#include "../clases/Vlocal.cpp"
 Mesa::Mesa(int id, IDictionary * historial) : venta(NULL)
 {
     this->id=id;
@@ -12,6 +13,7 @@ Mesa::Mesa(int id, IDictionary * historial) : venta(NULL)
 }
 
 Mesa::~Mesa(){
+	delete this->historial;
 }
 
 void Mesa::setid(int id)
@@ -32,11 +34,17 @@ Vlocal * Mesa::getVenta(){
 	return this->venta;
 }
 
-void Mesa::setVenta(Vlocal * venta){
+void Mesa::setVenta(Vlocal * venta_){
 
 	
-	this->venta=venta;
+	this->venta=venta_;
+	if(venta_!=NULL){
+		IKey * k  = new IntKey(venta_->getCodigo());
+		this->historial->add(k,venta);	
+	}
+	
 }
+
 
 
 #endif

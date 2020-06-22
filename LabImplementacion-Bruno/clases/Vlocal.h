@@ -1,8 +1,9 @@
 
 #include "Venta.cpp"
+#include "Mozo.cpp"
 #include "../interfaces/IDictionary.cpp"
 #include "../interfaces/ICollection.cpp"
-#include "Mozo.cpp"
+
 #include "../Datatypes/DtMozo.cpp"
 #ifndef VLOCAL_H
 #define VLOCAL_H
@@ -17,7 +18,7 @@ class Vlocal : public Venta{
 		Mozo * mozo;
 	
 	public:
-		Vlocal(ICollection *,DtFecha *,Mozo*);
+		Vlocal(ICollection *,DtFecha *,string,Mozo*);
 		DtEmpleado * getEmpleado() const;
 		Mozo * getMozo();
 	

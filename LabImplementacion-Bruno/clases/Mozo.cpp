@@ -24,6 +24,7 @@ ICollection * Mozo::getDTMesa() const
 		mes->add(dm); 
 		it->next();
 	}
+	delete it;
 	return mes;
 }
 IDictionary * Mozo::getMesa(){
@@ -39,15 +40,17 @@ int Mozo::cantMesas(){
 		cantmesas++;
 		it->next();
 	}
+	delete it;
 	return cantmesas;
 }
 
 
 void Mozo::borrarMesas(Vlocal * venta){
 	IIterator * it = this->mesas->getIterator();
+
 	while(it->hasCurrent()){
 		Mesa * m = (Mesa*) it->getCurrent();
-
+		
 		if(m->coincide(venta)){
 			it->next();
 			m->setVenta(NULL);
@@ -59,6 +62,7 @@ void Mozo::borrarMesas(Vlocal * venta){
 			it->next();
 		}
 	}
+	delete it;
 }
 
 
@@ -85,9 +89,8 @@ void Mozo::agregarMesa(Mesa * mesa){
 	this->mesas->add(new IntKey(mesa->getid()),mesa);
 }
 
-Mozo::~Mozo()
-{
-
+Mozo::~Mozo(){
+	delete this->mesas;
 }
 
 #endif

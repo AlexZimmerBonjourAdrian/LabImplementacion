@@ -23,15 +23,13 @@ IDictionary * Repartidor::getVentas(){
 	return this->ventas;
 }
 
+void Repartidor::agregarVenta(Venta * v){
+	IKey * k = new IntKey(v->getCodigo());
+	this->ventas->add(k,v);
+}
+
 Repartidor::~Repartidor(){
-	IIterator * it = ventas->getIterator();
-	while(it->hasCurrent()){
-		Repartidor * r = (Repartidor *) it->getCurrent();
-		IKey * k = new IntKey(r->getId());
-		ventas->remove(k);
-		it->next();
-	}
-	if(ventas!=NULL)delete ventas;
+	delete this->ventas;
 }
 
 #endif

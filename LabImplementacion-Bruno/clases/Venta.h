@@ -15,9 +15,10 @@ class Venta : public ICollectible{
 		ICollection * cantidades;
 		static int maximo;
 		DtFecha * fecha;
+		string estado;
 		
 	public:
-		Venta(ICollection *,DtFecha *);
+		Venta(ICollection *,DtFecha *,string);
 		void agregarProd(Producto * p, int cantProd);
 		void borrarProd(Producto * p);
 		void setNuevaCantidad(Producto * p, int cantProd,string);
@@ -29,6 +30,9 @@ class Venta : public ICollectible{
 		float getMontototal();
 		bool buscarProd(Producto *);
 		DtFecha * getFecha();
+		bool tieneMenu();
+		void setEstado(string);
+		string getEstado();
 		virtual DtEmpleado * getEmpleado() const = 0;
 		~Venta();
 };

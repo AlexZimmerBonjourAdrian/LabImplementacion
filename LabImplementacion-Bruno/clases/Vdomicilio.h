@@ -19,10 +19,12 @@ class Vdomicilio : public Venta{
 		Cliente * cliente;
 		
 	public:
-		Vdomicilio(ICollection *,DtFecha *,DtDireccion *,string,long int,Repartidor*, Cliente *);
+		Vdomicilio(ICollection *,DtFecha *,string,DtDireccion *,string,long int,Repartidor*, Cliente *);
 		DtDireccion * getDireccion();
+		Cliente * getCliente();
 		string getNombre();
 		DtEmpleado * getEmpleado() const;
+		bool esRepartidor(Repartidor*);
 		~Vdomicilio();
 };
 

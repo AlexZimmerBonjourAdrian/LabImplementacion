@@ -28,7 +28,7 @@ DtProducto * Menu::getDatos() const{
 		dtcomp->add(dp);
 		it->next();
 	}
-	
+	delete it;
 	return  new DtMenu(this->getCodigo(),this->getDescripcion(), this->getPrecio(),0,this->getTipo(),dtcomp);
 
 }
@@ -39,10 +39,12 @@ void Menu::sacardeLista(Comun *p){
 		Componente * c = (Componente *) it->getCurrent();
 		if(c->coincide(p)){
 			this->componentes->remove(c);
+			delete it;
 			return;
 		}
 		it->next();
 	}
+	delete it;
 }
 
 void Menu::borrar(Producto * p){
@@ -55,18 +57,20 @@ void Menu::borrar(Producto * p){
 		}
 		it->next();
 	}
+	delete it;
 
 }
 
 bool Menu::vacio(){
 	IIterator * it = this->componentes->getIterator();
-	
-	return !it->hasCurrent();
+	bool res=!it->hasCurrent();
+	delete it;
+	return res;
 }
 
 
 Menu::~Menu(){
-	
+	delete this->componentes;
 }
 
 

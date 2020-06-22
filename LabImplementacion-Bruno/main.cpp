@@ -60,7 +60,7 @@ main(){
 							case 1:{
 								cout << endl << "### ALTA PRODUCTO ###" << endl << endl;
 							
-								cout << endl << "\t..DESEA AGREGAR UN PRODUCTO COMUN O UN MENU?" << endl;
+								cout << endl << "\t..DESEA AGREGAR UN PRODUCTO COMUN O UN MENU?(comun/menu)" << endl;
 								cin >> opc1;
 								if(opc1=="comun" || opc1=="COMUN" || opc1=="Comun"){
 									cout << endl << "\t..Ingrese el codigo ";
@@ -76,16 +76,18 @@ main(){
 									cout << endl << endl <<"\t..Ingrese la descripcion ";
 									fflush(stdin);
 								    getline(cin,s1);
-									cout << endl << endl << "\t..Ingrese el precio ";
-									cin >> precio;
-									if(!checkNum()){
-										break;
-									}
-									if(precio<=0){
-										cout << "### EL PRECIO DEBE SER MAYOR QUE 0 ###" << endl;
-										break;
-
-									}
+									
+									do{
+										cout << endl << endl << "\t..Ingrese el precio ";
+										cin >> precio;
+										if(!checkNum()){
+											precio = 0;
+											continue;
+										}
+										if(precio<=0){
+											cout << "### EL PRECIO DEBE SER MAYOR QUE 0 ###" << endl;
+										}
+									}while(precio<=0);
 									cout << endl << endl << "\t..Desea confirmar el alta?(si o no)";
 									cin >> opc1;
 									if(opc1=="si"){
@@ -113,7 +115,7 @@ main(){
 											break;
 										}
 										if(s->check_prod_sistema(agregar)){
-											cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
+											cout << endl << endl << "### YA EXISTE UN PRODUCTO CON ESE CODIGO ###" << endl;
 											system("PAUSE");
 											break;
 										}
@@ -140,7 +142,7 @@ main(){
 										bool check;
 										
 										do{
-											cout << endl << "\t..Ingrese el codigo ";
+											cout << endl << "\t..Ingrese el codigo (para finalizar escriba 0)";
 											cin >> cod;
 											if(!checkNum()){
 												break;
@@ -151,19 +153,27 @@ main(){
 												break;
 											}
 											if(cod!=0){
-												cout <<  endl <<"\t..Ingrese la cantidad ";
 												int cant;
-												cin >>cant;
-												if(!checkNum()){
-													break;
-												}
-												s->agregarProdMenu(cod,cant);
+												do{
+													cout << endl << endl << "\t..Ingrese la cantidad ";
+													
+													cin >> cant;
+													if(!checkNum()){
+														cant = 0;
+														continue;
+													}
+													if(cant<=0){
+														cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###" << endl;
+													}
+												}while(cant<=0);
+											
+											s->agregarProdMenu(cod,cant);
 											}
 										
 										}while(cod!=0);
 										if(check){
 												
-											cout << endl << endl << "\t..Desea confirmar el alta? ";
+											cout << endl << endl << "\t..Desea confirmar el alta?(si o no)";
 											cin >> opc1;
 											if(opc1=="si"){
 												s->agregarMenu(agregar,s1);
@@ -243,6 +253,21 @@ main(){
 							case 3:{
 						
 								cout << endl << "### INFORMACION DE UN PRODUCTO ###" <<endl << endl;
+								ICollection * prod = s->mostrarProductos();
+								if(prod==NULL){
+									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+									Sleep(2000);
+									break;
+								}
+								
+								IIterator * it_p = prod->getIterator();
+								while(it_p->hasCurrent()){
+									DtProducto * dp = (DtProducto *) it_p->getCurrent();
+									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+									cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+									cout << endl << endl;	
+									it_p->next();
+								}
 								cout << "\tIngrese el codigo del producto (Si desea volver ingrese 0) ";
 								
 								int cod=1;
@@ -330,13 +355,13 @@ main(){
 												
 										}
 										if(m){
-											s->ingresarRepartidor(nombre,mt);
-											cout << "###EL EMPLEADO HA SIDO DADO DE ALTA###" << endl; 
+											int mo= s->ingresarRepartidor(nombre,mt);
+											cout << "###EL EMPLEADO HA SIDO DADO DE ALTA CON EL IDENTIFICADOR: "<<mo<< " ###" << endl; 
 										}
 								}
 								else{
-									s->ingresarMozo(nombre);
-									cout << "###EL EMPLEADO HA SIDO DADO DE ALTA###" << endl; 
+									int re=s->ingresarMozo(nombre);
+									cout << "###EL EMPLEADO HA SIDO DADO DE ALTA CON EL IDENTIFICADOR: "<<re<< " ###" << endl; 
 								}
 	
 								Sleep (2000);
@@ -498,36 +523,43 @@ main(){
 									itp->next();
 								}
 								
-								cout << "\t..Ingrese 0 para detenerse" << endl << endl;
+								cout << "\t..Ingrese el  producto(Ingrese 0 para terminar)" << endl;
 								cin >> id;
 								if(!checkNum()){
 									break;
 								}
-								
+								if(id==0){
+									break;
+								}
 								do{
 									
 									
 									cout << "\t..Ingrese la cantidad" << endl;
 									int cant = 0;
-									cin >> cant;
-									if(!checkNum()){
-										break;
-									}
-									if(cant<=0){
-										cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
-										break;
-									}
+									
+									do{
+										cin >> cant;
+										if(!checkNum()){
+											break;
+										}	
+										if(cant<=0){
+											cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###" << endl;
+											cout << "\t..Ingrese la cantidad:" << endl;
+										}
+									}while(cant<=0);
+								
 									
 									cout << "\t..Desea confirmar?(1 , 0)" << endl;
 									cin >> agregar;
 									if(agregar==1){
 										
 										s->ingresarProducto(id,cant);
-										Sleep(2000);
+									
 									}
 									else{
 										cout << "### PRODUCTO NO AGREGADO ###" << endl;	
 									}
+									cout << "\t..Ingrese el  producto(Ingrese 0 para terminar)" << endl;
 									cin >> id;
 							
 						
@@ -565,31 +597,50 @@ main(){
 								if(!checkNum()){
 									break;
 								}
-								DtFactura * df = s->crearVdomicilio(repartidor,telefono);
-								if(df!=NULL){
-									cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
-										cout << endl << "##Factura " << df->getCodigo() << " ##" << endl;
-										cout << endl << "\t..Subtotal: " << df->getSubtotal() << endl ;
-										cout << "\t..Descuento: "<< df->getDescuento()<< endl;
-										cout << "\t..Monto total: " << df->getMonto()<< endl;
-										cout << "\t..Monto total(IVA): " << df->gettotal_iva() << endl << endl;
-										DtEmpleado * de = df->getTrabajador();
-										cout << endl << "Empleado: " << de->getNombre() << endl << endl; 
-										cout << "\t --Productos--" << endl << endl;
-										ICollection * prod = df->getProductos();
-										IIterator * it_p = prod->getIterator();
-										while(it_p->hasCurrent()){
-											DtProducto * dp = (DtProducto *) it_p->getCurrent();
-											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-											cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-											cout << "\t ..Precio: " << dp->getPrecio() << endl;
-											cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
-											cout << endl << endl;
+								bool correct=false;
+								do{
+									cout << endl << "\t..Desea confirmar la venta?(si o no)" << endl;
+									cin >> s1;
+									if(s1=="SI" || s1=="Si" || s1=="si"){
+										DtFactura * df = s->crearVdomicilio(repartidor,telefono);
+										if(df!=NULL){
+											cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
+											cout << endl << "##Factura " << df->getCodigo() << " ##" << endl;
+											cout << endl << "\t..Subtotal: " << df->getSubtotal() << endl ;
+											cout << "\t..Descuento: "<< df->getDescuento()<< endl;
+											cout << "\t..Monto total: " << df->getMonto()<< endl;
+											cout << "\t..Monto total(IVA): " << df->gettotal_iva() << endl << endl;
+											DtEmpleado * de = df->getTrabajador();
+											cout << endl << "Empleado: " << de->getNombre() << endl << endl; 
+											cout << "\t --Productos--" << endl << endl;
+											ICollection * prod = df->getProductos();
+											IIterator * it_p = prod->getIterator();
+											while(it_p->hasCurrent()){
+												DtProducto * dp = (DtProducto *) it_p->getCurrent();
+												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
+												cout << endl << endl;
+												
+												it_p->next();
 											
-											it_p->next();
-									
+											}
+										}
+										correct=true;
+								}
+								else{
+									if(s1=="NO" || s1=="No" || s1=="no"){
+										cout << "### NO SE CREO LA VENTA ###" << endl;
+										correct=true;
+									}
+									else{
+										cout <<  "### OPCION INCORRECTA ###" << endl;
 									}
 								}
+								
+							}while(correct==false);
+								
 								s->liberarMemoria();
 								
 								
@@ -598,11 +649,35 @@ main(){
 								
 								break;
 							}
-							case 8:
-								cout <<"Consultar actualizaciones de pedidos a domicilio no implementado" <<endl;
-								Sleep (2000);
-								break;
+							case 8:{
 								
+								cout << "### CONSULTAR PEDIDOS DE UN REPARTIDOR ###" << endl;
+								cout << endl << "\t..Ingresar el id del repartidor:" << endl;
+								int rep;
+								cin >>rep;
+								ICollection * pedidos = s->getTodosPedidos(rep);
+								IIterator * it = pedidos->getIterator();
+								if(!it->hasCurrent()){
+									cout << "### EL REPARTIDOR NO TIENE ENTREGAS PENDIENTES ###" << endl;
+									system("PAUSE");
+									break;
+								}
+								cout << endl << "\t..Seleccione el pedido a modificar:" << endl;
+								
+								
+								while(it->hasCurrent()){
+									DtVenta * dv = (DtVenta *) it->getCurrent();
+									ICollection * prods = dv->getProductos();
+									cout << endl << "Venta #" << dv->getCodigo() << endl;
+									DtFecha * df = dv->getFecha();
+									cout << "Fecha: " << df->getAnio() <<"-"<< df->getMes()<<"-" << df->getDia() << endl;
+									cout << "Estado: " << dv->getEstado() << endl;
+									it->next();
+								}
+							
+								system("PAUSE");
+								break;
+							}
 							case 9:{
 								try{
 									cout << endl << "### Alta mesa ###" << endl << endl;
@@ -646,6 +721,8 @@ main(){
 							
 							case 11:{
 								s->asignarMesasAutomatico();
+								cout << "### LAS MESAS HAN SIDO ASIGNADAS ###" << endl;
+								system("PAUSE");
 								break;
 							}
 							
@@ -673,7 +750,20 @@ main(){
 								case 1:{
 									cout << endl << "###INICIAR VENTA EN MESA###" << endl << endl;
 									
-									cout << "\t..Ingrese el id del mozo" << endl << endl;
+									ICollection * mozos = s->mostrarMozos();
+									IIterator * it = mozos->getIterator();
+									if(!it->hasCurrent()){
+										cout << "### NO HAY MOZOS EN EL SISTEMA ###" << endl;
+										system("PAUSE");
+										break;
+									}
+									while(it->hasCurrent()){
+										DtMozo * dm = (DtMozo*) it->getCurrent();
+										cout << "Mozo #" << dm->getId() << " (" << dm->getNombre() << ")" << endl;
+										it->next();
+									}
+									
+									cout << endl << "\t..Ingrese el id del mozo" << endl << endl;
 									cin >> id;
 									if(!checkNum()){
 										break;
@@ -742,11 +832,10 @@ main(){
 									
 									
 									IIterator * it = p->getIterator();
-									int count=0;
 									while(it->hasCurrent()){
-										count++;
+									
 										DtProducto * dp = (DtProducto *) it->getCurrent();
-										cout << count << ") "<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										cout << "Producto #"<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
 										it->next();
 									
 									}
@@ -780,7 +869,7 @@ main(){
 												s->agregarProductoVenta(id,cant);
 											}
 											
-											Sleep(2000);
+											
 											
 										}
 										else{
@@ -803,12 +892,22 @@ main(){
 										break;
 									}
 									s->ingresarMesa(opc);
-									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
 									ICollection * p = s->mostrarProdVenta(opc);
 									IIterator * it = p->getIterator();
+									if(!it->hasCurrent()){
+										cout << "### LA VENTA NO TIENE PRODUCTOS ###" << endl;
+										break;
+									}
+									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
+								
 									while(it->hasCurrent()){
 										DtProducto * dp = (DtProducto *) it->getCurrent();
-										cout << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										
+										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+										cout << "\t ..Precio: " << dp->getPrecio() << endl;
+										cout << "\t ..Cantidad: " << dp->getCantidad() << endl << endl << endl;
+										
 										it->next();
 									
 									}
@@ -834,6 +933,7 @@ main(){
 									if(agregar==1){
 										if(ch==true){
 											s->modificarCantidad(id,cant,"resta");
+											cout << "### SE HA ELIMINADO EL PRODUCTO DE LA VENTA ###" << endl;
 										}
 										
 										else{
@@ -854,12 +954,16 @@ main(){
 									if(!checkNum()){
 										break;
 									}
-									cout << endl << "\t..Ingrese el descuento a aplicar" << endl;
-									cin >> descuento;
-									if(!checkNum()){
-										break;
+									if(!s->check_mesa_menu(id)){
+										cout << endl << "\t..Ingrese el descuento a aplicar" << endl;
+										cin >> descuento;
+										if(!checkNum()){
+											break;
+										}
 									}
+									
 									DtFactura * df = s->emitirFactura(id,descuento);
+									
 									if(df!=NULL){
 										cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
 											cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl;
@@ -911,10 +1015,46 @@ main(){
 						system("cls");
 						opc = menuRepartidor();
 						switch(opc){
-							case 1:
-								cout <<"Modificar estado pedido no implementada" <<endl;
-								Sleep (2000);
-								break;
+							case 1:{
+								try{
+							
+									cout << endl <<"### MODIFICAR ESTADO DEL PEDIDO ###" <<endl;
+									cout << endl << "\t..Ingresar el id del repartidor:" << endl;
+									int rep;
+									cin >>rep;
+									ICollection * pedidos = s->getPedidos(rep);
+									IIterator * it = pedidos->getIterator();
+									if(!it->hasCurrent()){
+										cout << "### EL REPARTIDOR NO TIENE ENTREGAS PENDIENTES ###" << endl;
+										system("PAUSE");
+										break;
+									}
+									cout << endl << "\t..Seleccione el pedido a modificar:" << endl;
+									
+									
+									while(it->hasCurrent()){
+										DtVenta * dv = (DtVenta *) it->getCurrent();
+										ICollection * prods = dv->getProductos();
+										cout << endl << "Venta #" << dv->getCodigo() << endl;
+										DtFecha * df = dv->getFecha();
+										cout << "Fecha: " << df->getAnio() <<"-"<< df->getMes()<<"-" << df->getDia() << endl;
+										cout << "Estado: " << dv->getEstado() << endl;
+										it->next();
+									}
+									cin >> id;
+									cout << "\t..Que cambio quiere hacer?(1 o 2)" << endl;
+									cout << "\t..1- Confirmar ENTREGADA " << endl;
+									cout << "\t..2- Confirmar EN CAMINO " << endl;
+									cin >> opc;
+									s->cambiarEstado(id,opc,rep);
+									cout << "### SE HA ACTUALIZADO EL ESTADO ###" << endl;
+									system("PAUSE");
+									break;
+								}catch(char const * msg){
+									cout << msg << endl;
+									system("PAUSE");
+								}
+							}
 							case 2:
 								back=true;
 								break;
@@ -930,10 +1070,54 @@ main(){
 						system("cls");
 						opc = menuCliente();
 						switch(opc){
-							case 1:
-								cout <<"Consultar actualizaciones de pedidos a domicilio no implementada" <<endl;
-								Sleep (2000);
+							case 1:{
+			
+								cout <<"### CONSULTAR ACTUALIZACIONES DE PEDIDOS A DOMICILIO DE UN CLIENTE ###" <<endl << endl;
+								cout << "\t..Ingrese el telefono del cliente a mostrar" << endl; 
+								cin >> id;
+								if(!checkNum){
+									break;
+								}
+								ICollection * pedidos = s->getPedidosCliente(id);
+								IIterator * it = pedidos->getIterator();
+								if(!it->hasCurrent()){
+									cout << "### EL CLIENTE NO HA HECHO PEDIDOS ###" << endl;
+									system("PAUSE");
+									break;
+								}
+								while(it->hasCurrent()){
+									DtVenta * dv = (DtVenta *) it->getCurrent();
+									ICollection * prods = dv->getProductos();
+									cout << endl << "Venta #" << dv->getCodigo() << endl;
+									DtFecha * df = dv->getFecha();
+									cout << "Fecha: " << df->getAnio() <<"-"<< df->getMes()<<"-" << df->getDia() << endl;
+									cout << "Estado: " << dv->getEstado() << endl << endl;
+									IIterator * itp = prods->getIterator();
+									if(!it->hasCurrent()){
+										cout << "### LA VENTA NO TIENE PRODUCTOS ###" << endl;
+									}
+									
+									else{	
+										while(itp->hasCurrent()){
+										DtProducto * dp = (DtProducto *) itp->getCurrent();
+										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+										cout << "\t ..Precio: " << dp->getPrecio() << endl;
+										cout << endl << endl;	
+										itp->next();
+									}
+											
+									}
+									it->next();
+								}
+								
+								system("PAUSE");
 								break;
+								
+								
+								
+							}
+								
 							case 2:
 								back=true;
 								break;
@@ -950,135 +1134,199 @@ main(){
 					break;
 				
 				case 6:{
-					do{
-						system("cls");
-						opc = menuConsultas();
-						switch(opc){
-							case 1:{
-								ICollection * facturas = s->getFacturas();
-								IIterator * it = facturas->getIterator();
-								while(it->hasCurrent()){
-									DtFactura * df =(DtFactura *) it->getCurrent();
-									string tipo;
-									DtEmpleado * e =df->getTrabajador();
-									DtMozo * dm = dynamic_cast<DtMozo*>(e);
-									if(dm==NULL){
-										tipo="Repartidor";
-									} 
-									else{
-										tipo="Mozo";
-									}
-									cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl;
-									cout << "Subtotal: " << df->getSubtotal() << endl;
-									cout << "Descuento: "<< df->getDescuento()<< endl;
-									cout << "Monto total: " << df->getMonto()<< endl;
-									cout << "Monto total(IVA): " << df->gettotal_iva() << endl << endl;
-									DtFecha * dtf = df->getFecha();
-									cout << "Fecha: " << dtf->getAnio() << "-" << dtf->getMes() << "-" << dtf->getDia() << endl << endl; 
-									DtEmpleado * de = df->getTrabajador();
-									cout << "Empleado: " << de->getNombre() <<"  ("<<tipo <<") " <<endl << endl;
-									cout << "\t --Productos--" << endl << endl;
-									ICollection * prod = df->getProductos();
-									IIterator * it_p = prod->getIterator();
-									while(it_p->hasCurrent()){
-										DtProducto * dp = (DtProducto *) it_p->getCurrent();
-										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-										cout << "\t ..Precio: " << dp->getPrecio() << endl;
-										cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
-										cout << endl << endl;
-										it_p->next();
-									}
-									it->next();
-								}
-								system("PAUSE");
-								break;
-							}
-														
-							case 2:{
-								cout << "### EMPLEADOS ###" << endl << endl;
-								ICollection * emp = s->getEmpleados();
-								IIterator * it = emp->getIterator();
-								while(it->hasCurrent()){
-									DtEmpleado * e = (DtEmpleado *) it->getCurrent();
-									cout << "\t..Codigo: " << e->getId() << endl;
-									cout << "\t..Nombre: " << e->getNombre() << endl;
-									cout << "\t..Tipo: ";
-									
-									DtRepartidor * r1 = dynamic_cast<DtRepartidor*>(e);
-									if(r1==NULL){
-										cout << "Mozo" << endl;
-									}
-									else{
-										cout << "Repartidor" << endl;
-										cout << "\t..Medio de transporte: " << r1->getMedio() << endl;
-									}
-									cout << endl << endl;
-									it->next();
-								}
-								system("Pause");
-								break;
-							}
-								
-							case 3:{
-								break;
-							}
-								
-							case 4:{
-								cout << "### Productos ###" << endl << endl;
-								ICollection * prod = s->mostrarProductos();
-								if(prod==NULL){
-									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
-									Sleep(2000);
-									break;
-								}
-								IIterator * it_p = prod->getIterator();
-								while(it_p->hasCurrent()){
-									DtProducto * dp = (DtProducto *) it_p->getCurrent();
-									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-									cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-									cout << "\t ..Precio: " << dp->getPrecio() << endl;
-									cout << endl << endl;	
-									it_p->next();
-								}
-								system("PAUSE");
-								break;
-							}
-							
-							
-							case 5:{
-								cout << endl <<  "### Clientes ###" << endl;
-								ICollection * clientes = s->mostrarClientes();
-								IIterator * it = clientes->getIterator();
-								while(it->hasCurrent()){
-									DtCliente * dc = (DtCliente *) it->getCurrent();
-									cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
-									cout << "\t..Nombre: " << dc->getNombre() << endl;
-									DtDireccion * dd = dc->getDireccion();
-									cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
-									cout << "          -------------------------" << endl;
-									it->next();
-									
-								}
-								system("PAUSE");
-								break;
-							}
-							
-							case 6:{
-								back=true;
-								break;
-							}
-							
-							default:{
-								cout << "Opcion incorrecta" << endl;
-								Sleep (2000);
+					
+						do{
+							try{
 								system("cls");
-								break;
-							}
-							
-						}		
-					}while((opc<7 || opc>0) && !back);
-					break;
+								opc = menuConsultas();
+								switch(opc){
+									case 1:{
+										ICollection * facturas = s->getFacturas();
+										IIterator * it = facturas->getIterator();
+										while(it->hasCurrent()){
+											DtFactura * df =(DtFactura *) it->getCurrent();
+											string tipo;
+											DtEmpleado * e =df->getTrabajador();
+											DtMozo * dm = dynamic_cast<DtMozo*>(e);
+											if(dm==NULL){
+												tipo="Repartidor";
+											} 
+											else{
+												tipo="Mozo";
+											}
+											cout << endl << "##Factura " << df->getCodigo() << " ##" << endl << endl;
+											cout << "Subtotal: " << df->getSubtotal() << endl;
+											cout << "Descuento: "<< df->getDescuento()<< endl;
+											cout << "Monto total: " << df->getMonto()<< endl;
+											cout << "Monto total(IVA): " << df->gettotal_iva() << endl << endl;
+											DtFecha * dtf = df->getFecha();
+											cout << "Fecha: " << dtf->getAnio() << "-" << dtf->getMes() << "-" << dtf->getDia() << endl << endl; 
+											DtEmpleado * de = df->getTrabajador();
+											cout << "Empleado: " << de->getNombre() <<"  ("<<tipo <<") " <<endl << endl;
+											cout << "\t --Productos--" << endl << endl;
+											ICollection * prod = df->getProductos();
+											IIterator * it_p = prod->getIterator();
+											while(it_p->hasCurrent()){
+												DtProducto * dp = (DtProducto *) it_p->getCurrent();
+												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
+												cout << endl << endl;
+												it_p->next();
+											}
+											it->next();
+										}
+										system("PAUSE");
+										break;
+									}
+																
+									case 2:{
+										cout << "### EMPLEADOS ###" << endl << endl;
+										ICollection * emp = s->getEmpleados();
+										IIterator * it = emp->getIterator();
+										while(it->hasCurrent()){
+											DtEmpleado * e = (DtEmpleado *) it->getCurrent();
+											cout << "\t..Codigo: " << e->getId() << endl;
+											cout << "\t..Nombre: " << e->getNombre() << endl;
+											cout << "\t..Tipo: ";
+											
+											DtRepartidor * r1 = dynamic_cast<DtRepartidor*>(e);
+											if(r1==NULL){
+												cout << "Mozo" << endl;
+												DtMozo * m1 = dynamic_cast<DtMozo*>(e);
+												ICollection * mesas = m1->getMesas();
+												IIterator * it_mesas = mesas->getIterator();
+												if(it_mesas->hasCurrent()==false){
+													cout << endl << "\t### EL MOZO NO TIENE MESAS ASIGNADAS ###" << endl << endl;
+													
+												}
+												else{
+													cout << "\t### MESAS ASIGNADAS ###" << endl << endl;
+													while(it_mesas->hasCurrent()){
+														DtMesa * dtm = (DtMesa*)it_mesas->getCurrent();
+														cout << "\t\tMesa #" << dtm->getId() << endl;
+														it_mesas->next();
+													}
+													delete it_mesas; 
+												}
+												
+											}
+											else{
+												cout << "Repartidor" << endl;
+												cout << "\t..Medio de transporte: " << r1->getMedio() << endl;
+											}
+											cout << endl << endl;
+											it->next();
+										}
+										system("Pause");
+										break;
+									}
+										
+									case 3:{
+										cout << "### MESAS ###" << endl << endl;
+										ICollection * mesas = s->getMesas();
+										IIterator * it = mesas->getIterator();
+										if(!it->hasCurrent()){
+											cout << "### NO EXISTEN MESAS EN EL SISTEMAS ###" << endl;
+											break;
+										}
+										while(it->hasCurrent()){
+											DtMesa* m = (DtMesa *)it->getCurrent();
+											cout << "Mesa #" << m->getId() << endl;
+											it->next();
+										}
+										system("PAUSE");
+										break;
+									}
+										
+									case 4:{
+										cout << "### Productos ###" << endl << endl;
+										ICollection * prod = s->mostrarProductos();
+										if(prod==NULL){
+											cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+											Sleep(2000);
+											break;
+										}
+										IIterator * it_p = prod->getIterator();
+										while(it_p->hasCurrent()){
+											DtProducto * dp = (DtProducto *) it_p->getCurrent();
+											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+											cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+											cout << "\t ..Precio: " << dp->getPrecio() << endl;
+											cout << endl << endl;	
+											it_p->next();
+										}
+										system("PAUSE");
+										break;
+									}
+									
+									
+									case 5:{
+										cout << endl <<  "### Clientes ###" << endl;
+										ICollection * clientes = s->mostrarClientes();
+										IIterator * it = clientes->getIterator();
+										while(it->hasCurrent()){
+											DtCliente * dc = (DtCliente *) it->getCurrent();
+											cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
+											cout << "\t..Nombre: " << dc->getNombre() << endl;
+											DtDireccion * dd = dc->getDireccion();
+											cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+											cout << "          -------------------------" << endl;
+											it->next();
+											
+										}
+										system("PAUSE");
+										break;
+									}
+									
+									case 6:{
+										cout << endl << "### VENTAS ###" << endl;
+										ICollection * ventas = s->getVentas();
+										IIterator * it = ventas->getIterator();
+										while(it->hasCurrent()){
+											DtVenta * dv = (DtVenta*) it->getCurrent();
+											ICollection * prods = dv->getProductos();
+											cout << endl << "Venta #" << dv->getCodigo() << endl;
+											DtFecha * df = dv->getFecha();
+											cout << "Fecha: " << df->getAnio() <<"-"<< df->getMes()<<"-" << df->getDia() << endl;
+											cout << "Estado: " << dv->getEstado() << endl << endl;
+											IIterator * itp = prods->getIterator();
+											while(itp->hasCurrent()){
+												DtProducto * dp = (DtProducto *) itp->getCurrent();
+												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << endl << endl;	
+												itp->next();
+											}
+											
+											it->next();
+										}
+										system("PAUSE");
+										break;
+									}
+									
+									case 7:{
+										back=true;
+										break;
+									}
+									
+									default:{
+										cout << "Opcion incorrecta" << endl;
+										Sleep (2000);
+										system("cls");
+										break;
+									}
+									
+								}
+							}catch(char const * msg){
+								cout << msg << endl;
+								system("PAUSE");
+							}		
+						}while((opc<8 || opc>0) && !back);
+						break;
+				
 				}
 				
 				
@@ -1112,6 +1360,9 @@ int menu(){
 	cout << "7. Salir" << endl << endl;
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
+	if(!checkNum()){
+		return 0;
+	}
 	return opc;
 }
 
@@ -1177,7 +1428,8 @@ int menuConsultas(){
 	cout << "3. Consultar mesas" << endl;
 	cout << "4. Consultar productos" << endl;
 	cout << "5. Consultar cliente" << endl;
-	cout << "6. Volver a menu anterior" << endl;
+	cout << "6. Consultar ventas" << endl;
+	cout << "7. Volver a menu anterior" << endl;
 	cin >> opc;
 	return opc;
 	

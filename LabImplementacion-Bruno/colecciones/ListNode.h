@@ -20,6 +20,7 @@ public:
     // métodos de acceso para next
     ListNode * getNext() const;
     void setNext(ListNode *next);
+    ~ListNode();
     
 private:
     ICollectible *elem;

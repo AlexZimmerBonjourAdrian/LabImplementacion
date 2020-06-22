@@ -11,7 +11,9 @@
 #include "./clases/Menu.cpp"
 #include "./clases/Repartidor.cpp"
 #include "./clases/Cliente.cpp"
+#include "./Datatypes/DtMesa.cpp"
 #include "./Datatypes/DtCliente.cpp"
+#include "./Datatypes/DtVenta.cpp"
 #include "./Datatypes/DtRepartidor.cpp"
 struct nodolista{
     int info;
@@ -89,7 +91,7 @@ class Sistema {
 		//Caso de uso Facturacion de una venta
 		
 		DtFactura * emitirFactura(int, float);
-		
+		bool check_mesa_menu(int);
 		//Caso de uso Alta Producto
 		
 		bool check_prod_sistema(int);
@@ -112,8 +114,9 @@ class Sistema {
 		
 		//Caso de uso Alta empleado
 
-		void ingresarRepartidor(string,string);
-		void ingresarMozo(string);
+		int ingresarRepartidor(string,string);
+		int ingresarMozo(string);
+		ICollection * mostrarMozos();
 		
 		//Informacion de un producto
 		DtProducto * mostrarProducto(int);  
@@ -127,13 +130,17 @@ class Sistema {
 		int cantMozos();
 		bool mesaAsignada(Mesa*);
 		Mozo * mozoVago();
+		ICollection * getMesas();
 		
+		ICollection * getTodosPedidos(int);
+		
+		ICollection * getVentas();
 		//Caso de uso Alta cliente
 		
 		void crearCliente(string,int,string,int);
 		
 		//Utilidades
-		
+		ICollection * getPedidosCliente(int);
 		bool ventaFacturada(int);
 		ICollection * mostrarClientes();
 		
@@ -153,6 +160,7 @@ class Sistema {
 		DtFactura * crearVdomicilio(int repartidor,int telefono);
 		void ingresarProducto(int, int);
 		Repartidor * check_repartidor();
-		
+		ICollection * getPedidos(int);
+		void cambiarEstado(int,int,int);
 		
 };

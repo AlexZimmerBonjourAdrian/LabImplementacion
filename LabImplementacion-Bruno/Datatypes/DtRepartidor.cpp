@@ -22,7 +22,7 @@ ICollection * DtRepartidor::getVentas(){
 }
 
 DtRepartidor::~DtRepartidor(){
-	
+	delete this->ventas;
 }
 
 #endif

@@ -6,7 +6,7 @@
 
 class Factura : public ICollectible{
 	
-	private:
+	protected:
 		int codigo;
 		DtFecha * fecha;
 		ICollection * productos;
@@ -15,6 +15,8 @@ class Factura : public ICollectible{
 		float montototal;
 		float montototal_iva;
 		Venta * venta;
+		
+	
 		
 	public:
 		Factura(Venta *, int);

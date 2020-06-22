@@ -21,6 +21,7 @@ class DtFactura : public ICollectible{
 	    float descuento;
 	    float montototal;
 	    float total_iva;
+	
 	    
 	public:
 		DtFactura(int, DtFecha *, ICollection * ,DtEmpleado*, float, float,float,float);
