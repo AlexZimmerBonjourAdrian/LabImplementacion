@@ -15,6 +15,7 @@
 #include "./Datatypes/DtCliente.cpp"
 #include "./Datatypes/DtVenta.cpp"
 #include "./Datatypes/DtRepartidor.cpp"
+
 struct nodolista{
     int info;
     struct nodolista*sig;

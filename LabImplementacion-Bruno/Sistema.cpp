@@ -394,7 +394,6 @@ void Sistema::agregarMenu(int codigo, string descripcion){
 	Menu * m = new Menu(codigo,descripcion,0);
 	float total=0;
 	while(nodo!=NULL && nodo->sig!=NULL){
-		
 		int cod = nodo->info;
 		IKey * k = new IntKey(cod);
 		Producto * p = (Producto*)this->productos->find(k);
@@ -411,12 +410,12 @@ void Sistema::agregarMenu(int codigo, string descripcion){
 		total = total + (c->getPrecio()*nodo->info);
 		m->agregarProd(c,nodo->info);
 		nodo=nodo->sig;
-		delete k;
 	}
 	total = total - ((total*10)/100);
 	m->setPrecio(total);
-	IKey * k2 = new IntKey(codigo);
+	IKey * k2 = new IntKey(codigo);	
 	this->productos->add(k2,m);
+
 	
 }
 
