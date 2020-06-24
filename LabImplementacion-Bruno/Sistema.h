@@ -76,7 +76,7 @@ class Sistema {
 	public:
 		//Instancia
 		
-		void cargarDatos();
+		void cargarDatos(string);
 		static Sistema * getInstance();
 		
 		//Informacion
@@ -94,6 +94,7 @@ class Sistema {
 		ICollection * getPedidosCliente(int);
 		ICollection * getFacturasFecha(DtFecha*);
 		ICollection * mostrarRepartidores();
+		ICollection * mesasconVenta();
 		
 		//Verificaciones
 		
@@ -136,6 +137,7 @@ class Sistema {
 		void ingresarMesa(int);
 		void agregarProductoVenta(int,int);
 		void modificarCantidad(int,int,string);
+		
 		
 		//Caso de uso Alta empleado
 

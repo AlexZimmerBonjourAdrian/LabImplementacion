@@ -22,6 +22,23 @@ void gotoxy(int x, int y) //implementación de la función gotoxy
 }
 
 
+void SetColor(int ForgC){
+    WORD wColor;
+
+     HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+     CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+                          //We use csbi for the wAttributes word.
+    if(GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    {
+                    //Mask out all but the background attribute, and add in the forgournd color
+         wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+         SetConsoleTextAttribute(hStdOut, wColor);
+    }
+    return;
+}
+
+
 int menu();
 int menuMozo();
 int menuAdministrador();
@@ -31,7 +48,9 @@ int menuConsultas();
 
 bool checkNum(){
 	if(!cin.good()){
+		SetColor(12);
 		cout << endl << "### EL VALOR SOLO PUEDE SER NUMERICO ###" << endl;
+		SetColor(15);
 		system("PAUSE");
 		cin.clear();
 		fflush(stdin);
@@ -64,9 +83,11 @@ main(){
 						
 						system("cls");
 						if(cargar==false){
+							SetColor(12);
 							cout << "### ADVERTENCIA ###" << endl;
-							cout << "\t..Si agrega datos antes de cargar los datos de prueba se pueden" << endl;
-							cout << "\t  producir errores en la consistencia de los datos" << endl;
+							SetColor(15);
+							cout << endl << "Si agrega datos antes de cargar los datos de prueba se pueden" << endl;
+							cout << "producir errores en la consistencia de los datos" << endl;
 							cout << endl << "\t Desea continuar?(si o no)" << endl;
 							cin >> s1;
 							if(s1=="si"||s1=="SI" || s1=="Si"){
@@ -84,13 +105,28 @@ main(){
 						switch(opc){
 							case 1:{
 								system("cls");
+								
+								
 								cout << endl << "### ALTA PRODUCTO ###" << endl << endl;
 								bool ck=false;
 								cout << endl << "\t..DESEA AGREGAR UN PRODUCTO COMUN O UN MENU?(comun/menu)" << endl;
 								string opcion;
 								cin >> opcion;
 								if(opcion!="menu" && opcion!="comun"){
+									SetColor(12);
 									cout << "### OPCION INCORRECTA ###" << endl;
+									SetColor(15);
+									system("PAUSE");
+									break;
+								}
+								ICollection * p = s->mostrarProductos();
+								IIterator * it = p->getIterator();
+								if(!it->hasCurrent() && opcion=="menu"){
+									SetColor(12);
+									cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+									SetColor(15);
+									delete p,it;
+									Sleep(2000);
 									break;
 								}
 								do{
@@ -103,13 +139,17 @@ main(){
 										continue;
 									}
 									if(agregar==0){
+										SetColor(12);
 										cout << "### EL CODIGO NO PUEDE SER 0 ###" <<  endl;
+										SetColor(15);
 										system("PAUSE");
 										system("cls");
 										continue;
 									}
 									if(s->check_prod_sistema(agregar)){
-										cout << endl << endl << "\t..Ya existe un producto con ese codigo" << endl;
+										SetColor(12);
+										cout << endl << endl << "### YA EXISTE UN PRODUCTO CON ESE CODIGO ###" << endl;
+										SetColor(15);
 										system("PAUSE");
 										system("cls");
 										continue;
@@ -135,31 +175,32 @@ main(){
 											continue;
 										}
 										if(precio<=0){
+											SetColor(12);
 											cout << endl <<"### EL PRECIO DEBE SER MAYOR QUE 0 ###" << endl;
+											SetColor(15);
 										}
 									}while(precio<=0);
 									cout << endl << endl << "\t..Desea confirmar el alta?(si o no)";
 									cin >> opc1;
 									if(opc1=="si"){
 										s->agregarProducto(agregar,s1,precio);
+										SetColor(10);
 										cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
+										SetColor(15);
 									
 										s->liberarMemoria();
 									}
 									else{
+										SetColor(12);
+										cout << "### NO SE CREO EL PRODUCTO ###" << endl;
+										SetColor(15);
 										s->liberarMemoria();
 									}
 									
 								}
 								else{
 									if(opcion=="menu" || opcion=="MENU" || opcion=="Menu"){
-										ICollection * p = s->mostrarProductos();
-										IIterator * it = p->getIterator();
-										if(!it->hasCurrent()){
-											cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
-											Sleep(2000);
-											break;
-										}
+									
 									
 										system("cls");
 										cout << "### PRODUCTOS ###" << endl<< endl;
@@ -189,7 +230,9 @@ main(){
 											}
 											if(cod!=0)check=s->check_prod_sistema(cod);
 											if(cod!=0 && !(check)){
-												cout << endl << endl << "\t..No existe un producto con ese codigo" << endl;
+												SetColor(12);
+												cout << endl << endl << "### NO EXISTE PRODUCTO CON ESE CODIGO ###" << endl;
+												SetColor(15);
 												break;
 											}
 											if(cod!=0){
@@ -203,7 +246,9 @@ main(){
 														continue;
 													}
 													if(cant<=0){
+														SetColor(12);
 														cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###" << endl;
+														SetColor(15);
 													}
 												}while(cant<=0);
 											
@@ -217,10 +262,14 @@ main(){
 											cin >> opc1;
 											if(opc1=="si"){
 												s->agregarMenu(agregar,s1);
+												SetColor(10);
 												cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
+												SetColor(15);
 											}
 											else{
+												SetColor(12);
 												cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl;
+												SetColor(15);
 												system("PAUSE"); 
 											}
 											s->liberarMemoria();
@@ -228,7 +277,9 @@ main(){
 											
 										}
 										else{
+											SetColor(12);
 											cout << "### OPCION INCORRECTA ###" << endl;
+											SetColor(15);
 											system("PAUSE");
 											s->liberarMemoria();
 											break;
@@ -243,21 +294,28 @@ main(){
 							case 2:{
 								
 								ICollection * p = s->mostrarProductos();
-								if(p==NULL){
+								IIterator * it = p->getIterator();
+								if(!it->hasCurrent()){
+									SetColor(12);
 									cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
-									Sleep(2000);
+									SetColor(15);
+									delete it,p;
+									system("PAUSE");
 									break;
 								}
+								system("cls");
 								cout <<"### BAJA PRODUCTO ###" <<endl;
 								
 									
 								
 								cout << endl << "\t..Seleccione el producto a eliminar de la lista" << endl << endl ;
-								IIterator * it = p->getIterator();
+								
 								
 								while(it->hasCurrent()){
 									DtProducto * dp = (DtProducto *) it->getCurrent();
-									cout  << "\tProducto # "<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+									cout <<endl << endl <<"\t ..Codigo: " << dp->getCodigo() << endl;
+									cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+									cout << "\t ..Precio: " << dp->getPrecio() << endl;
 									delete dp;
 									it->next();
 								
@@ -271,7 +329,9 @@ main(){
 								bool check;
 								check=s->check_prod_sistema(idprod);
 								if(!check){
+									SetColor(12);
 									cout << "### NO EXISTE UN PRODUCTO CON ESE CODIGO ###" << endl;
+									SetColor(15);
 									system("PAUSE");
 									break;
 								}
@@ -283,26 +343,36 @@ main(){
 								if(opc==1){
 									s->eliminarProducto(idprod);
 									s->liberarMemoria();
+									SetColor(10);
 									cout << endl << "### SE HA ELIMINADO EL PRODUCTO ###" << endl;
+									SetColor(15);
 								}
 								else{
 									s->liberarMemoria();
+									SetColor(12);
 									cout << endl << "### NO SE HA ELIMINADO EL PRODUCTO ###" << endl;
+									SetColor(15);
 								}
 								system("PAUSE");
 								break;
 							}
 							case 3:{
-						
-								cout << endl << "### INFORMACION DE UN PRODUCTO ###" <<endl << endl;
+							
+							
 								ICollection * prod = s->mostrarProductos();
-								if(prod==NULL){
+								IIterator * it_p = prod->getIterator();
+								if(!it_p->hasCurrent()){
+									SetColor(12);
 									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+									SetColor(15);
+									delete it_p,prod;
 									Sleep(2000);
 									break;
 								}
+								cout << endl << "### INFORMACION DE UN PRODUCTO ###" <<endl << endl;
 								
-								IIterator * it_p = prod->getIterator();
+								
+								
 								while(it_p->hasCurrent()){
 									DtProducto * dp = (DtProducto *) it_p->getCurrent();
 									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
@@ -326,7 +396,9 @@ main(){
 									}
 									ch=s->check_prod_sistema(cod);
 									if(ch==false){
+										SetColor(12);
 										cout << endl << endl << "###  CODIGO INCORRECTO ###" << endl;
+										SetColor(15);
 										cout << endl << "\tIngrese el codigo del producto nuevamente (Si desea cancelar ingrese 0) ";
 									}
 									
@@ -361,6 +433,7 @@ main(){
 								break;
 							}
 							case 4:{
+								system("cls");
 								cout << endl << "### INGRESAR EMPLEADO ###" << endl << endl << "\t..Ingrese el nombre: " ;
 								string nombre;
 								fflush(stdin);
@@ -369,7 +442,9 @@ main(){
 								cout << "\t..El empleado es repartidor?(si/no)" << endl << endl;
 								cin >> opc1;
 								if(opc1 != "si" && opc1!="SI" && opc1!="NO" && opc1!="no"){
+									SetColor(12);
 									cout << "### OPCION INCORRECTA ###" << endl;
+									SetColor(15);
 									break;
 								}
 								if(opc1=="si"){
@@ -395,27 +470,32 @@ main(){
 												mt="Moto";
 												break;
 											default:
+												SetColor(12);
 												cout << "### OPCION INCORRECTA ###" << endl;
+												SetColor(15);
 												m=false;
 												break;
 												
 										}
 										if(m){
 											int mo= s->ingresarRepartidor(nombre,mt);
-											cout << "###EL EMPLEADO HA SIDO DADO DE ALTA CON EL IDENTIFICADOR: "<<mo<< " ###" << endl; 
+											SetColor(10);
+											cout << "###EL EMPLEADO HA SIDO DADO DE ALTA CON EL IDENTIFICADOR: "<<mo<< " ###" << endl;
+											SetColor(15); 
 										}
 								}
 								else{
 									int re=s->ingresarMozo(nombre);
+									SetColor(10);
 									cout << "###EL EMPLEADO HA SIDO DADO DE ALTA CON EL IDENTIFICADOR: "<<re<< " ###" << endl; 
+									SetColor(15);
 								}
 	
 								Sleep (2000);
 								break;
-							}
-							
+							}							
 							case 5:{
-							
+								system("cls");
 								cout <<"### ALTA CLIENTE ###" <<endl << endl;
 								cout << "\t..Ingrese el nombre: ";
 								string nombre;
@@ -425,7 +505,9 @@ main(){
 								long int telefono;
 								cin >> telefono;
 								if(s->check_cliente(telefono)){
+									SetColor(12);
 									cout << "### YA EXISTE UN CLIENTE CON ESE NUMERO ###" << endl;
+									SetColor(15);
 									system("PAUSE");
 									break;
 								}
@@ -439,14 +521,20 @@ main(){
 								if(!checkNum()){
 									break;
 								}
-								cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
-								cin >> opc;
-								if(opc==1){
+								cout << endl << endl << "\t..Desea confirmar el alta?(si o no)" << endl;
+								cin >> s1;
+								if(s1=="Si" || s1=="si" || s1=="SI"){
 									s->crearCliente(nombre,telefono,calle,nro);
+									SetColor(10);
+									cout << endl << "### SE CREO EL CLIENTE ###" << endl;
+									SetColor(15);
+									Sleep(2000);
 									
 								}
 								else{
+									SetColor(12);
 									cout << endl << "### NO SE CREO EL CLIENTE ###" << endl;
+									SetColor(15);
 									Sleep (2000);
 								}
 								
@@ -500,13 +588,52 @@ main(){
 							}
 							case 7:{
 								s->liberarMemoria();
+								system("cls");
+								ICollection * p = s->mostrarProductos();
+								IIterator * itp = p->getIterator();
+								if(!itp->hasCurrent()){
+									SetColor(12);
+									cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###" << endl;
+									SetColor(15);
+									system("PAUSE");
+									break;
+									
+								}
+								
+								ICollection * clientes = s->mostrarClientes();
+								IIterator * itc = clientes->getIterator();
+								if(!itc->hasCurrent()){
+									SetColor(12);
+									cout << "### NO HAY CLIENTES EN EL SISTEMA ###" << endl;
+									SetColor(15);
+									system("PAUSE");
+									delete itc, clientes;
+									break;
+								}
+								
 								cout <<"### VENTA A DOMICILIO ###" <<endl;
+								
+							
+								cout << endl <<  "### Clientes ###" << endl;
+								
+								while(itc->hasCurrent()){
+									DtCliente * dc = (DtCliente *) itc->getCurrent();
+									cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
+									cout << "\t..Nombre: " << dc->getNombre() << endl;
+									DtDireccion * dd = dc->getDireccion();
+									cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+									cout << "          -------------------------" << endl;
+									itc->next();
+									
+								}
+								
+								
+								
 								cout << endl << "\t..Ingresar telefono del cliente: ";
 								int telefono=0;
 								cin >> telefono;
 								if(!checkNum()){
-									cout << "### EL VALOR DEBE SER NUMERICO ###" << endl;
-									system("PAUSE");
+									
 									break;
 								}
 								bool ck = s->check_cliente(telefono);
@@ -514,7 +641,9 @@ main(){
 									cout << endl << "\t.. El cliente ingresado no existe. Desea agregarlo? " << endl;
 									cin>>s1;
 									if(s1!="si" && s1!="no"){
+										SetColor(12);
 										cout << "### OPCION INCORRECTA ###" << endl;
+										SetColor(15);
 										break;
 									}
 									if(s1=="si"){
@@ -536,31 +665,30 @@ main(){
 										cin >> opc;
 										if(opc==1){
 											s->crearCliente(nombre,telefono,calle,nro);
+											SetColor(10);
 											cout << endl << "### SE CREO EL CLIENTE ###" << endl;
+											SetColor(15);
 											Sleep (2000);
 										}
 										else{
+											SetColor(12);
 											cout << endl << "### NO SE CREO EL CLIENTE ###" << endl;
+											SetColor(15);
 											Sleep (2000);
 											break;
 										}
 									}
 									else{
+										SetColor(12);
 										cout << "### NO SE AGREGO EL CLIENTE ###" << endl;
+										SetColor(15);
 										system("PAUSE");
 										break;
 									}
 								}
 								
-								ICollection * p = s->mostrarProductos();
-								if(p==NULL){
-									cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###" << endl;
-									system("PAUSE");
-									break;
-									
-								}
+								system("cls");
 								cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
-								IIterator * itp = p->getIterator(); 
 								while(itp->hasCurrent()){
 									DtProducto * dp = (DtProducto *) itp->getCurrent();
 									cout << "\t ..Codigo: " << dp->getCodigo() << endl;
@@ -590,7 +718,9 @@ main(){
 											break;
 										}	
 										if(cant<=0){
+											SetColor(12);
 											cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###" << endl;
+											SetColor(15);
 											cout << "\t..Ingrese la cantidad:" << endl;
 										}
 									}while(cant<=0);
@@ -604,7 +734,9 @@ main(){
 									
 									}
 									else{
+										SetColor(12);
 										cout << "### PRODUCTO NO AGREGADO ###" << endl;	
+										SetColor(15);
 									}
 									cout << "\t..Ingrese el  producto(Ingrese 0 para terminar)" << endl;
 									cin >> id;
@@ -618,7 +750,9 @@ main(){
 								
 								IIterator * it = emp->getIterator();
 								if(!it->hasCurrent()){
+									SetColor(12);
 									cout << "### NO HAY REPARTIDORES EN EL SISTEMA ###" << endl;
+									SetColor(15);
 									s->liberarMemoria();
 									break;
 								}
@@ -678,11 +812,15 @@ main(){
 								}
 								else{
 									if(s1=="NO" || s1=="No" || s1=="no"){
+										SetColor(12);
 										cout << "### NO SE CREO LA VENTA ###" << endl;
+										SetColor(15);
 										correct=true;
 									}
 									else{
+										SetColor(12);
 										cout <<  "### OPCION INCORRECTA ###" << endl;
+										SetColor(15);
 									}
 								}
 								
@@ -697,7 +835,7 @@ main(){
 								break;
 							}
 							case 8:{
-								
+								system("cls");
 								cout << "### CONSULTAR PEDIDOS DE UN REPARTIDOR ###" << endl;
 								cout << endl << "\t..Ingresar el id del repartidor:" << endl;
 								int rep;
@@ -705,7 +843,10 @@ main(){
 								ICollection * pedidos = s->getTodosPedidos(rep);
 								IIterator * it = pedidos->getIterator();
 								if(!it->hasCurrent()){
+									SetColor(12);
 									cout << "### EL REPARTIDOR NO TIENE ENTREGAS PENDIENTES ###" << endl;
+									SetColor(15);	
+									delete it,pedidos;
 									system("PAUSE");
 									break;
 								}
@@ -733,16 +874,19 @@ main(){
 										break;
 									}
 									s->agregarMesa(id);
-									cout << endl << "### Mesa creada ###" << endl;
+									SetColor(10);
+									cout << endl << "### MESA CREADA ###" << endl;
+									SetColor(15);
 									Sleep(2000);
 									break;
 								}catch(char const * msg){
+										SetColor(12);
 										cout << msg << endl;
+										SetColor(15);
 								}
 								system("PAUSE");
 								break;
-							}	
-							
+							}								
 							case 10:{
 								
 									cout << endl << "### Agregar mesa a un mozo ###" << endl;
@@ -757,17 +901,20 @@ main(){
 										break;
 									}
 									s->agregarMesaMozo(descuento,id);
+									SetColor(10);
 									cout << endl << "### LA MESA SE A AGREGADO AL MOZO ###" << endl;
+									SetColor(15);
 									s->liberarMemoria();
 									system("PAUSE");
 									break;	
 								
 								
-							}
-							
+							}							
 							case 11:{
 								s->asignarMesasAutomatico();
+								SetColor(10);
 								cout << "### LAS MESAS HAN SIDO ASIGNADAS ###" << endl;
+								SetColor(15);
 								system("PAUSE");
 								break;
 							}
@@ -776,13 +923,17 @@ main(){
 								back=true;
 								break;
 							default:
-								cout << "Opcion incorrecta" << endl;
+								SetColor(12);
+								cout << "### OPCION INCORRECTA ###" << endl;
+								SetColor(15);
 								Sleep (2000);
 								system("cls");
 						}	
 						
 					}catch(char const * msg){
-						cout << msg << endl;
+						SetColor(12);
+						cout << msg  << endl;
+						SetColor(15);
 						system("PAUSE");
 					}	
 				}while((opc<13 || opc>0) && !back);
@@ -795,15 +946,19 @@ main(){
 							opc = menuMozo();
 							switch(opc){
 								case 1:{
-									cout << endl << "###INICIAR VENTA EN MESA###" << endl << endl;
-									
 									ICollection * mozos = s->mostrarMozos();
 									IIterator * it = mozos->getIterator();
 									if(!it->hasCurrent()){
+										SetColor(12);
 										cout << "### NO HAY MOZOS EN EL SISTEMA ###" << endl;
+										SetColor(15);
+										delete mozos,it;
 										system("PAUSE");
 										break;
 									}
+									cout << endl << "###INICIAR VENTA EN MESA###" << endl << endl;
+									
+								
 									while(it->hasCurrent()){
 										DtMozo * dm = (DtMozo*) it->getCurrent();
 										cout << "Mozo #" << dm->getId() << " (" << dm->getNombre() << ")" << endl;
@@ -843,7 +998,9 @@ main(){
 									}
 									if(id==0){
 										s->liberarMemoria();
-										cout << endl << "\t..No se inicio la venta" << endl;
+										SetColor(12);
+										cout << endl << "### NO SE INICIO LA VENTA ###" << endl;
+										SetColor(15);
 									}
 									else{
 											
@@ -855,7 +1012,9 @@ main(){
 										anio= fecha->tm_year+1900;								
 										s->confirmarSeleccion(selec,new DtFecha(anio,mes,dia));
 										s->liberarMemoria();
-										cout << endl << "### Se inicio la venta ###" << endl;
+										SetColor(10);
+										cout << endl << "### SE INICIO LA VENTA ###" << endl;
+										SetColor(15);
 									}	
 									Sleep (2000);
 									break;
@@ -863,13 +1022,39 @@ main(){
 								
 								case 2:{
 										//Agregar Producto a una venta
-									cout << "### INGRESAR PRODUCTO A UNA VENTA ###" << endl;
+									
 									ICollection * p = s->mostrarProductos();
-									if(p==NULL){
-										cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###";
+									IIterator * it = p->getIterator();
+									if(!it->hasCurrent()){
+										SetColor(12);
+										cout << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete it, p;
 										break;
 									}
+									
+									ICollection * mes=s->mesasconVenta();
+									IIterator * itm = mes->getIterator();
+									if(!itm->hasCurrent()){
+										SetColor(12);
+										cout << "### NO EXISTEN MESAS CON VENTAS INICIADAS ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete itm,it, mes,p;
+										break;
+									}
+									cout << endl << "### INGRESAR PRODUCTO A UNA VENTA ###" << endl;
 									cout << endl << "\t..Ingrese la mesa a agregar" << endl;
+									while(itm->hasCurrent()){
+										DtMesa * mesa = (DtMesa *) itm->getCurrent();
+										cout << "Mesa #" << mesa->getId() << endl;
+										itm->next();
+										delete mesa;
+									}
+									delete itm, mes;
+									
+									
 									cin>>opc;
 									if(!checkNum()){
 										break;
@@ -878,11 +1063,13 @@ main(){
 									cout << "\t..Seleccione los productos de la lista disponible" << endl << endl ;
 									
 									
-									IIterator * it = p->getIterator();
+									
 									while(it->hasCurrent()){
 									
 										DtProducto * dp = (DtProducto *) it->getCurrent();
-										cout << "Producto #"<< dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										cout << endl << endl << "\t ..Codigo: " << dp->getCodigo() << endl;
+										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+										cout << "\t ..Precio: " << dp->getPrecio() << endl;
 										it->next();
 									
 									}
@@ -900,7 +1087,9 @@ main(){
 											break;
 										}
 										if(cant<=0){
+											SetColor(12);
 											cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
+											SetColor(15);
 											break;
 										}
 										bool ch = s->check_prod_venta(id);
@@ -920,7 +1109,9 @@ main(){
 											
 										}
 										else{
+											SetColor(12);
 											cout << "### PRODUCTO NO AGREGADO ###" << endl;	
+											SetColor(15);
 										}
 										cout << "\t..Ingrese el  producto(Ingrese 0 para terminar)" << endl;
 										cin >> id;
@@ -931,9 +1122,31 @@ main(){
 								}
 									
 								case 3:{
-								
+									
+									ICollection * mes=s->mesasconVenta();
+									IIterator * itm = mes->getIterator();
+									if(!itm->hasCurrent()){
+										SetColor(12);
+										cout << "### NO EXISTEN MESAS CON VENTAS INICIADAS ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete itm, mes;
+										break;
+									}
+									
 									cout << endl << "### QUITAR PRODUCTO A UNA VENTA ### "<<endl;
 									cout << endl << "\t..Ingrese la mesa a quitar" << endl;
+									
+									
+									while(itm->hasCurrent()){
+										DtMesa * mesa = (DtMesa *) itm->getCurrent();
+										cout << "Mesa #" << mesa->getId() << endl;
+										itm->next();
+										delete mesa;
+									}
+									delete itm, mes;
+									
+									
 									cin>>opc;
 									if(!checkNum()){
 										break;
@@ -942,7 +1155,11 @@ main(){
 									ICollection * p = s->mostrarProdVenta(opc);
 									IIterator * it = p->getIterator();
 									if(!it->hasCurrent()){
+										SetColor(12);
 										cout << "### LA VENTA NO TIENE PRODUCTOS ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete it,p;
 										break;
 									}
 									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
@@ -958,6 +1175,7 @@ main(){
 										it->next();
 									
 									}
+									delete p, it;
 									cin >> id;
 									if(!checkNum()){
 										break;
@@ -970,7 +1188,9 @@ main(){
 									}
 								
 									if(cant<=0){
+										SetColor(12);
 										cout << "### LA CANTIDAD DEBE SER MAYOR QUE 0 ###";
+										SetColor(15);
 										break;
 									}
 									bool ch = s->check_prod_venta(id);
@@ -980,23 +1200,52 @@ main(){
 									if(agregar==1){
 										if(ch==true){
 											s->modificarCantidad(id,cant,"resta");
+											SetColor(10);
 											cout << "### SE HA ELIMINADO EL PRODUCTO DE LA VENTA ###" << endl;
+											SetColor(15);
 										}
 										
 										else{
+											SetColor(12);
 											cout << "### EL PRODUCTO SELECCIONADO NO SE ENCUENTRA EN LA VENTA ###" << endl;
+											SetColor(15);
 										}
 										
 										Sleep(2000);
 										
+									}
+									else{
+										SetColor(12);
+										cout << "### NO SE HA QUITADO EL PRODUCTO ###" << endl;
+										SetColor(15);
 									}
 									
 							
 									break;
 								}
 								case 4:{
+									ICollection * mes=s->mesasconVenta();
+									IIterator * itm = mes->getIterator();
+									if(!itm->hasCurrent()){
+										SetColor(12);
+										cout << "### NO EXISTEN MESAS CON VENTAS INICIADAS ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete itm, mes;
+										break;
+									}
 									cout << endl << "### EMITIR FACTURA ###" << endl;
 									cout << endl << "\t..Ingrese la mesa a facturar" << endl;
+									
+									while(itm->hasCurrent()){
+										DtMesa * mesa = (DtMesa *) itm->getCurrent();
+										cout << "Mesa #" << mesa->getId() << endl;
+										itm->next();
+										delete mesa;
+									}
+									delete itm, mes;
+									
+									
 									cin >> id;
 									if(!checkNum()){
 										break;
@@ -1033,7 +1282,9 @@ main(){
 										}
 									}
 									else{
+										SetColor(12);
 										cout << endl << "### LA MESA NO TIENE UNA VENTA EN CURSO O YA HA SIDO FACTURADA ###" << endl;
+										SetColor(15);
 									}
 									system("Pause");
 									break;
@@ -1045,12 +1296,16 @@ main(){
 									back=true;
 									break;
 								default:
-									cout << "Opcion incorrecta" << endl;
+									SetColor(12);
+									cout << endl <<"### OPCION INCORRECTA ###" << endl;
+									SetColor(15);
 									Sleep (2000);
 									system("cls");
 							}
 						}catch(char const * msg){
+							SetColor(12);
 							cout << msg << endl;
+							SetColor(15);
 							system("PAUSE");
 						}		
 					}while((opc<6 || opc>0) && !back);
@@ -1072,11 +1327,14 @@ main(){
 									ICollection * pedidos = s->getPedidos(rep);
 									IIterator * it = pedidos->getIterator();
 									if(!it->hasCurrent()){
+										SetColor(12);
 										cout << "### EL REPARTIDOR NO TIENE ENTREGAS PENDIENTES ###" << endl;
+										SetColor(15);
+										delete pedidos,it;
 										system("PAUSE");
 										break;
 									}
-									cout << endl << "\t..Seleccione el pedido a modificar:" << endl;
+									cout << endl << "\t..Seleccione el pedido a modificar:(numero de venta)" << endl;
 									
 									
 									while(it->hasCurrent()){
@@ -1094,11 +1352,15 @@ main(){
 									cout << "\t..2- Confirmar EN CAMINO " << endl;
 									cin >> opc;
 									s->cambiarEstado(id,opc,rep);
+									SetColor(10);
 									cout << "### SE HA ACTUALIZADO EL ESTADO ###" << endl;
+									SetColor(15);
 									system("PAUSE");
 									break;
 								}catch(char const * msg){
+									SetColor(12);
 									cout << msg << endl;
+									SetColor(15);
 									system("PAUSE");
 								}
 							}
@@ -1121,8 +1383,34 @@ main(){
 							opc = menuCliente();
 							switch(opc){
 								case 1:{
-				
-									cout <<"### CONSULTAR ACTUALIZACIONES DE PEDIDOS A DOMICILIO DE UN CLIENTE ###" <<endl << endl;
+									ICollection * clientes = s->mostrarClientes();
+									IIterator * itc = clientes->getIterator();
+									if(!itc->hasCurrent()){
+										SetColor(12);
+										cout << "### NO HAY CLIENTES EN EL SISTEMA ###" << endl;
+										SetColor(15);
+										system("PAUSE");
+										delete itc, clientes;
+										break;
+									}
+									
+									cout << endl <<"### CONSULTAR ACTUALIZACIONES DE PEDIDOS A DOMICILIO DE UN CLIENTE ###" <<endl << endl;
+									
+								
+									cout << endl <<  "### Clientes ###" << endl;
+									
+									while(itc->hasCurrent()){
+										DtCliente * dc = (DtCliente *) itc->getCurrent();
+										cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
+										cout << "\t..Nombre: " << dc->getNombre() << endl;
+										DtDireccion * dd = dc->getDireccion();
+										cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+										cout << "          -------------------------" << endl;
+										itc->next();
+										
+									}
+									delete itc,clientes;
+									
 									cout << "\t..Ingrese el telefono del cliente a mostrar" << endl; 
 									cin >> id;
 									if(!checkNum){
@@ -1131,7 +1419,10 @@ main(){
 									ICollection * pedidos = s->getPedidosCliente(id);
 									IIterator * it = pedidos->getIterator();
 									if(!it->hasCurrent()){
+										SetColor(12);
 										cout << "### EL CLIENTE NO HA HECHO PEDIDOS ###" << endl;
+										SetColor(15);
+										delete pedidos,it;
 										system("PAUSE");
 										break;
 									}
@@ -1144,18 +1435,23 @@ main(){
 										cout << "Estado: " << dv->getEstado() << endl << endl;
 										IIterator * itp = prods->getIterator();
 										if(!it->hasCurrent()){
+											SetColor(12);
 											cout << "### LA VENTA NO TIENE PRODUCTOS ###" << endl;
+											SetColor(15);
+											delete prods,itp;
 										}
 										
 										else{	
 											while(itp->hasCurrent()){
-											DtProducto * dp = (DtProducto *) itp->getCurrent();
-											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-											cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-											cout << "\t ..Precio: " << dp->getPrecio() << endl;
-											cout << endl << endl;	
-											itp->next();
-										}
+												DtProducto * dp = (DtProducto *) itp->getCurrent();
+												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << endl << endl;	
+												itp->next();
+											
+											}
+											delete prods,itp;
 												
 										}
 										it->next();
@@ -1178,18 +1474,41 @@ main(){
 							}		
 						}while((opc<3 || opc>0) && !back);
 					}catch(char const * msg){
+						SetColor(12);
 						cout << msg << endl;
+						SetColor(15);
 						system("PAUSE");
 					}
 						break;
 					}
 				case 5:{
-					
-					s->cargarDatos();
+					if(cargar){
+						SetColor(12);
+						cout << "### YA SE HAN CARGADO DATOS ###" << endl;
+						SetColor(15);
+						break;
+					}
+					s->cargarDatos("no");
 					cargar=true;
 					break;
-				}
+				}	
 				case 6:{
+					if(cargar){
+						SetColor(12);
+						cout << "### YA SE HAN CARGADO LOS DATOS SIN VENTAS, REINICIE EL SISTEMA ###" << endl;
+						SetColor(15);
+						system("PAUSE");
+						break;
+					}
+					s->cargarDatos("si");
+					SetColor(10);
+					cout << "### SE HAN CARGADO LAS VENTAS EN EL SISTEMA ###" << endl;
+					SetColor(15);
+					cargar=true;
+					system("PAUSE");
+					break;
+				}
+				case 7:{
 					
 						do{
 							try{
@@ -1199,6 +1518,14 @@ main(){
 									case 1:{
 										ICollection * facturas = s->getFacturas();
 										IIterator * it = facturas->getIterator();
+										if(!it->hasCurrent()){
+											SetColor(12);
+											cout << "### NO EXISTEN FACTURAS EN EL SISTEMA ###" << endl;
+											SetColor(15);
+											system("PAUSE");
+											delete facturas,it;
+											break;
+										}
 										while(it->hasCurrent()){
 											DtFactura * df =(DtFactura *) it->getCurrent();
 											string tipo;
@@ -1238,9 +1565,18 @@ main(){
 									}
 																
 									case 2:{
-										cout << "### EMPLEADOS ###" << endl << endl;
 										ICollection * emp = s->getEmpleados();
 										IIterator * it = emp->getIterator();
+										if(!it->hasCurrent()){
+											SetColor(12);
+											cout << "### NO EXISTEN EMPLEADOS EN EL SISTEMA ###" << endl;
+											SetColor(15);
+											system("PAUSE");
+											delete emp,it;
+											break;
+										}
+										cout << "### EMPLEADOS ###" << endl << endl;
+										
 										while(it->hasCurrent()){
 											DtEmpleado * e = (DtEmpleado *) it->getCurrent();
 											cout << "\t..Codigo: " << e->getId() << endl;
@@ -1282,13 +1618,18 @@ main(){
 									}
 										
 									case 3:{
-										cout << "### MESAS ###" << endl << endl;
 										ICollection * mesas = s->getMesas();
 										IIterator * it = mesas->getIterator();
 										if(!it->hasCurrent()){
+											SetColor(12);
 											cout << "### NO EXISTEN MESAS EN EL SISTEMAS ###" << endl;
+											SetColor(15);
+											system("PAUSE");
+											delete mesas,it;
 											break;
 										}
+										cout << "### MESAS ###" << endl << endl;
+										
 										while(it->hasCurrent()){
 											DtMesa* m = (DtMesa *)it->getCurrent();
 											cout << "Mesa #" << m->getId() << endl;
@@ -1301,12 +1642,16 @@ main(){
 									case 4:{
 										cout << "### Productos ###" << endl << endl;
 										ICollection * prod = s->mostrarProductos();
-										if(prod==NULL){
-											cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
-											Sleep(2000);
+										IIterator * it_p = prod->getIterator();
+										if(!it_p->hasCurrent()){
+											SetColor(12);
+											cout << endl << "### NO EXISTEN PRODUCTOS EN EL SISTEMA ###" << endl;
+											SetColor(15);
+											system("PAUSE");
+											delete prod, it_p;
 											break;
 										}
-										IIterator * it_p = prod->getIterator();
+										
 										while(it_p->hasCurrent()){
 											DtProducto * dp = (DtProducto *) it_p->getCurrent();
 											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
@@ -1318,12 +1663,20 @@ main(){
 										system("PAUSE");
 										break;
 									}
-									
-									
+																	
 									case 5:{
-										cout << endl <<  "### Clientes ###" << endl;
 										ICollection * clientes = s->mostrarClientes();
 										IIterator * it = clientes->getIterator();
+										if(!it->hasCurrent()){
+											SetColor(12);
+											cout << "### NO HAY CLIENTES EN EL SISTEMA ###" << endl;
+											SetColor(15);
+											system("PAUSE");
+											delete it, clientes;
+											break;
+										}
+										cout << endl <<  "### Clientes ###" << endl;
+										
 										while(it->hasCurrent()){
 											DtCliente * dc = (DtCliente *) it->getCurrent();
 											cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
@@ -1339,9 +1692,19 @@ main(){
 									}
 									
 									case 6:{
-										cout << endl << "### VENTAS ###" << endl;
 										ICollection * ventas = s->getVentas();
 										IIterator * it = ventas->getIterator();
+										if(!it->hasCurrent()){
+											SetColor(12);
+											cout << endl << "### NO EXISTEN VENTAS EN EL SISTEMA ###" << endl;
+											SetColor(15);
+											delete it;
+											delete ventas;
+											system("PAUSE");
+											break;
+										}
+										cout << endl << "### VENTAS ###" << endl;
+										
 										while(it->hasCurrent()){
 											DtVenta * dv = (DtVenta*) it->getCurrent();
 											ICollection * prods = dv->getProductos();
@@ -1355,6 +1718,7 @@ main(){
 												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
 												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
 												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
 												cout << endl << endl;	
 												itp->next();
 											}
@@ -1379,7 +1743,9 @@ main(){
 									
 								}
 							}catch(char const * msg){
+								SetColor(12);
 								cout << msg << endl;
+								SetColor(15);
 								system("PAUSE");
 							}		
 						}while((opc<8 || opc>0) && !back);
@@ -1388,7 +1754,7 @@ main(){
 				}
 				
 				
-				case 7:
+				case 8:
 					cout << "### Gracias por usar el sistema ###" << endl;
 					return 0;
 				default:
@@ -1396,7 +1762,7 @@ main(){
 					Sleep (2000);
 					system("cls");
 			}
-		}while(opc<8 || opc>0);
+		}while(opc<9 || opc>0);
 		return 0;
 	
 
@@ -1414,8 +1780,9 @@ int menu(){
 	cout << "3. Repartidor" << endl;
 	cout << "4. Cliente" << endl;
 	cout << "5. Cargar datos de prueba" << endl;
-	cout << "6. Consultas" << endl;
-	cout << "7. Salir" << endl << endl;
+	cout << "6. Cargar ventas de prueba" << endl;
+	cout << "7. Consultas" << endl;
+	cout << "8. Salir" << endl << endl;
 	cout << "Ingrese la opcion:"; 
 	cin >> opc;
 	if(!checkNum()){
@@ -1429,10 +1796,10 @@ int menuAdministrador(){
 	cout << "\t **MENU ADMINISTRADOR***" << endl;
 	cout << "1. Alta producto" << endl;
  	cout << "2. Baja producto" << endl;
-	cout << "3. Información de un producto" << endl;
+	cout << "3. Informacion de un producto" << endl;
 	cout << "4. Alta empleado" << endl;
 	cout << "5. Alta cliente" << endl;
-	cout << "6. Resumen facturación de 1 día dada la fecha" << endl;
+	cout << "6. Resumen facturacion de 1 dia dada la fecha" << endl;
 	cout << "7. Venta a domicilio" << endl;
 	cout << "8. Consultar actualizaciones de pedidos a domicilio" << endl;
 	cout << "9. Alta mesa" << endl;

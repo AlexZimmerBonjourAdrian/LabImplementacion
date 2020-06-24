@@ -18,7 +18,9 @@ Sistema::Sistema() {
 }
 
 //Instancia
-void Sistema::cargarDatos(){
+void Sistema::cargarDatos(string op){
+	
+	//Empleados
 	
 	Mozo * m1 = new Mozo("Juan",new ListDictionary());
 	IKey * k1 = new IntKey(m1->getId());
@@ -54,42 +56,44 @@ void Sistema::cargarDatos(){
 	
 	clientes->add(k6,cli2);
 	
-	Comun * c1 = new Comun(1,"Papas",35);
+	//Productos
+	
+	Comun * c1 = new Comun(1,"Papas con cheddar",35);
 	IKey * k7 = new IntKey(1);
 	
 	productos->add(k7,c1);
 
-	Comun * c2 = new Comun(2,"Coca",55);
+	Comun * c2 = new Comun(2,"Coca Cola 1L",55);
 	IKey * k8 = new IntKey(2);
 	
 	productos->add(k8,c2);
 	
-	Comun * c3 = new Comun(3,"Milanesa",65);
+	Comun * c3 = new Comun(3,"Milanesa de pollo",65);
 	IKey * k9 = new IntKey(3);
 
 	productos->add(k9,c3);
 	
-	Comun * c4 = new Comun(4,"Ravioles",120);
+	Comun * c4 = new Comun(4,"Ravioles con salsa",120);
 	IKey * k10 = new IntKey(4);
 
 	productos->add(k10,c4);
 	
-	Comun * c5 = new Comun(5,"Panchos",45);
+	Comun * c5 = new Comun(5,"Pancho comun",45);
 	IKey * k11 = new IntKey(5);
 
 	productos->add(k11,c5);
 	
-	Comun * c6 = new Comun(6,"Empanadas",50);
+	Comun * c6 = new Comun(6,"Empanada de carne",50);
 	IKey * k12 = new IntKey(6);
 
 	productos->add(k12,c6);
 	
-	Comun * c7 = new Comun(7,"Tallarines",110);
+	Comun * c7 = new Comun(7,"Tallarines con salsa",110);
 	IKey * k13 = new IntKey(7);
 
 	productos->add(k13,c7);
 
-	Menu * men1 = new Menu(8,"Menu1",171);
+	Menu * men1 = new Menu(8,"Menu lunes",171);
 	IKey * k14 = new IntKey(8);
 
 	men1->agregarProd(c1,2);
@@ -98,7 +102,7 @@ void Sistema::cargarDatos(){
 	
 	productos->add(k14,men1);
 	
-	Menu * men2 = new Menu(9,"Menu2",162);
+	Menu * men2 = new Menu(9,"Menu jueves",162);
 	IKey * k15 = new IntKey(9);
 
 	men2->agregarProd(c5,2);
@@ -106,6 +110,7 @@ void Sistema::cargarDatos(){
 	men2->agregarProd(c1,1);
 	
 	productos->add(k15,men1);
+	//Mesas
 	
 	Mesa * mesa1 = new Mesa(1,new ListDictionary());
 	IKey * mk1 = new IntKey(1);
@@ -117,6 +122,98 @@ void Sistema::cargarDatos(){
 	mesas->add(mk1,mesa1);
 	mesas->add(mk2,mesa2);
 	mesas->add(mk3,mesa3);
+	
+	//Ventas de ejemplo(fecha)
+	if(op=="si"){
+		
+		DtFecha * df1 = new DtFecha(2018,9,12);
+		DtFecha * df2 = new DtFecha(2019,2,22);
+		DtFecha * df3 = new DtFecha(2017,4,25);
+		DtFecha * df4 = new DtFecha(2016,2,2);
+		DtFecha * df5 = new DtFecha(2020,5,7);
+		Venta * v1 = new Vlocal(new List(),df1,"Facturada",m3);
+		IKey * vk1 = new IntKey(v1->getCodigo());
+		Venta * v2 = new Vlocal(new List(),df1,"Facturada",m2);
+		IKey * vk2 = new IntKey(v2->getCodigo());
+		Venta * v3 = new Vlocal(new List(),df1,"Facturada",m1);
+		IKey * vk3 = new IntKey(v3->getCodigo());
+		Venta * v4 = new Vlocal(new List(),df2,"Facturada",m2);
+		IKey * vk4 = new IntKey(v4->getCodigo());
+		Venta * v5 = new Vlocal(new List(),df2,"Facturada",m1);
+		IKey * vk5 = new IntKey(v5->getCodigo());
+		Venta * v6 = new Vlocal(new List(),df2,"Facturada",m3);
+		IKey * vk6 = new IntKey(v6->getCodigo());
+		Venta * v7 = new Vdomicilio(new List(),df3,"Entregada",c->getDireccion(),c->getNombre(),c->getTelefono(),r1,c);
+		IKey * vk7 = new IntKey(v7->getCodigo());
+		Venta * v8 = new Vdomicilio(new List(),df3,"Entregada",cli2->getDireccion(),cli2->getNombre(),cli2->getTelefono(),r1,cli2);
+		IKey * vk8 = new IntKey(v8->getCodigo());
+		Venta * v9 = new Vdomicilio(new List(),df4,"Entregada",cli2->getDireccion(),cli2->getNombre(),cli2->getTelefono(),r1,cli2);
+		IKey * vk9 = new IntKey(v9->getCodigo());
+		Venta * v10 = new Vdomicilio(new List(),df3,"Entregada",c->getDireccion(),c->getNombre(),c->getTelefono(),r1,c);
+		IKey * vk10 = new IntKey(v10->getCodigo());
+		v1->agregarProd(c1,2);
+		v1->agregarProd(c3,2);
+		v2->agregarProd(c1,2);
+		v2->agregarProd(c3,2);
+		v3->agregarProd(c1,2);
+		v3->agregarProd(c3,2);
+		v4->agregarProd(c1,2);
+		v4->agregarProd(c3,2);
+		v5->agregarProd(c1,2);
+		v5->agregarProd(c3,2);
+		v6->agregarProd(c1,2);
+		v6->agregarProd(c3,2);
+		v7->agregarProd(c1,2);
+		v7->agregarProd(c3,2);
+		v8->agregarProd(c1,2);
+		v8->agregarProd(c3,2);
+		v9->agregarProd(c1,2);
+		v9->agregarProd(c3,2);
+		v10->agregarProd(c1,2);
+		v10->agregarProd(c3,2);
+		this->ventas->add(vk1,v1);
+		this->ventas->add(vk2,v2);
+		this->ventas->add(vk3,v3);
+		this->ventas->add(vk4,v4);
+		this->ventas->add(vk5,v5);
+		this->ventas->add(vk6,v6);
+		this->ventas->add(vk7,v7);
+		this->ventas->add(vk8,v8);
+		this->ventas->add(vk9,v9);
+		this->ventas->add(vk10,v10);
+		Factura * f1 = new Factura(v1,10);
+		IKey * fk1 = new IntKey(f1->getCodigo());
+		Factura * f2 = new Factura(v2,10);
+		IKey * fk2 = new IntKey(f2->getCodigo());
+		Factura * f3 = new Factura(v3,10);
+		IKey * fk3 = new IntKey(f3->getCodigo());
+		Factura * f4 = new Factura(v4,10);
+		IKey * fk4 = new IntKey(f4->getCodigo());
+		Factura * f5 = new Factura(v5,10);
+		IKey * fk5 = new IntKey(f5->getCodigo());
+		Factura * f6 = new Factura(v6,10);
+		IKey * fk6 = new IntKey(f6->getCodigo());
+		Factura * f7 = new Factura(v7,10);
+		IKey * fk7 = new IntKey(f7->getCodigo());
+		Factura * f8 = new Factura(v8,10);
+		IKey * fk8 = new IntKey(f8->getCodigo());
+		Factura * f9 = new Factura(v9,10);
+		IKey * fk9 = new IntKey(f9->getCodigo());
+		Factura * f10 = new Factura(v10,10);
+		IKey * fk10 = new IntKey(f10->getCodigo());
+		this->facturas->add(fk1,f1);
+		this->facturas->add(fk2,f2);
+		this->facturas->add(fk3,f3);
+		this->facturas->add(fk4,f4);
+		this->facturas->add(fk5,f5);
+		this->facturas->add(fk6,f6);
+		this->facturas->add(fk7,f7);
+		this->facturas->add(fk8,f8);
+		this->facturas->add(fk9,f9);
+		this->facturas->add(fk10,f10);
+		
+		
+	}
 	
 }
 
@@ -168,18 +265,17 @@ ICollection * Sistema::mostrarClientes(){
 ICollection * Sistema::mostrarProductos(){
 	
 	IIterator * it = productos->getIterator();
-	if(it->hasCurrent()){
-		ICollection * dp = new List();
-		while(it->hasCurrent()){
-			Producto * p = (Producto *) it->getCurrent();
-			dp->add(p->getDatos());	
-			it->next();
-		}
-		return dp;
-		
+	ICollection * dp = new List();
+	while(it->hasCurrent()){
+		Producto * p = (Producto *) it->getCurrent();
+		dp->add(p->getDatos());	
+		it->next();
 	}
+	return dp;
+	
+	
 	delete it;
-	return NULL;
+
 }
 
 ICollection * Sistema::getTodosPedidos(int idrep){
@@ -402,7 +498,6 @@ void Sistema::agregarMenu(int codigo, string descripcion){
 			throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 		}
 		if(p->getTipo()=="Menu"){
-			delete k;
 			throw "### NO SE PUEDE AGREGAR UN MENU DENTRO DE UN MENU ###";
 		}
 		Comun * c = (Comun*) p;
@@ -693,11 +788,14 @@ Mozo * Sistema::mozoVago(){
 void Sistema::eliminarProducto(int idprod){
 	IKey * k = new IntKey(idprod);
 	Producto * p = (Producto*)productos->find(k);
-	delete k;
+	
+
 	if(p==NULL){
+		delete k;
 		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
 	if(!this->productoFacturado(p->getCodigo())){
+		delete k;
 		throw "### NO SE PUEDE ELIMINAR UN PRODUCTO QUE NO HAYA SIDO COMPLETAMENTE FACTURADO ###";
 	}
 	IIterator * it = ventas->getIterator();
@@ -727,8 +825,9 @@ void Sistema::eliminarProducto(int idprod){
 		}
 		
 	}
-	delete it;
+	
 	productos->remove(k);
+	delete it,k;
 	delete p;
 
 }
@@ -913,6 +1012,20 @@ void Sistema::modificarCantidad(int idprod, int cantProd,string op){
 		throw "### EL PRODUCTO NO EXISTE EN EL SISTEMA ###";
 	}
 	v->setNuevaCantidad(p,cantProd,op);
+}
+
+ICollection * Sistema::mesasconVenta(){
+	IIterator * it = mesas->getIterator();
+	ICollection * mesasfact = new List();
+	while(it->hasCurrent()){
+		Mesa * m = (Mesa*) it->getCurrent();
+		if(m->getVenta()!=NULL){
+			DtMesa * dtmesa = new DtMesa(m->getid());
+			mesasfact->add(dtmesa);
+		}
+		it->next();
+	}
+	return mesasfact;
 }
 
 //Informacion de un producto
