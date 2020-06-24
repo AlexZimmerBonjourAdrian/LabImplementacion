@@ -1062,7 +1062,7 @@ void Sistema::ingresarProducto(int idprod, int cant){
 }
 
 
-DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
+void * Sistema::crearVdomicilio(int repartidor, int telefono){
 		IKey * k = new IntKey(telefono);
 		Cliente * c = (Cliente*)this->clientes->find(k);
 		delete k;
@@ -1112,17 +1112,12 @@ DtFactura * Sistema::crearVdomicilio(int repartidor, int telefono){
 		}
 		
 		Vdomicilio * vd = (Vdomicilio *) v;
-		Factura * f = new Factura(vd,0);
-		IKey * kf = new IntKey(v->getCodigo());
-		this->facturas->add(kf,f);
-		DtFactura * df = f->getDatos();
 		this->ventas->add(k3,v);
 		r->agregarVenta(v);
-		return df;
 }
 
 
-void Sistema::cambiarEstado(int idventa, int opc, int rep){
+DtFactura * Sistema::cambiarEstado(int idventa, int opc, int rep){
 	IKey * k = new IntKey(rep);
 	Empleado *e = (Empleado *) this->empleados->find(k);
 	Repartidor * r = dynamic_cast<Repartidor*>(e);
@@ -1148,7 +1143,8 @@ void Sistema::cambiarEstado(int idventa, int opc, int rep){
 				throw "### LA VENTA YA HA SIDO ENTREGADA ###";
 			}
 			v->setEstado("En camino");
-			}
+			return NULL;
+		}
 		if(opc==1){
 			if(v->getEstado()=="Entregada"){
 				throw "### LA VENTA YA HA SIDO ENTREGADA ###";
@@ -1157,6 +1153,11 @@ void Sistema::cambiarEstado(int idventa, int opc, int rep){
 				throw "### LA MESA AUN NO ESTA EN VIAJE ###";
 			}
 			v->setEstado("Entregada");
+			Factura * f = new Factura(v,0);
+			IKey * kf = new IntKey(v->getCodigo());
+			this->facturas->add(kf,f);
+			DtFactura * df = f->getDatos();
+			return df;
 		}
 	}
 	else{

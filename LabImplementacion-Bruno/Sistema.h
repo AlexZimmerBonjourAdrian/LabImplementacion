@@ -163,9 +163,9 @@ class Sistema {
 		
 		//Venta a domicilio	
 		
-		DtFactura * crearVdomicilio(int repartidor,int telefono);
+		void * crearVdomicilio(int repartidor,int telefono);
 		void ingresarProducto(int, int);
-		void cambiarEstado(int,int,int);
+		DtFactura * cambiarEstado(int,int,int);
 
 		
 	

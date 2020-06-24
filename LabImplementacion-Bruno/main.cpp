@@ -65,6 +65,7 @@ main(){
 	int agregar = 1;
 	float precio=0;
 	bool cargar = false;
+	bool venta=false;
 		string opc1,s1;
 		Sistema * s = Sistema::getInstance();
 		int id=1, descuento;
@@ -783,48 +784,27 @@ main(){
 									cout << endl << "\t..Desea confirmar la venta?(si o no)" << endl;
 									cin >> s1;
 									if(s1=="SI" || s1=="Si" || s1=="si"){
-										DtFactura * df = s->crearVdomicilio(repartidor,telefono);
-										if(df!=NULL){
-											cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
-											cout << endl << "##Factura " << df->getCodigo() << " ##" << endl;
-											cout << endl << "\t..Subtotal: " << df->getSubtotal() << endl ;
-											cout << "\t..Descuento: "<< df->getDescuento()<< endl;
-											cout << "\t..Monto total: " << df->getMonto()<< endl;
-											cout << "\t..Monto total(IVA): " << df->gettotal_iva() << endl << endl;
-											DtEmpleado * de = df->getTrabajador();
-											cout << endl << "Empleado: " << de->getNombre() << endl << endl; 
-											cout << "\t --Productos--" << endl << endl;
-											ICollection * prod = df->getProductos();
-											IIterator * it_p = prod->getIterator();
-											while(it_p->hasCurrent()){
-												DtProducto * dp = (DtProducto *) it_p->getCurrent();
-												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
-												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
-												cout << "\t ..Precio: " << dp->getPrecio() << endl;
-												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
-												cout << endl << endl;
-												
-												it_p->next();
-											
-											}
-										}
-										correct=true;
-								}
-								else{
-									if(s1=="NO" || s1=="No" || s1=="no"){
-										SetColor(12);
-										cout << "### NO SE CREO LA VENTA ###" << endl;
+										s->crearVdomicilio(repartidor,telefono);
+										SetColor(10);
+										cout << "### SE CREO LA VENTA ###" << endl;
 										SetColor(15);
 										correct=true;
 									}
 									else{
-										SetColor(12);
-										cout <<  "### OPCION INCORRECTA ###" << endl;
-										SetColor(15);
-									}
-								}
+										if(s1=="NO" || s1=="No" || s1=="no"){
+											SetColor(12);
+											cout << "### NO SE CREO LA VENTA ###" << endl;
+											SetColor(15);
+											correct=true;
+										}
+										else{
+											SetColor(12);
+											cout <<  "### OPCION INCORRECTA ###" << endl;
+											SetColor(15);
+										}
+									}	
 								
-							}while(correct==false);
+								}while(correct==false);
 								
 								s->liberarMemoria();
 								
@@ -1351,10 +1331,41 @@ main(){
 									cout << "\t..1- Confirmar ENTREGADA " << endl;
 									cout << "\t..2- Confirmar EN CAMINO " << endl;
 									cin >> opc;
-									s->cambiarEstado(id,opc,rep);
+									DtFactura * df = s->cambiarEstado(id,opc,rep);
 									SetColor(10);
 									cout << "### SE HA ACTUALIZADO EL ESTADO ###" << endl;
 									SetColor(15);
+									
+									if(df!=NULL){
+										SetColor(10);
+										cout << endl <<"### SE HA CREADO LA FACTURA CON LOS DATOS ###" << endl << endl;
+										SetColor(15);
+										
+										
+										cout << endl << "### SE CREO LA FACTURA CON LOS SIGUIENTES DATOS: ###" << endl << endl;
+										cout << endl << "##Factura " << df->getCodigo() << " ##" << endl;
+										cout << endl << "\t..Subtotal: " << df->getSubtotal() << endl ;
+										cout << "\t..Descuento: "<< df->getDescuento()<< endl;
+										cout << "\t..Monto total: " << df->getMonto()<< endl;
+										cout << "\t..Monto total(IVA): " << df->gettotal_iva() << endl << endl;
+										DtEmpleado * de = df->getTrabajador();
+										cout << endl << "Empleado: " << de->getNombre() << endl << endl; 
+										cout << "\t --Productos--" << endl << endl;
+										ICollection * prod = df->getProductos();
+										IIterator * it_p = prod->getIterator();
+										while(it_p->hasCurrent()){
+											DtProducto * dp = (DtProducto *) it_p->getCurrent();
+											cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+											cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+											cout << "\t ..Precio: " << dp->getPrecio() << endl;
+											cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
+											cout << endl << endl;
+											
+											it_p->next();
+										
+										}
+										
+									}
 									system("PAUSE");
 									break;
 								}catch(char const * msg){
@@ -1480,12 +1491,14 @@ main(){
 						system("PAUSE");
 					}
 						break;
-					}
+				}
+				
 				case 5:{
-					if(cargar){
+					if(venta){
 						SetColor(12);
 						cout << "### YA SE HAN CARGADO DATOS ###" << endl;
 						SetColor(15);
+						system("PAUSE");
 						break;
 					}
 					s->cargarDatos("no");
@@ -1505,6 +1518,7 @@ main(){
 					cout << "### SE HAN CARGADO LAS VENTAS EN EL SISTEMA ###" << endl;
 					SetColor(15);
 					cargar=true;
+					venta=true;
 					system("PAUSE");
 					break;
 				}
