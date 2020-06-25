@@ -13,6 +13,7 @@
 #include "./clases/Cliente.cpp"
 #include "./Datatypes/DtMesa.cpp"
 #include "./Datatypes/DtCliente.cpp"
+#include "./Datatypes/DtApartamento.cpp"
 #include "./Datatypes/DtVenta.cpp"
 #include "./Datatypes/DtRepartidor.cpp"
 
@@ -159,7 +160,7 @@ class Sistema {
 		
 		//Caso de uso Alta cliente
 		
-		void crearCliente(string,int,string,int);
+		void crearCliente(string,int,DtDireccion *);
 		
 		//Venta a domicilio	
 		

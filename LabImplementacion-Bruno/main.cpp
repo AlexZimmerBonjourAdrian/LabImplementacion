@@ -1,11 +1,6 @@
 #include "Sistema.cpp"
 #include<iostream>
 #include<stdio.h>
-#include "./clases/Producto.cpp"
-#include "./clases/Repartidor.cpp"
-#include "./clases/Vdomicilio.cpp"
-#include "./Datatypes/DtDireccion.cpp"
-#include "./clases/Cliente.cpp"
 #include <windows.h>
 #include <typeinfo>
 #include<ctime>
@@ -522,10 +517,35 @@ main(){
 								if(!checkNum()){
 									break;
 								}
+								
+								cout << endl << "\t..Vive en un apartamento?(si o no)" << endl;
+								string op;
+								cin>>op;
+								if(!checkNum()){
+									break;
+								}
+								DtDireccion * dc = NULL;
+								if(op=="Si" || op=="si" || op=="SI"){
+									cout << endl << "\t..Ingrese el nombre del apartamento: ";
+									string nombreAp;
+									fflush(stdin);
+									getline(cin,nombreAp);
+									cout << endl << endl;
+									cout << "\t..Ingrese el piso: ";
+									int piso;
+									cin>>piso;
+									if(!checkNum()){
+										break;
+									}
+									 dc = new DtApartamento(calle,nro,nombreAp,piso);
+								}
+								else{
+									dc=new DtDireccion(calle,nro);
+								}
 								cout << endl << endl << "\t..Desea confirmar el alta?(si o no)" << endl;
 								cin >> s1;
 								if(s1=="Si" || s1=="si" || s1=="SI"){
-									s->crearCliente(nombre,telefono,calle,nro);
+									s->crearCliente(nombre,telefono,dc);
 									SetColor(10);
 									cout << endl << "### SE CREO EL CLIENTE ###" << endl;
 									SetColor(15);
@@ -563,7 +583,7 @@ main(){
 								if(!checkNum()){
 									break;
 								}
-								DtFecha * f = new DtFecha(anio,mes,dia);
+								DtFecha * f = new DtFecha(anio,mes,dia,0,0);
 								ICollection * facturas = s->getFacturasFecha(f);
 								delete f;
 								IIterator * it = facturas->getIterator();
@@ -662,10 +682,36 @@ main(){
 										if(!checkNum()){
 											break;
 										}
+										
+										cout << "\t..Vive en un apartamento?(si o no)" << endl;
+										string op;
+										cin>>op;
+										if(!checkNum()){
+											break;
+										}
+										DtDireccion * dc = NULL;
+										if(op=="Si" || op=="si" || op=="SI"){
+											cout << endl << "\t..Ingrese el nombre del apartamento: ";
+											string nombreAp;
+											getline(cin,nombreAp);
+											cout << endl << endl;
+											cout << "\t..Ingrese el piso: ";
+											int piso;
+											cin>>piso;
+											if(!checkNum()){
+												break;
+											}
+											 dc = new DtApartamento(calle,nro,nombreAp,piso);
+										}
+										else{
+											dc=new DtDireccion(calle,nro);
+										}
+													
+										
 										cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
 										cin >> opc;
 										if(opc==1){
-											s->crearCliente(nombre,telefono,calle,nro);
+											s->crearCliente(nombre,telefono,dc);
 											SetColor(10);
 											cout << endl << "### SE CREO EL CLIENTE ###" << endl;
 											SetColor(15);
@@ -984,13 +1030,15 @@ main(){
 									}
 									else{
 											
-										int dia, mes, anio;  
+										int dia, mes, anio,hora,minutos;  
 										time_t tiempo = time (NULL);  
 										struct tm *fecha = localtime (&tiempo); 
 										dia=fecha->tm_mday;
 										mes=fecha->tm_mon+1;
-										anio= fecha->tm_year+1900;								
-										s->confirmarSeleccion(selec,new DtFecha(anio,mes,dia));
+										anio= fecha->tm_year+1900;	
+										hora=fecha->tm_hour;
+										minutos=fecha->tm_min;							
+										s->confirmarSeleccion(selec,new DtFecha(anio,mes,dia,hora,minutos));
 										s->liberarMemoria();
 										SetColor(10);
 										cout << endl << "### SE INICIO LA VENTA ###" << endl;
@@ -1002,7 +1050,7 @@ main(){
 								
 								case 2:{
 										//Agregar Producto a una venta
-									
+									s->liberarMemoria();
 									ICollection * p = s->mostrarProductos();
 									IIterator * it = p->getIterator();
 									if(!it->hasCurrent()){
@@ -1558,6 +1606,7 @@ main(){
 											cout << "Monto total(IVA): " << df->gettotal_iva() << endl << endl;
 											DtFecha * dtf = df->getFecha();
 											cout << "Fecha: " << dtf->getAnio() << "-" << dtf->getMes() << "-" << dtf->getDia() << endl << endl; 
+											cout << "Hora: " << dtf->getHora() << ":" << dtf->getMinutos() << endl << endl;
 											DtEmpleado * de = df->getTrabajador();
 											cout << "Empleado: " << de->getNombre() <<"  ("<<tipo <<") " <<endl << endl;
 											cout << "\t --Productos--" << endl << endl;
@@ -1697,6 +1746,11 @@ main(){
 											cout << "\t..Nombre: " << dc->getNombre() << endl;
 											DtDireccion * dd = dc->getDireccion();
 											cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+											
+											DtApartamento * da = dynamic_cast<DtApartamento *>(dd);
+											if(da!=NULL){
+												cout << "\t..Edificio: " << da->getDpto() << endl << "\t..Piso: " << da->getPiso() << endl;
+											}
 											cout << "          -------------------------" << endl;
 											it->next();
 											

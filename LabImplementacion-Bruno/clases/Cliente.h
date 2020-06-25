@@ -12,6 +12,7 @@ class Cliente : public ICollectible{
 		int telefono;
 		string nombre;
 		DtDireccion * direccion;
+	
 	public:
 		Cliente(int,string,DtDireccion *);
 		string getNombre();

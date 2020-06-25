@@ -10,14 +10,15 @@ class DtFecha : public ICollectible {
 	    int anio;
 	    int mes;
 	    int dia;
+	    int hora;
+	    int minutos;
 	public:
-	    DtFecha(int anio, int mes, int dia);
+	    DtFecha(int anio, int mes, int dia,int,int);
 	    int getAnio();
 	    int getMes();
 	    int getDia();
-	   	bool operator >(const DtFecha f2)const{	 	
-  		 	return((this->anio >f2.anio) || (this->mes > f2.mes)|| (this->dia >f2.dia)) ? true: false;
-		}
+	    int getHora();
+	    int getMinutos();
 	   	virtual ~DtFecha();
 };
 

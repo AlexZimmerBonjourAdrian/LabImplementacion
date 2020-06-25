@@ -42,6 +42,21 @@ void Sistema::cargarDatos(string op){
 	
 	empleados->add(k4,r1);
 	
+	Repartidor * r2 = new Repartidor("Augusto","Moto",new ListDictionary());
+	IKey * rk5 = new IntKey(r2->getId());
+	
+	empleados->add(rk5,r2);
+		
+	Repartidor * r3 = new Repartidor("Luisa","Bicicleta",new ListDictionary());
+	IKey * rk6 = new IntKey(r3->getId());
+	
+	empleados->add(rk6,r3);
+	
+	Repartidor * r4 = new Repartidor("Julia","Moto",new ListDictionary());
+	IKey * rk7 = new IntKey(r4->getId());
+	
+	empleados->add(rk7,r4);
+	
 	DtDireccion * dd = new DtDireccion("Herrera", 154);
 	
 	Cliente * c = new Cliente(1,"Gustavo",dd);
@@ -126,11 +141,11 @@ void Sistema::cargarDatos(string op){
 	//Ventas de ejemplo(fecha)
 	if(op=="si"){
 		
-		DtFecha * df1 = new DtFecha(2018,9,12);
-		DtFecha * df2 = new DtFecha(2019,2,22);
-		DtFecha * df3 = new DtFecha(2017,4,25);
-		DtFecha * df4 = new DtFecha(2016,2,2);
-		DtFecha * df5 = new DtFecha(2020,5,7);
+		DtFecha * df1 = new DtFecha(2018,9,12,18,21);
+		DtFecha * df2 = new DtFecha(2019,2,22,14,33);
+		DtFecha * df3 = new DtFecha(2017,4,25,22,06);
+		DtFecha * df4 = new DtFecha(2016,2,2,11,35);
+		DtFecha * df5 = new DtFecha(2020,5,7,9,32);
 		Venta * v1 = new Vlocal(new List(),df1,"Facturada",m3);
 		IKey * vk1 = new IntKey(v1->getCodigo());
 		Venta * v2 = new Vlocal(new List(),df1,"Facturada",m2);
@@ -225,10 +240,9 @@ Sistema * Sistema::getInstance(){
 }
 
 //ALta cliente
-void Sistema::crearCliente(string nombre, int telefono, string calle, int nro){
+void Sistema::crearCliente(string nombre,int telefono,DtDireccion * direccion){
 	IKey * k = new IntKey(telefono);
-	DtDireccion * dt = new DtDireccion(calle,nro);
-	Cliente * c = new Cliente(telefono,nombre,dt);
+	Cliente * c = new Cliente(telefono,nombre,direccion);
 	clientes->add(k,c);
 	
 }
@@ -566,6 +580,7 @@ Lista Sistema::listarMesasAsignadas(int idmozo){
 	Mozo * mo = dynamic_cast<Mozo *>(e);
 	delete k;
 	if(mo==NULL){
+		this->liberarMemoria();
 		throw "### NO EXISTE EL MOZO EN EL SISTEMA ###";
 	}
 	else{
@@ -889,6 +904,7 @@ bool Sistema::check_prod_venta(int idprod){
 	Vlocal * v = (Vlocal*)this->ventas->find(k2);
 	delete k2;
 	if(v==NULL){
+		this->liberarMemoria();
 		throw "### LA VENTA NO EXISTE EN EL SISTEMA ###";
 	}
 	IKey * k1 = new IntKey(idprod);
@@ -1078,13 +1094,15 @@ void * Sistema::crearVdomicilio(int repartidor, int telefono){
 			this->liberarMemoria();
 			throw "### NO SE ENCONTRO EL REPARTIDOR ###";
 		}
-		int dia, mes, anio;  
+		int dia, mes, anio,hora,minutos;  
 		time_t tiempo = time (NULL);  
 		struct tm *fecha = localtime (&tiempo); 
 		dia=fecha->tm_mday;
 		mes=fecha->tm_mon+1;
-		anio= fecha->tm_year+1900;		
-		DtFecha * fecha_actual = new DtFecha(anio,mes,dia);
+		anio= fecha->tm_year+1900;
+		hora=fecha->tm_hour;
+		minutos=fecha->tm_min;		
+		DtFecha * fecha_actual = new DtFecha(anio,mes,dia,hora,minutos);
 		DtDireccion * dir = c->getDireccion();
 		Venta * v = new Vdomicilio(new List(),fecha_actual,"Preparandose",dir,c->getNombre(),c->getTelefono(),r,c);
 		IKey * k3 = new IntKey(v->getCodigo());
