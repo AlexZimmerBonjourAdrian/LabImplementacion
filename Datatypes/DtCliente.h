@@ -1,21 +1,22 @@
-#include <iostream>
-#include "./DtDireccion.h"
-#ifndef DtCliente_H
-#define DTCliente_H
+#include<iostream>
+#include "../interfaces/ICollectible.cpp"
+#include "DtDireccion.cpp"
+#ifndef DTCLIENTE_H
+#define DTCLIENTE_H
+
 using namespace std;
-class DtCliente
-{
-private:
-string telefono;
-string nombre;
-DtDireccion * direccion;
-   
-public:
-    DtCliente(string,string,DtDireccion);
-    string getTelefono();
-    string getNombre();
-    DtDireccion * getdireccion();
-    virtual ~DtCliente();
+
+class  DtCliente : public ICollectible{
+	private:
+		int telefono;
+		string nombre;
+		DtDireccion * dir;
+	public:
+		DtCliente(int,string,DtDireccion*);
+		int getTelefono();
+		string getNombre();
+		DtDireccion * getDireccion();
+		~DtCliente();
 };
 
 #endif

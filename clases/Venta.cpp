@@ -43,18 +43,32 @@ int Venta::getCantidadProd(Producto *p){
 	return 0;
 }
 
-void Venta::setNuevaCantidad(Producto * p, int cantProd){
+void Venta::setNuevaCantidad(Producto * p, int cantProd,string op){
 	IIterator * it = cantidades->getIterator();
 	while(it->hasCurrent()){
 		CantidadProd * cant =(CantidadProd *)it->getCurrent();
 		if(cant->coincideProd(p)){
-			cant->sumarCantidad(cantProd);
+			if(op=="suma"){
+				cant->sumarCantidad(cantProd);
+				cout << "SUME" << endl;
+			}
+			else{
+				cant->restarCantidad(cantProd);
+				if(cant->getCantidad()<=0){
+					this->cantidades->remove(cant);
+					delete cant;
+				}
+			}
 			return;
 		}
 		it->next();
 	}
 	throw "(Clase venta)No se encontro el producto en la venta";
 }
+
+
+
+
 
 bool Venta::buscarProd(Producto * p){
 	IIterator * it = cantidades->getIterator();

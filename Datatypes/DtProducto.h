@@ -20,6 +20,7 @@ class DtProducto : public ICollectible{
 	    string getDescripcion();
 	    float getPrecio();
 	    string getTipo();
+	    void setCantidad(int);
 	    int getCantidad();
 	    virtual ~DtProducto();
 };

@@ -10,10 +10,11 @@
 #include "./clases/Menu.cpp"
 #include "./clases/Repartidor.cpp"
 #include "./clases/Cliente.cpp"
-#include "./colecciones/StringKey.h"
-#include "./Datatypes/DtRepartidor.h"
-#include "./clases/Vdomicilio.h"
-#include "./Datatypes/DtCliente.h"
+#include "./Datatypes/DtCliente.cpp"
+#include "./clases/Producto.cpp"
+//#include "./colecciones/StringKey.h"
+
+
 struct nodolista{
     int info;
     struct nodolista*sig;
@@ -45,7 +46,7 @@ void mostrarLista(Lista L) {
     }
 }
 
-void eliminarLista(Lista &L){
+ void eliminarLista(Lista &L){
 	if(L==NULL)return;
 	if(L->sig==NULL){
 		delete L;
@@ -56,7 +57,7 @@ void eliminarLista(Lista &L){
 	L=NULL;
 }
 
-void EliminarElementoLista(Lista&L, int codigo)
+ void EliminarElementoLista(Lista&L, int codigo)
 {
 	if (L==NULL) return;
 	if (L->info == codigo)
@@ -70,7 +71,6 @@ void EliminarElementoLista(Lista&L, int codigo)
 	//L=NULL;
 	
 }
-
 class Sistema {
 	private:
 		static Sistema * instance;
@@ -81,7 +81,6 @@ class Sistema {
 		IDictionary * productos;
 		IDictionary * facturas;
 		IDictionary * clientes;
-		IDictionary * repartidores;
 		Lista temp;
 		bool cond;
 		
@@ -91,11 +90,22 @@ class Sistema {
 		static Sistema * getInstance();
 		IDictionary * getEmpleados();
 		ICollection * getFacturas();
-		IDictionary * getProductos();
-		IDictionary * getVentas();
-		IDictionary * getClienteS();
+		
 		//Caso de uso Iniciar venta en mesa
 		
+		#pragma region Operaciones a realizar
+		DtCliente altaCliente(string telefono, string nombre,DtDireccion * direccion);
+		bool ingresartelefono(string telefono);
+		ICollection * ListarProductos(List L);
+		void seleccionarProducto(int codigoP,int cantidad);
+		ICollection * ListarRepartidores();
+		void seleccionarRepartidor(int codigo);
+		DtFactura confirmarpedido(List L);
+		void CancelarOperacion();
+		void CancelarCliente();
+		void confirmarCliente();
+		#pragma endregion
+
 		void agregarMozo(Mozo * m);
 		void agregarMesa(int);
 	
@@ -104,28 +114,6 @@ class Sistema {
 		void seleccionarMesas(int);
 		void confirmarSeleccion(Lista, DtFecha *);
 		void liberarMemoria();
-
-			#pragma region Operaciones a realizar
-			altaCliente(string telefono, string nombre,DtDireccion * direccion)
-{
-	IKey * k = new IntKey(telefono);
-	DtCliente dtC= new DtCliente(telefono,nombre,direccion);
-	
-	Clientes->add(k,dtC);
-
-	return dtC;
-}
-		DtCliente altaCliente(string telefono, string nombre,DtDireccion * direccion);
-		bool ingresartelefono(string telefono);
-		ICollection * ListarProductos();
-		void seleccionarProducto(int codigoP,int cantidad);
-		ICollection ListarRepartidores();
-		void seleccionarRepartidor(integer Codigo);
-		DtFactura confirmarpedido();
-		void CancelarOperacion();
-		void CancelarCliente();
-		void confirmarCliente();
-		#pragma endregion
 		
 		//Caso de uso Facturacion de una venta
 		
@@ -149,7 +137,7 @@ class Sistema {
 		ICollection * mostrarProductos();
 		bool check_prod_venta(int);
 		void agregarProductoVenta(int,int);
-		void modificarCantidad(int,int);
+		void modificarCantidad(int,int,string);
 		
 		//Caso de uso Alta empleado
 
@@ -163,8 +151,25 @@ class Sistema {
 		
 		void agregarMesaMozo(int idmesa, int idmozo);
 		
+		//Caso de uso Alta cliente
+		
+		void crearCliente(string,int,string,int);
+		
 		//Utilidades
 		
 		bool ventaFacturada(int);
+		ICollection * mostrarClientes();
+		
+		//Quitar producto a una venta
+		
+		ICollection * mostrarProdVenta(int);
+		
+		//Facturacion de 1 dia
+		
+		ICollection * getFacturasFecha(DtFecha*);
+		
+		//Venta a domicilio
+		
+		
 		
 };

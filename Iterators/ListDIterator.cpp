@@ -4,19 +4,25 @@
 
 using namespace std;
 
-ListDIterator::ListDIterator(ListNodeDictionary* n, bool disposeHeadOnDelete):
-        head(n), current(n), disposeHeadOnDelete(disposeHeadOnDelete) {
+ListDIterator::ListDIterator(ListNodeDictionary* n, bool disposeHeadOnDelete):disposeHeadOnDelete(disposeHeadOnDelete) {
+	this->head=n;
+	this->current=n;
 }
 
 ICollectible *ListDIterator::getCurrent()
 {
-    if(current == NULL)
-        throw "No hay elemento: se llego al fin de la coleccion";
+    if(current == NULL){
+    	throw "No hay elemento: se llego al fin de la coleccion";
+	}
+        
     return current->getElem();
 }
 
+
+
 bool ListDIterator::hasCurrent()
 {
+
     return current != NULL;
 }
 

@@ -18,6 +18,7 @@ class Factura : public ICollectible{
 	public:
 		Factura(Venta *, int);
 		int getCodigo();
+		DtFecha * getFecha();
 		DtFactura * getDatos();
 		~Factura();
 };

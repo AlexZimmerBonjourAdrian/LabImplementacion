@@ -1,8 +1,6 @@
 #include "../Datatypes/DtFactura.h"
-#include "../interfaces/ICollectible.h"
+#include "../ICollection/interfaces/ICollectible.h"
 #include "string.h"
-#ifndef DTFACTURADOM_H
-#define DTFACTURADOM_H
 using namespace std;
 class DtFacturaDom :: public ICollectible
 {
@@ -13,6 +11,4 @@ public:
     string getMedio_Transporte();
      virtual ~DtFacturaDom();
 };
-
-#endif
 

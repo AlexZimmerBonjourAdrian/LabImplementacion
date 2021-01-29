@@ -1,6 +1,4 @@
-#include "../interfaces/ICollectible.h"
-#ifndef DTSUB_H
-#define DTSUB_H
+#include "../ICollection/interfaces/ICollectible.h"
 class DtSub : public ICollectible
 {
 private:
@@ -12,7 +10,5 @@ public:
     int getCant();
     virtual ~DtSub();
 };
-
-#endif
 
 

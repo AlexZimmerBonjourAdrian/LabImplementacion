@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Cliente::Cliente(string telefono, string nombre, DtDireccion * direccion){
+Cliente::Cliente(int telefono, string nombre, DtDireccion * direccion){
 	this->telefono=telefono;
 	this->nombre=nombre;
 	this->direccion=direccion;
@@ -13,6 +13,14 @@ Cliente::Cliente(string telefono, string nombre, DtDireccion * direccion){
 
 string Cliente::getNombre(){
 	return this->nombre;
+}
+
+int Cliente::getTelefono(){
+	return this->telefono;
+}
+
+DtDireccion * Cliente::getDireccion(){
+	return this->direccion;
 }
 
 Cliente::~Cliente(){

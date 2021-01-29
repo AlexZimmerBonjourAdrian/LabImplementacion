@@ -1,4 +1,4 @@
-#include "../Datatypes/DtSub.h"
+#include "../DtSub.h"
 
 DtSub::DtSub(int cod, int cant)
 {

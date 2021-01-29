@@ -3,19 +3,20 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
 #include "../Datatypes/DtDireccion.cpp"
-#include "../Datatypes/DtDireccion.cpp"
 
 using namespace std;
 
 class Cliente : public ICollectible{
 	
 	private:
-		string telefono;
+		int telefono;
 		string nombre;
 		DtDireccion * direccion;
 	public:
-		Cliente(string,string,DtDireccion *);
+		Cliente(int,string,DtDireccion *);
 		string getNombre();
+		int getTelefono();
+		DtDireccion * getDireccion();
 		~Cliente(); 	
 		
 };

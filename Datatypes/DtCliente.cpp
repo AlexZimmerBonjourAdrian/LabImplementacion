@@ -1,27 +1,28 @@
-#include "./DtCliente.h"
+#include "DtCliente.h"
+#include<iostream>
+#ifndef DTCLIENTE_CPP
+#define DTCLIENTE_CPP
 
-DtCliente::DtCliente(string telefono, string nombre, DtDireccion * Direccion)
-{
-    this->nombre=nombre;
-    this->telefono=telefono;
-    this->direccion=Direccion;
+using namespace std;
+
+DtCliente::DtCliente(int telefono, string nombre,DtDireccion * dir){
+	this->telefono=telefono;
+	this->nombre = nombre;
+	this->dir=dir;
 }
 
-DtCliente::getNombre()
-{
-    return this->nombre;
+int DtCliente::getTelefono(){
+	return this->telefono;
 }
-
-DtCliente::getTelefono()
-{
-    return this->telefono;
+string DtCliente::getNombre(){
+	return this->nombre;
 }
-
-DtCliente::getdireccion()
-{
-    return this->direccion;
+DtDireccion * DtCliente::getDireccion(){
+	return this->dir;
 }
 
 DtCliente::~DtCliente(){
-    
+	
 }
+
+#endif

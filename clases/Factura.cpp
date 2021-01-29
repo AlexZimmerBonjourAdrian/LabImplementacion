@@ -13,12 +13,10 @@ Factura::Factura(Venta* venta_, int descuento){
 	this->fecha=venta_->getFecha();
 	
 	this->productos=venta_->getProductos();
-	cout << "ENTREFACT" << endl;
 	this->subtotal=venta_->getSubtotal();
 	this->descuento=descuento;
 	this->montototal=venta_->getMontototal();
 	this->venta=venta_;
-	cout << "SALIFACT" << endl;
 }
 
 int Factura::getCodigo(){
@@ -26,7 +24,14 @@ int Factura::getCodigo(){
 }
 
 DtFactura * Factura::getDatos(){
-	return new DtFactura(this->codigo,this->fecha,this->productos,this->venta->getEmpleado(),this->subtotal,this->descuento,this->montototal);
+	
+
+	DtFactura * df = new DtFactura(this->codigo,this->fecha,this->productos,this->venta->getEmpleado(),this->subtotal,this->descuento,this->montototal);
+	return df;
+}
+
+DtFecha * Factura::getFecha(){
+	return this->fecha;
 }
 
 Factura::~Factura(){

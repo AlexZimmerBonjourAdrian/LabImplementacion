@@ -4,14 +4,14 @@
 #define STRINGKEY_H
 
 using namespace std;
-class StringKey : public Ikey
-{
+class StringKey : public IKey{
 private:
     string id;
+    
 public:
     StringKey(string); 
     bool equals(IKey * id) const;
     string getString();
     virtual ~StringKey();
-}
+};
 #endif

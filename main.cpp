@@ -8,6 +8,7 @@
 #include "./clases/Cliente.cpp"
 #include <windows.h>
 #include <typeinfo>
+
 using namespace std;
  
 bool verificarMesaAtendida(Sistema * s, Mesa * m){
@@ -80,6 +81,7 @@ main(){
 									cin >> opc1;
 									if(opc1=="si"){
 										s->agregarProducto(agregar,s1,precio);
+										cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
 										s->liberarMemoria();
 									}
 									else{
@@ -101,7 +103,13 @@ main(){
 									cin >> precio;
 									cout << endl << endl;
 									ICollection * p = s->mostrarProductos();
+									if(p==NULL){
+										cout << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
+										Sleep(2000);
+										break;
+									}
 									IIterator * it = p->getIterator();
+									
 									int count=0;
 									while(it->hasCurrent()){
 										DtProducto * dp = (DtProducto *) it->getCurrent();
@@ -137,7 +145,7 @@ main(){
 										cin >> opc1;
 										if(opc1=="si"){
 											s->agregarMenu(agregar,s1,precio);
-											
+											cout << endl << "### SE HA AGREGADO EL PRODUCTO ###"<< endl;
 										}
 										else{
 											cout << endl << "### NO SE HA AGREGADO EL MENU ###" << endl; 
@@ -147,7 +155,7 @@ main(){
 									s->liberarMemoria();
 									
 								}
-								
+								system("PAUSE");
 								break;
 							}
 							case 2:{
@@ -272,15 +280,72 @@ main(){
 								break;
 							}
 							
-							case 5:
-								cout <<"Alta empleado no implementado" <<endl;
-								Sleep (2000);
-								break;
+							case 5:{
+							
+								cout <<"### ALTA CLIENTE ###" <<endl << endl;
+								cout << "\t..Ingrese el nombre: ";
+								string nombre;
+								fflush(stdin);
+								getline(cin, nombre);
+								cout << endl << endl << "\t..Ingrese el telefono: ";
+								long int telefono;
+								cin >> telefono;
+								cout << endl << endl << "\t..Ingrese la calle: ";
+								string calle;
+								fflush(stdin);
+								getline(cin,calle);
+								cout << endl << endl << "\t..Ingrese el numero: ";
+								int nro;
+								cin >> nro;
+								cout << endl << endl << "\t..Desea confirmar el alta?(1 o 0)" << endl;
+								cin >> opc;
+								if(opc==1){
+									s->crearCliente(nombre,telefono,calle,nro);
+									
+								}
+								else{
+									cout << endl << "### NO SE CREO EL CLIENTE ###" << endl;
+									Sleep (2000);
+								}
 								
-							case 6:
-								cout <<"Resumen facturación de 1 día dada la fecha no implementado" <<endl;
+								break;
+							}
+							case 6:{
+							
+								cout << "### FACTURACION DE UN DIA ###" << endl;
+								cout << endl << "\t..Ingrese la fecha a consultar:" << endl;
+								cout << endl << "\t..Anio: ";
+								int anio;
+								cin>>anio;
+								cout << endl << "\t..Mes: ";
+								int mes;
+								cin >> mes;
+								cout << endl << "\t..Dia: ";
+								int dia;
+								cin >> dia;
+								DtFecha * f = new DtFecha(anio,mes,dia);
+								ICollection * facturas = s->getFacturasFecha(f);
+								IIterator * it = facturas->getIterator();
+								while(it->hasCurrent()){
+									DtFactura * df =(DtFactura *) it->getCurrent();
+									cout << endl <<"##Factura " << df->getCodigo() << " ##" << endl << "Subtotal: " << df->getSubtotal() << endl << " Descuento: "<< df->getDescuento()<< endl << endl;
+									cout << "\t --Productos--" << endl << endl;
+									ICollection * prod = df->getProductos();
+									IIterator * it_p = prod->getIterator();
+									while(it_p->hasCurrent()){
+										DtProducto * dp = (DtProducto *) it_p->getCurrent();
+										cout << "\t ..Codigo: " << dp->getCodigo() << endl;
+										cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
+										cout << "\t ..Precio: " << dp->getPrecio() << endl;
+										cout << endl << endl;
+										it_p->next();
+									}
+									it->next();
+								}
+								system("PAUSE");
 								Sleep (2000);
 								break;
+							}
 							case 7:
 								cout <<"Venta a domicilio no implementado" <<endl;
 								Sleep (2000);
@@ -402,7 +467,7 @@ main(){
 										cin >> agregar;
 										if(agregar==1){
 											if(ch==true){
-												s->modificarCantidad(id,cant);
+												s->modificarCantidad(id,cant,"suma");
 											}
 											
 											else{
@@ -422,10 +487,46 @@ main(){
 									break;
 								}
 									
-								case 3:
-									cout <<"Quitar producto a una venta no implementado" <<endl;
-									Sleep (2000);
+								case 3:{
+								
+									cout << endl << "### QUITAR PRODUCTO A UNA VENTA ### "<<endl;
+									cout << endl << "\t..Ingrese la mesa a quitar" << endl;
+									cin>>opc;
+									s->ingresarMesa(opc);
+									cout << "\t..Seleccione el producto de la lista disponible" << endl << endl ;
+									ICollection * p = s->mostrarProdVenta(opc);
+									IIterator * it = p->getIterator();
+									while(it->hasCurrent()){
+										DtProducto * dp = (DtProducto *) it->getCurrent();
+										cout << dp->getCodigo() << "  " << dp->getDescripcion() << "  " << dp->getPrecio() << endl;
+										it->next();
+									
+									}
+									cin >> id;
+								
+									cout << "\t..Ingrese la cantidad" << endl;
+									int cant = 0;
+									cin >> cant;
+									bool ch = s->check_prod_venta(id);
+									
+									cout << "\t..Desea confirmar?(1 , 0)" << endl;
+									cin >> agregar;
+									if(agregar==1){
+										if(ch==true){
+											s->modificarCantidad(id,cant,"resta");
+										}
+										
+										else{
+											cout << "### EL PRODUCTO SELECCIONADO NO SE ENCUENTRA EN LA VENTA ###" << endl;
+										}
+										
+										Sleep(2000);
+										
+									}
+									
+							
 									break;
+								}
 								case 4:{
 									cout << endl << "### EMITIR FACTURA ###" << endl;
 									cout << endl << "\t..Ingrese la mesa a facturar" << endl;
@@ -444,6 +545,7 @@ main(){
 												cout << "\t ..Codigo: " << dp->getCodigo() << endl;
 												cout << "\t ..Nombre del Producto: " << dp->getDescripcion() << endl;
 												cout << "\t ..Precio: " << dp->getPrecio() << endl;
+												cout << "\t ..Cantidad: " << dp->getCantidad() << endl;
 												cout << endl << endl;
 												it_p->next();
 										
@@ -565,7 +667,7 @@ main(){
 							}
 								
 							case 4:{
-								cout << "\t --Productos--" << endl << endl;
+								cout << "### Productos ###" << endl << endl;
 								ICollection * prod = s->mostrarProductos();
 								if(prod==NULL){
 									cout << endl << "### NO HAY PRODUCTOS EN EL SISTEMA ###" << endl;
@@ -584,7 +686,27 @@ main(){
 								system("PAUSE");
 								break;
 							}
+							
+							
 							case 5:{
+								cout << endl <<  "### Clientes ###" << endl;
+								ICollection * clientes = s->mostrarClientes();
+								IIterator * it = clientes->getIterator();
+								while(it->hasCurrent()){
+									DtCliente * dc = (DtCliente *) it->getCurrent();
+									cout << endl << "\t..Telefono: " << dc->getTelefono() << endl;
+									cout << "\t..Nombre: " << dc->getNombre() << endl;
+									DtDireccion * dd = dc->getDireccion();
+									cout << "\t..Direccion: " << dd->getCalle() << "  " << dd->getNro() << endl << endl;
+									cout << "          -------------------------" << endl;
+									it->next();
+									
+								}
+								system("PAUSE");
+								break;
+							}
+							
+							case 6:{
 								back=true;
 								break;
 							}
@@ -597,13 +719,13 @@ main(){
 							}
 							
 						}		
-					}while((opc<6 || opc>0) && !back);
+					}while((opc<7 || opc>0) && !back);
 					break;
 				}
 				
 				
 				case 7:
-					cout << "Gracias por usar el sistema" << endl;
+					cout << "### Gracias por usar el sistema ###" << endl;
 					return 0;
 				default:
 					cout << "Opcion incorrecta" << endl;
@@ -642,7 +764,7 @@ int menuAdministrador(){
  	cout << "2. Baja producto" << endl;
 	cout << "3. Información de un producto" << endl;
 	cout << "4. Alta empleado" << endl;
-	cout << "5. Asignar mozos a mesas" << endl;
+	cout << "5. Alta cliente" << endl;
 	cout << "6. Resumen facturación de 1 día dada la fecha" << endl;
 	cout << "7. Venta a domicilio" << endl;
 	cout << "8. Consultar actualizaciones de pedidos a domicilio" << endl;
@@ -695,7 +817,8 @@ int menuConsultas(){
 	cout << "2. Consultar empleados" << endl;
 	cout << "3. Consultar mesas" << endl;
 	cout << "4. Consultar productos" << endl;
-	cout << "5. Volver a menu anterior" << endl;
+	cout << "5. Consultar cliente" << endl;
+	cout << "6. Volver a menu anterior" << endl;
 	cin >> opc;
 	return opc;
 	

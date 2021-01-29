@@ -1,6 +1,8 @@
 
 #include "List.h"
 #include "../iterators/ListIterator.cpp"
+#ifndef LIST_CPP
+#define LIST_CPP
 
 List::List():
    head(NULL), size(0){
@@ -81,3 +83,5 @@ List::~List() {
         current = next;
     }
 }
+
+#endif

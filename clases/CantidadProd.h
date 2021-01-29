@@ -12,6 +12,7 @@ class CantidadProd : public ICollectible{
 		CantidadProd(int, Producto *);
 		bool coincideProd(Producto * p);
 		void sumarCantidad(int cantProd);
+		void restarCantidad(int cantProd);
 		Producto * getProducto();
 		DtProducto * getDtProducto();
 		int getCantidadRestada(int cantProd);

@@ -2,11 +2,11 @@
 #ifndef STRINGKEY_CPP
 #define STRINGKEY_CPP
 
-StringKey::Stringkey(string id)
+void StringKey::Stringkey(string id)
 {
     this->id=id;
 }
-bool stringKey::equals(IKey * id) const{
+bool StringKey::equals(IKey * id) const{
     StringKey * key = (StringKey *) id;
     return this->id==key->id;
 }
